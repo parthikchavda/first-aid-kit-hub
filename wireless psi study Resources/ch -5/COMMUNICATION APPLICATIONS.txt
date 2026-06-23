@@ -1,0 +1,131 @@
+COMMUNICATION APPLICATIONS
+
+Introduction
+
+આ વિષય મુખ્યત્વે પાંચ મોટા ભાગમાં વહેંચાયેલો છે:
+
+1. Television Engineering
+   • Basics:
+
+* Scanning (Interlaced Scanning)
+* Composite Video Signal
+
+• Camera Tubes:
+
+* Vidicon
+* Plumbicon
+* (હાલમાં CCD Camera Sensors વધુ વપરાય છે, પરંતુ જૂના પ્રશ્નોમાં Vidicon અને Plumbicon પૂછાય છે.)
+
+• Color Television:
+
+* Three Primary Colors (Red, Green, Blue – RGB)
+* Color Mixing
+* PAL Standard
+* NTSC Standard
+* PAL અને NTSC વચ્ચેનો તફાવત
+
+• Display Devices:
+
+* CRT (Cathode Ray Tube)
+* LCD (Liquid Crystal Display)
+* LED (Light Emitting Diode)
+
+---
+
+2. Radar and Navigational Aids
+   • Concept:
+
+* RADAR (Radio Detection And Ranging)
+
+• Types of Radar:
+
+* Pulsed Radar
+* CW (Continuous Wave) Radar
+* MTI (Moving Target Indicator) Radar
+
+• Doppler Effect:
+
+* રાડાર દ્વારા વસ્તુની ગતિ (Speed) કેવી રીતે માપવામાં આવે છે.
+
+• Radar Range Equation:
+
+* રાડારની મહત્તમ રેન્જ શોધવાનું સૂત્ર.
+
+---
+
+3. Fiber Optic Communication
+   • Principle:
+
+* Total Internal Reflection (TIR)
+
+• Components:
+
+* Types of Fiber:
+
+  * Single Mode Fiber
+  * Multi Mode Fiber
+
+* Light Sources:
+
+  * LED
+  * LASER
+
+* Detectors:
+
+  * PIN Photo Diode
+  * Avalanche Photo Diode (APD)
+
+• Losses in Optical Fiber:
+
+* Attenuation
+* Dispersion
+
+---
+
+4. Satellite Communication
+   • Satellite Orbits:
+
+* GEO (Geostationary Earth Orbit)
+* MEO (Medium Earth Orbit)
+* LEO (Low Earth Orbit)
+
+• Communication System:
+
+* Uplink
+* Downlink
+* Transponder
+
+• Applications:
+
+* GPS
+* DTH Television
+* VSAT
+
+---
+
+5. Mobile / Cellular Communication
+   • Cellular Concepts:
+
+* Frequency Reuse
+* Handoff (Handover)
+* Cell Splitting
+
+• GSM Architecture:
+
+* SIM (Subscriber Identity Module)
+* HLR (Home Location Register)
+* VLR (Visitor Location Register)
+* BTS (Base Transceiver Station)
+* BSC (Base Station Controller)
+* MSC (Mobile Switching Centre)
+
+• Mobile Communication Generations:
+
+* 1G
+* 2G
+* 3G
+* 4G
+* 5G
+
+Summary:
+Communication Applications subject mainly covers Television Engineering, Radar Systems, Fiber Optic Communication, Satellite Communication, and Mobile/Cellular Communication along with their principles, components, standards, applications, and modern communication technologies.
