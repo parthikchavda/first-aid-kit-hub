@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetMaster • Computer Networks MCQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: #1e2d47;
+  --accent: #00d4ff;
+  --accent2: #7c3aed;
+  --accent3: #10b981;
+  --danger: #ef4444;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --gold: #f59e0b;
+  --glow: 0 0 30px rgba(0,212,255,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid background */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size:50px 50px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* HEADER */
+.header {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(10,14,26,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 64px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition: transform 0.3s ease;
+}
+.header.hide { transform: translateY(-100%); }
+
+.logo {
+  display:flex; align-items:center; gap:10px;
+  font-family:'Space Mono', monospace;
+  font-size:18px; font-weight:700;
+  color: var(--accent);
+  letter-spacing:-0.5px;
+}
+.logo-icon {
+  width:34px; height:34px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px;
+}
+
+.header-controls { display:flex; align-items:center; gap:12px; }
+
+.goto-wrap {
+  display:flex; align-items:center; gap:8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius:8px;
+  padding: 6px 12px;
+  font-size:13px;
+  font-family:'Space Mono',monospace;
+  color: var(--muted);
+}
+.goto-wrap input {
+  background:transparent; border:none; outline:none;
+  color: var(--accent); width:60px; font-size:13px;
+  font-family:'Space Mono',monospace; text-align:center;
+}
+
+.lang-toggle {
+  display:flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+}
+.lang-toggle button {
+  padding: 7px 14px; border:none; cursor:pointer;
+  font-size:12px; font-weight:700; font-family:'Syne',sans-serif;
+  background:transparent; color:var(--muted);
+  transition:all 0.2s;
+  letter-spacing:0.5px;
+}
+.lang-toggle button.active { background:var(--accent); color:#000; }
+
+/* HERO */
+.hero {
+  position:relative; z-index:1;
+  min-height: 280px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding: 100px 24px 40px;
+  text-align:center;
+  overflow:hidden;
+}
+.hero-orb {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:0.4;
+  pointer-events:none;
+}
+.orb1 { width:400px; height:400px; background:var(--accent2); top:-100px; left:-100px; }
+.orb2 { width:300px; height:300px; background:var(--accent); top:-50px; right:-50px; }
+
+.hero-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  border-radius:20px;
+  padding: 5px 14px;
+  font-size:12px; color:var(--accent); font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:18px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  font-weight:800;
+  line-height:1.1;
+  background: linear-gradient(135deg, #fff 30%, var(--accent) 70%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:12px;
+}
+.hero p { color:var(--muted); font-size:15px; }
+
+/* PART TABS */
+.part-tabs {
+  position:sticky; top:64px; z-index:90;
+  background: rgba(10,14,26,0.95);
+  backdrop-filter:blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display:flex; align-items:center; gap:0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.part-tabs::-webkit-scrollbar { display:none; }
+
+.part-tab {
+  position:relative;
+  padding: 16px 28px;
+  border:none; background:transparent;
+  color: var(--muted); cursor:pointer;
+  font-family:'Syne',sans-serif;
+  font-size:13px; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase;
+  white-space:nowrap;
+  transition: color 0.2s;
+}
+.part-tab::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+.part-tab.active { color:var(--accent); }
+.part-tab.active::after { transform:scaleX(1); }
+.part-tab:hover:not(.active) { color: var(--text); }
+
+.tab-badge {
+  display:inline-block;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius:10px;
+  padding:1px 7px; font-size:10px;
+  margin-left:6px; vertical-align:middle;
+}
+.part-tab.active .tab-badge {
+  background: rgba(0,212,255,0.2);
+  border-color: rgba(0,212,255,0.5);
+}
+
+/* TOOLBAR */
+.toolbar {
+  position:relative; z-index:1;
+  padding: 20px 24px;
+  display:flex; align-items:center; gap:12px;
+  flex-wrap:wrap;
+  max-width:1100px; margin:0 auto;
+}
+.search-wrap {
+  flex:1; min-width:200px;
+  position:relative;
+}
+.search-wrap input {
+  width:100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius:10px;
+  padding: 12px 16px 12px 42px;
+  color: var(--text); font-size:14px;
+  font-family:'Syne',sans-serif;
+  outline:none;
+  transition: border-color 0.2s;
+}
+.search-wrap input:focus { border-color: var(--accent); }
+.search-wrap input::placeholder { color:var(--muted); }
+.search-icon {
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-size:16px; pointer-events:none;
+}
+
+.mode-btns { display:flex; gap:8px; }
+.mode-btn {
+  padding: 11px 18px;
+  border: 1px solid var(--border);
+  border-radius:10px;
+  background: var(--surface);
+  color: var(--muted);
+  font-family:'Syne',sans-serif;
+  font-size:12px; font-weight:700;
+  letter-spacing:0.5px; text-transform:uppercase;
+  cursor:pointer; transition:all 0.2s;
+  white-space:nowrap;
+}
+.mode-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0,212,255,0.08);
+}
+
+/* PROGRESS BAR */
+.progress-wrap {
+  position:relative; z-index:1;
+  padding: 0 24px 16px;
+  max-width:1100px; margin:0 auto;
+}
+.progress-info {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:8px; font-size:12px; color:var(--muted);
+  font-family:'Space Mono',monospace;
+}
+.progress-bar {
+  height:4px; background:var(--surface2); border-radius:2px; overflow:hidden;
+}
+.progress-fill {
+  height:100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius:2px;
+  transition: width 0.4s ease;
+  width:0%;
+}
+
+/* MCQ CONTAINER */
+.mcq-container {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto;
+  padding: 0 24px 40px;
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  gap:20px;
+}
+
+/* MCQ CARD */
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius:16px;
+  padding: 24px;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  position:relative;
+  overflow:hidden;
+}
+.mcq-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.mcq-card:hover { border-color: rgba(0,212,255,0.3); box-shadow: var(--glow); transform:translateY(-2px); }
+.mcq-card:hover::before { opacity:1; }
+.mcq-card.answered { border-color: rgba(16,185,129,0.3); }
+.mcq-card.answered::before { background: linear-gradient(90deg, transparent, var(--accent3), transparent); opacity:1; }
+
+.card-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:14px;
+}
+.q-num {
+  font-family:'Space Mono',monospace;
+  font-size:11px; font-weight:700;
+  color:var(--accent);
+  letter-spacing:1px;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.2);
+  padding:3px 10px; border-radius:20px;
+}
+.q-status {
+  width:8px; height:8px; border-radius:50%;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.q-status.correct { background: var(--accent3); box-shadow: 0 0 8px var(--accent3); }
+.q-status.wrong { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+
+.card-lang {
+  display:flex; gap:6px; margin-bottom:14px;
+}
+.card-lang button {
+  padding:4px 12px; border-radius:6px;
+  border: 1px solid var(--border);
+  background:transparent; color:var(--muted);
+  font-size:11px; font-weight:700; cursor:pointer;
+  font-family:'Syne',sans-serif;
+  transition:all 0.2s;
+}
+.card-lang button.active { background:var(--accent2); border-color:var(--accent2); color:#fff; }
+
+.question-text {
+  font-size:14px; font-weight:600; line-height:1.65;
+  color: var(--text);
+  margin-bottom:18px;
+}
+
+.options-grid { display:flex; flex-direction:column; gap:8px; }
+
+.option-btn {
+  display:flex; align-items:flex-start; gap:10px;
+  padding: 12px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius:10px;
+  cursor:pointer; text-align:left; width:100%;
+  transition: all 0.2s;
+  color: var(--text); font-size:13px;
+  font-family:'Syne',sans-serif; line-height:1.5;
+}
+.option-btn:hover:not(:disabled) {
+  border-color: rgba(0,212,255,0.4);
+  background: rgba(0,212,255,0.05);
+}
+.option-btn:disabled { cursor:default; }
+.option-btn .opt-label {
+  font-family:'Space Mono',monospace;
+  font-size:11px; font-weight:700;
+  color:var(--muted); min-width:22px;
+  flex-shrink:0; margin-top:1px;
+}
+.option-btn.selected { border-color:var(--accent2); background:rgba(124,58,237,0.12); }
+.option-btn.correct { border-color:var(--accent3)!important; background:rgba(16,185,129,0.12)!important; color:var(--accent3)!important; }
+.option-btn.correct .opt-label { color:var(--accent3)!important; }
+.option-btn.wrong { border-color:var(--danger)!important; background:rgba(239,68,68,0.12)!important; color:var(--danger)!important; }
+.option-btn.wrong .opt-label { color:var(--danger)!important; }
+
+.answer-reveal {
+  margin-top:14px;
+  padding:12px 16px;
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.25);
+  border-radius:10px;
+  font-size:12px; color:var(--accent3);
+  font-family:'Space Mono',monospace;
+  display:none;
+}
+.answer-reveal strong { color:var(--accent3); }
+
+/* FOOTER / SUBMIT */
+.test-footer {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto 60px;
+  padding: 0 24px;
+  display:none;
+}
+.submit-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius:16px;
+  padding: 28px 32px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:20px; flex-wrap:wrap;
+}
+.submit-info { font-size:14px; color:var(--muted); }
+.submit-info strong { color:var(--text); display:block; font-size:22px; margin-bottom:4px; }
+.btn-submit {
+  padding: 14px 40px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border:none; border-radius:10px;
+  color:#000; font-family:'Syne',sans-serif;
+  font-size:14px; font-weight:800;
+  cursor:pointer; letter-spacing:1px; text-transform:uppercase;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,212,255,0.3); }
+
+/* SCORE MODAL */
+.modal-overlay {
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,0.8); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  opacity:0; pointer-events:none; transition:opacity 0.3s;
+}
+.modal-overlay.show { opacity:1; pointer-events:all; }
+.modal {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px; padding:40px;
+  max-width:480px; width:100%;
+  text-align:center;
+  transform:scale(0.9); transition:transform 0.3s;
+  position:relative;
+}
+.modal-overlay.show .modal { transform:scale(1); }
+
+.modal-icon { font-size:56px; margin-bottom:16px; }
+.modal h2 { font-size:2rem; font-weight:800; margin-bottom:8px; }
+.score-big {
+  font-size:4rem; font-weight:800;
+  font-family:'Space Mono',monospace;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1; margin:16px 0;
+}
+.score-detail { color:var(--muted); font-size:14px; margin-bottom:24px; }
+.score-stats {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px; margin-bottom:28px;
+}
+.stat-box {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:12px; padding:16px;
+}
+.stat-box .val { font-size:1.8rem; font-weight:800; font-family:'Space Mono',monospace; }
+.stat-box .lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+.stat-box.c .val { color:var(--accent3); }
+.stat-box.w .val { color:var(--danger); }
+.modal-btns { display:flex; gap:12px; justify-content:center; }
+.modal-btn {
+  padding:12px 28px; border-radius:10px;
+  font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; text-transform:uppercase; letter-spacing:1px;
+  transition:all 0.2s;
+}
+.modal-btn.primary { background:var(--accent); border:none; color:#000; }
+.modal-btn.secondary { background:transparent; border:1px solid var(--border); color:var(--muted); }
+.modal-btn:hover { transform:translateY(-2px); }
+
+/* EMPTY STATE */
+.empty-state {
+  text-align:center; padding:80px 24px;
+  color:var(--muted); grid-column:1/-1;
+}
+.empty-state .icon { font-size:48px; margin-bottom:12px; }
+
+/* SCROLL TOP */
+.scroll-top {
+  position:fixed; bottom:28px; right:28px; z-index:200;
+  width:46px; height:46px;
+  background:var(--accent); border:none; border-radius:50%;
+  color:#000; font-size:18px; cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,212,255,0.4);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:translateY(20px);
+  transition:all 0.3s;
+}
+.scroll-top.show { opacity:1; transform:translateY(0); }
+
+/* TOAST */
+.toast {
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:12px 24px;
+  font-size:13px; color:var(--text);
+  z-index:300; opacity:0;
+  transition:all 0.3s; white-space:nowrap;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+@media (max-width:700px) {
+  .mcq-container { grid-template-columns:1fr; padding:0 12px 40px; }
+  .hero h1 { font-size:2rem; }
+  .header { padding:0 12px; }
+  .part-tabs { padding:0 12px; }
+  .toolbar { padding:16px 12px; }
+  .progress-wrap { padding:0 12px 12px; }
+  .submit-row { flex-direction:column; align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="logo">
+    <div class="logo-icon">🌐</div>
+    NetMaster
+  </div>
+  <div class="header-controls">
+    <div class="goto-wrap">
+      <span>Q:</span>
+      <input type="number" id="gotoInput" placeholder="1-291" min="1" max="291"
+        onkeydown="if(event.key==='Enter')goTo()">
+    </div>
+    <div class="lang-toggle">
+      <button id="gLangEn" class="active" onclick="setGlobalLang('en')">EN</button>
+      <button id="gLangGu" onclick="setGlobalLang('gu')">ગુ</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-badge">📡 Computer Networks</div>
+  <h1>MCQ Master</h1>
+  <p id="heroSub">291 Questions • Practice & Test Modes • Bilingual</p>
+</div>
+
+<!-- PART TABS -->
+<div class="part-tabs" id="partTabs"></div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search questions..." oninput="filterCards()">
+  </div>
+  <div class="mode-btns">
+    <button class="mode-btn active" id="btnPractice" onclick="setMode('practice')">⚡ Practice</button>
+    <button class="mode-btn" id="btnTest" onclick="setMode('test')">📝 Test Mode</button>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="progressWrap" style="display:none">
+  <div class="progress-info">
+    <span id="progressText">0 / 0 answered</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<!-- MCQ GRID -->
+<div class="mcq-container" id="mcqContainer"></div>
+
+<!-- SUBMIT FOOTER -->
+<div class="test-footer" id="testFooter">
+  <div class="submit-row">
+    <div class="submit-info">
+      <strong id="answeredCount">0 / 0</strong>
+      Questions answered in this part
+    </div>
+    <button class="btn-submit" onclick="submitTest()">Submit &amp; Score →</button>
+  </div>
+</div>
+
+<!-- SCORE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon">🎯</div>
+    <h2 id="modalTitle">Results</h2>
+    <div class="score-big" id="scorePct">0%</div>
+    <div class="score-detail" id="scoreDetail"></div>
+    <div class="score-stats">
+      <div class="stat-box c"><div class="val" id="statCorrect">0</div><div class="lbl">Correct</div></div>
+      <div class="stat-box w"><div class="val" id="statWrong">0</div><div class="lbl">Wrong</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn primary" onclick="closeModal()">Review Answers</button>
+      <button class="modal-btn secondary" onclick="resetPart()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== ALL MCQs =====
+const ALL_MCQS = [
+  {qEn:"1. The portion of physical layer that interfaces with the media access control sublayer is called ______",qGu:"1. ફિઝિકલ લેયરનો તે ભાગ જે MAC સબલેયર સાથે ઇન્ટરફેસ કરે છે તેને ______ કહેવામાં આવે છે",opts:["(A) physical signaling sublayer","(B) physical data sublayer","(C) physical address sublayer","(D) physical transport sublayer"],optsGu:["(A) ફિઝિકલ સિગ્નલિંગ સબલેયર","(B) ફિઝિકલ ડેટા સબલેયર","(C) ફિઝિકલ એડ્રેસ સબલેયર","(D) ફિઝિકલ ટ્રાન્સપોર્ટ સબલેયર"],ans:"(A) physical signaling sublayer"},
+  {qEn:"2. What is routing algorithm used by OSPF routing protocol?",qGu:"2. OSPF રાઉટિંગ પ્રોટોકોલ દ્વારા કયો રાઉટિંગ અલ્ગોરિધમ વપરાય છે?",opts:["(A) Distance vector","(B) Flooding","(C) Path vector","(D) Link state"],optsGu:["(A) ડિસ્ટન્સ વેક્ટર","(B) ફ્લડિંગ","(C) પાથ વેક્ટર","(D) લિંક સ્ટેટ"],ans:"(D) Link state"},
+  {qEn:"3. In communication of two processes, an endpoint for communication is called:",qGu:"3. બે પ્રક્રિયાઓના સંચારમાં, સંચાર માટેના અંતિમ બિંદુને કહેવામાં આવે છે:",opts:["(A) Socket","(B) Pipe","(C) Port","(D) Remote procedure call"],optsGu:["(A) સોકેટ","(B) પાઈપ","(C) પોર્ટ","(D) RPC"],ans:"(A) Socket"},
+  {qEn:"4. Which protocol may be used for accessing the World Wide Web?",qGu:"4. WWW એક્સેસ કરવા માટે કયો પ્રોટોકોલ વાપરી શકાય?",opts:["(A) HTTP","(B) SMTP","(C) SLIP","(D) None of the above"],optsGu:["(A) HTTP","(B) SMTP","(C) SLIP","(D) ઉપરોક્તમાંથી કોઈ નહીં"],ans:"(A) HTTP"},
+  {qEn:"5. Web pages are created in a language called",qGu:"5. વેબ પેજ કઈ ભાષામાં બનાવવામાં આવે છે?",opts:["(A) SLIP","(B) HTML","(C) HTTP","(D) WWW"],optsGu:["(A) SLIP","(B) HTML","(C) HTTP","(D) WWW"],ans:"(B) HTML"},
+  {qEn:"6. What is Data Encryption Standard (DES)?",qGu:"6. ડેટા એન્ક્રિપ્શન સ્ટાન્ડર્ડ (DES) શું છે?",opts:["(A) Block cipher","(B) Stream cipher","(C) Bit cipher","(D) None of the above"],optsGu:["(A) બ્લોક સાઇફર","(B) સ્ટ્રીમ સાઇફર","(C) બિટ સાઇફર","(D) ઉપરોક્તમાંથી કોઈ નહીં"],ans:"(A) Block cipher"},
+  {qEn:"7. On what type of switching does internet work?",qGu:"7. ઇન્ટરનેટ કયા પ્રકારના સ્વિચિંગ પર કામ કરે છે?",opts:["(A) Circuit","(B) Bit","(C) Packet","(D) Line"],optsGu:["(A) સર્કિટ","(B) બિટ","(C) પેકેટ","(D) લાઇન"],ans:"(C) Packet"},
+  {qEn:"8. Which technique is used for transmitting digital signal?",qGu:"8. ડિજિટલ સિગ્નલ ટ્રાન્સમિટ કરવા કઈ ટેક્નિક વપરાય?",opts:["(A) Amplitude modulation","(B) Frequency modulation","(C) Pulse code modulation","(D) Amplitude shift keying"],optsGu:["(A) એમ્પ્લિટ્યુડ મોડ્યુલેશન","(B) ફ્રીક્વન્સી મોડ્યુલેશન","(C) PCM","(D) ASK"],ans:"(D) Amplitude shift keying"},
+  {qEn:"9. Which is an advantage of computer networks?",qGu:"9. કમ્પ્યુટર નેટવર્કનો ફાયદો કયો છે?",opts:["(A) Resource sharing","(B) Improving reliability and availability","(C) Enhancing performance","(D) All of the above"],optsGu:["(A) રિસોર્સ શેરિંગ","(B) વિશ્વસનીયતા","(C) પર્ફોર્મન્સ","(D) ઉપરોક્ત બધા"],ans:"(D) All of the above"},
+  {qEn:"10. A network spreading in different geographical locations is known as",qGu:"10. વિભિન્ન ભૌગોલિક સ્થળોમાં ફેલાયેલ નેટવર્ક:",opts:["(A) LAN","(B) WAN","(C) Both (A) and (B)","(D) None of the above"],optsGu:["(A) LAN","(B) WAN","(C) બંને","(D) કોઈ નહીં"],ans:"(B) WAN"},
+  {qEn:"11. Which is a token-based protocol?",qGu:"11. ટોકન-આધારિત પ્રોટોકોલ કયો છે?",opts:["(A) CSMA/CD","(B) Slotted ring","(C) Both (A) and (B)","(D) None of the above"],optsGu:["(A) CSMA/CD","(B) સ્લોટેડ રિંગ","(C) બંને","(D) કોઈ નહીં"],ans:"(C) Both (A) and (B)"},
+  {qEn:"12. X.21 is",qGu:"12. X.21 શું છે?",opts:["(A) method of determining which device has access to medium","(B) access control technique for multiple access media","(C) common linked protocol by ISO","(D) network access standard for connecting to circuit switch network"],optsGu:["(A) ટ્રાન્સ. મીડિયમ ઍક્સેસ","(B) MAC ટેક્નિક","(C) ISO પ્રોટોકોલ","(D) નેટ. એક્સેસ સ્ટાન્ડર્ડ"],ans:"(D) network access standard for connecting to circuit switch network"},
+  {qEn:"13. Which type of TFTP support is NOT included in Windows NT?",qGu:"13. Windows NTમાં TFTP માટે કઈ સ્ટાઇલ સપોર્ટ ન હોય?",opts:["(A) As client","(B) As server","(C) Windows NT includes full TFTP support","(D) None of the above"],optsGu:["(A) ક્લાયન્ટ","(B) સર્વર","(C) પૂર્ણ સપોર્ટ","(D) કોઈ નહીં"],ans:"(B) As server"},
+  {qEn:"14. The media access control sublayer resides in which OSI layer?",qGu:"14. MAC સબલેયર કયા OSI લેયરમાં છે?",opts:["(A) Transport","(B) Network","(C) Physical","(D) Data link"],optsGu:["(A) ટ્રાન્સ.","(B) નેટ.","(C) ફિઝ.","(D) ડેટા લિંક"],ans:"(D) Data link"},
+  {qEn:"15. Which protocol standard secures credit card transactions over the Internet?",qGu:"15. ઇ. ટ્રાન્ઝ. સુરક્ષા માટે:",opts:["(A) Secure Electronic Transaction (SET)","(B) FTP","(C) POP","(D) HTTP"],optsGu:["(A) SET","(B) FTP","(C) POP","(D) HTTP"],ans:"(A) Secure Electronic Transaction (SET)"},
+  {qEn:"16. A ______ can forward packets across networks that use different protocols:",qGu:"16. ______ અલગ પ્રોટોકોલ વાળા નેટ. પર ફોર્વર્ડ કરી શકે:",opts:["(A) repeater","(B) bridge","(C) router","(D) gateway"],optsGu:["(A) રિપ.","(B) બ્રિજ","(C) રાઉ.","(D) ગેટ."],ans:"(D) gateway"},
+  {qEn:"17. Which is a contention-free protocol?",qGu:"17. કોન્ટેન્શન ફ્રી પ્રોટોકોલ:",opts:["(A) Pure Aloha","(B) Ethernet","(C) Non-persistent CSMA","(D) Token Ring"],optsGu:["(A) Aloha","(B) ઇ.","(C) NP-CSMA","(D) Token Ring"],ans:"(D) Token Ring"},
+  {qEn:"18. Encryption and decryption provide secrecy, but not",qGu:"18. Encryption ______ નથી આપતો:",opts:["(A) Authentication","(B) Integrity","(C) Frames","(D) All of these"],optsGu:["(A) ઓથ.","(B) ઇન્ટ.","(C) ફ્રે.","(D) બધા"],ans:"(B) Integrity"},
+  {qEn:"19. In symmetric key cryptography, the encryption and decryption key is",qGu:"19. Symmetric ক্রিপ্টোগ্রাফীমें key:",opts:["(A) private","(B) public","(C) different","(D) same"],optsGu:["(A) પ્રા.","(B) પબ.","(C) અ.","(D) સ."],ans:"(D) same"},
+  {qEn:"20. In early ARPANET, which routing method was used?",qGu:"20. ARPANET early routing:",opts:["(A) Distance vector routing","(B) Link state routing","(C) Least cost routing","(D) Flooding"],optsGu:["(A) DVR","(B) LSR","(C) LCR","(D) ફ."],ans:"(A) Distance vector routing"},
+  {qEn:"21. Which Ethernet encoding has the highest redundancy?",qGu:"21. Highest redundancy Ethernet encoding:",opts:["(A) 1B2B","(B) 4B5B","(C) 5B6B","(D) 8B10B"],optsGu:["(A) 1B2B","(B) 4B5B","(C) 5B6B","(D) 8B10B"],ans:"(D) 8B10B"},
+  {qEn:"22. An Ethernet hub",qGu:"22. ઇ. Hub:",opts:["(A) functions as a repeater","(B) connects to a digital PBX","(C) connects to a token-ring network","(D) functions as a gateway"],optsGu:["(A) Repeater","(B) PBX","(C) Token-ring","(D) Gateway"],ans:"(A) functions as a repeater"},
+  {qEn:"23. Bandwidth 5 kHz, lowest frequency 52 kHz — highest frequency?",qGu:"23. BW=5kHz, lowest=52kHz → highest?",opts:["(A) 5kHz","(B) 10kHz","(C) 47kHz","(D) 57kHz"],optsGu:["(A) 5","(B) 10","(C) 47","(D) 57"],ans:"(D) 57kHz"},
+  {qEn:"24. Which error detection technique is based on binary division?",qGu:"24. Binary division error detection:",opts:["(A) Checksum","(B) Cyclic Redundancy Check (CRC)","(C) Simple parity check","(D) Two-dimensional parity check"],optsGu:["(A) CS","(B) CRC","(C) Par","(D) 2D Par"],ans:"(B) Cyclic Redundancy Check (CRC)"},
+  {qEn:"25. The length of an IPv6 address is:",qGu:"25. IPv6 address length:",opts:["(A) 16 bits","(B) 32 bits","(C) 64 bits","(D) 128 bits"],optsGu:["(A) 16","(B) 32","(C) 64","(D) 128"],ans:"(D) 128 bits"},
+  {qEn:"26. UPnP stands for:",qGu:"26. UPnP stands for:",opts:["(A) Uniform Plug and Play","(B) Unit Plug and Play","(C) Useful Plug and Play","(D) Universal Plug and Play"],optsGu:["(A) Uniform","(B) Unit","(C) Useful","(D) Universal"],ans:"(D) Universal Plug and Play"},
+  {qEn:"27. Which is NOT a network edge device?",qGu:"27. Network Edge device નથી:",opts:["(A) PC","(B) Server","(C) Smartphone","(D) Switch"],optsGu:["(A) PC","(B) Serv.","(C) Smart","(D) Switch"],ans:"(D) Switch"},
+  {qEn:"28. Application layer protocol defines:",qGu:"28. App layer protocol defines:",opts:["(A) types of messages exchanged","(B) rules for when and how processes communicate","(C) message format, syntax and semantics","(D) all of above"],optsGu:["(A) Msg types","(B) Rules","(C) Format","(D) All"],ans:"(D) all of above"},
+  {qEn:"29. The ______ is the physical path over which a message travels.",qGu:"29. Message travel path:",opts:["(A) Path","(B) Protocol","(C) Route","(D) Medium"],optsGu:["(A) Pa","(B) Pr","(C) Ro","(D) Me"],ans:"(D) Medium"},
+  {qEn:"30. A set of rules that governs data communication:",qGu:"30. Data comm rules set:",opts:["(A) Rule","(B) Medium","(C) Link","(D) Protocol"],optsGu:["(A) R","(B) M","(C) L","(D) P"],ans:"(D) Protocol"},
+  {qEn:"31. Bluetooth is an example of:",qGu:"31. Bluetooth example of:",opts:["(A) local area network","(B) virtual private network","(C) personal area network","(D) none of the above"],optsGu:["(A) LAN","(B) VPN","(C) PAN","(D) None"],ans:"(C) personal area network"},
+  {qEn:"32. Which protocol finds the MAC address from IP address?",qGu:"32. IP→MAC address:",opts:["(A) SMTP","(B) ICMP","(C) ARP","(D) RARP"],optsGu:["(A) SMTP","(B) ICMP","(C) ARP","(D) RARP"],ans:"(C) ARP"},
+  {qEn:"33. The structure/format of data is called:",qGu:"33. Data format structure:",opts:["(A) Syntax","(B) Struct","(C) Semantic","(D) none of the above"],optsGu:["(A) Syn","(B) Str","(C) Sem","(D) None"],ans:"(A) Syntax"},
+  {qEn:"34. The first network:",qGu:"34. First network:",opts:["(A) ARPANET","(B) NFSNET","(C) CNNET","(D) ASAPNET"],optsGu:["(A) ARPANET","(B) NFSNET","(C) CNNET","(D) ASAPNET"],ans:"(A) ARPANET"},
+  {qEn:"35. Noise due to random behavior of charge-based carriers:",qGu:"35. Random carrier noise:",opts:["(A) Partition noise","(B) Industrial noise","(C) Shot noise","(D) Flicker noise"],optsGu:["(A) Pa","(B) In","(C) Sh","(D) Fl"],ans:"(C) Shot noise"},
+  {qEn:"36. Which IP header field is NOT modified by a typical IP router?",qGu:"36. Router modify ન કરે IP header field:",opts:["(A) Checksum","(B) Source address","(C) Time to Live (TTL)","(D) Length"],optsGu:["(A) CS","(B) Src","(C) TTL","(D) Len"],ans:"(B) Source address"},
+  {qEn:"37. Which pair can use multiple TCP connections between same client-server?",qGu:"37. Multiple TCP connections pair:",opts:["(A) HTTP, FTP","(B) HTTP, TELNET","(C) FTP, SMTP","(D) HTTP, SMTP"],optsGu:["(A) HTTP,FTP","(B) HTTP,TEL","(C) FTP,SMTP","(D) HTTP,SMTP"],ans:"(D) HTTP, SMTP"},
+  {qEn:"38. Which socket API converts unconnected active TCP socket to passive?",qGu:"38. Active→Passive TCP socket:",opts:["(A) connect","(B) bind","(C) listen","(D) accept"],optsGu:["(A) connect","(B) bind","(C) listen","(D) accept"],ans:"(C) listen"},
+  {qEn:"39. Which transport layer protocol supports electronic mail?",qGu:"39. Email transport protocol:",opts:["(A) SMTP","(B) IP","(C) TCP","(D) UDP"],optsGu:["(A) SMTP","(B) IP","(C) TCP","(D) UDP"],ans:"(C) TCP"},
+  {qEn:"40. PDU for the application layer in Internet stack:",qGu:"40. App layer PDU:",opts:["(A) Segment","(B) Datagram","(C) Message","(D) Frame"],optsGu:["(A) Seg","(B) Dg","(C) Msg","(D) Fr"],ans:"(C) Message"},
+  {qEn:"41. IP address consists of ____ parts separated by dots",qGu:"41. IP address parts:",opts:["(A) 2","(B) 3","(C) 4","(D) 1"],optsGu:["(A) 2","(B) 3","(C) 4","(D) 1"],ans:"(C) 4"},
+  {qEn:"42. Domain name matching to IP address is performed by",qGu:"42. Domain→IP:",opts:["(A) Electronic mail","(B) URL","(C) DNS","(D) FTP"],optsGu:["(A) Email","(B) URL","(C) DNS","(D) FTP"],ans:"(C) DNS"},
+  {qEn:"43. 'Internet' is an example of",qGu:"43. Internet example:",opts:["(A) LAN","(B) MAN","(C) WAN","(D) None of these"],optsGu:["(A) LAN","(B) MAN","(C) WAN","(D) None"],ans:"(C) WAN"},
+  {qEn:"44. If network cable breaks, whole network goes down in ____ topology",qGu:"44. Cable break = whole network down in:",opts:["(A) Star","(B) Ring","(C) Mesh","(D) All correct"],optsGu:["(A) Star","(B) Ring","(C) Mesh","(D) All"],ans:"(B) Ring"},
+  {qEn:"45. Most reliable topology?",qGu:"45. Most reliable topology:",opts:["(A) Bus","(B) Star","(C) Ring","(D) Mesh"],optsGu:["(A) Bus","(B) Star","(C) Ring","(D) Mesh"],ans:"(D) Mesh"},
+  {qEn:"46. Hierarchical topology also known as",qGu:"46. Hierarchical topology = ?",opts:["(A) Bus network","(B) Star network","(C) Tree network","(D) Mesh network"],optsGu:["(A) Bus","(B) Star","(C) Tree","(D) Mesh"],ans:"(C) Tree network"},
+  {qEn:"47. MAN stands for",qGu:"47. MAN full form:",opts:["(A) Machine Area Network","(B) Metropolitan Area Network","(C) Metropolitan Asynchronous Network","(D) Machine Asynchronous Network"],optsGu:["(A) Machine AN","(B) Metropolitan AN","(C) Met. Async N","(D) Mach. Async N"],ans:"(B) Metropolitan Area Network"},
+  {qEn:"48. Component responsible for network communication in a computer system?",qGu:"48. Network communication component:",opts:["(A) UPS","(B) Ethernet card","(C) SVGA card","(D) SMPS"],optsGu:["(A) UPS","(B) Ethernet","(C) SVGA","(D) SMPS"],ans:"(B) Ethernet card"},
+  {qEn:"49. Which has minimum transmission speed?",qGu:"49. Minimum transmission speed:",opts:["(A) Twisted pair wire","(B) Fiber optic cable","(C) Coaxial cable","(D) Microwave"],optsGu:["(A) TP","(B) FO","(C) Coax","(D) MW"],ans:"(A) Twisted pair wire"},
+  {qEn:"50. Internet connection speed measured in",qGu:"50. Internet speed unit:",opts:["(A) Kilo bits per second","(B) Kilo Boolean per second","(C) Meter per second","(D) None of these"],optsGu:["(A) Kbps","(B) KBool","(C) m/s","(D) None"],ans:"(A) Kilo bits per second"},
+  {qEn:"51. Error correction done by",qGu:"51. Error correction:",opts:["(A) Hamming code","(B) CRC","(C) Framing","(D) Two dimensional parity check"],optsGu:["(A) Hamm","(B) CRC","(C) Fr","(D) 2D Par"],ans:"(A) Hamming code"},
+  {qEn:"52. TCP/IP is an example of",qGu:"52. TCP/IP example:",opts:["(A) Communication protocol","(B) Networking protocol","(C) Data transfer protocol","(D) All correct"],optsGu:["(A) Comm","(B) Net","(C) Data","(D) All"],ans:"(D) All correct"},
+  {qEn:"53. Which is a connecting device in computer networks?",qGu:"53. Connecting device:",opts:["(A) Router","(B) Hub","(C) Switch","(D) All correct"],optsGu:["(A) R","(B) H","(C) S","(D) All"],ans:"(D) All correct"},
+  {qEn:"54. ______ combines transmissions from multiple I/O devices into one line",qGu:"54. Multiple I/O → one line:",opts:["(A) Modifier","(B) Multiplexer","(C) Concentrator","(D) Gateway"],optsGu:["(A) Mod","(B) Mux","(C) Con","(D) GW"],ans:"(B) Multiplexer"},
+  {qEn:"55. Amount of data transmitted in fixed time is called",qGu:"55. Data in fixed time = ?",opts:["(A) Refresh rate","(B) Resolution","(C) Bandwidth","(D) Frequency"],optsGu:["(A) RR","(B) Res","(C) BW","(D) Freq"],ans:"(C) Bandwidth"},
+  {qEn:"56. Parity bits are attached to detect",qGu:"56. Parity bits detect:",opts:["(A) Buffer size","(B) Destination","(C) Errors","(D) None of these"],optsGu:["(A) Buf","(B) Dest","(C) Errors","(D) None"],ans:"(C) Errors"},
+  {qEn:"57. In communication satellite, multiple repeaters are known as",qGu:"57. Satellite repeaters:",opts:["(A) Detector","(B) Modulator","(C) Stations","(D) Transponders"],optsGu:["(A) Det","(B) Mod","(C) Sta","(D) Trans"],ans:"(D) Transponders"},
+  {qEn:"58. 'Communication protocol' means",qGu:"58. Communication protocol:",opts:["(A) Data transformation","(B) Set of rules to communicate data machine to machine","(C) Transmission signals","(D) None of these"],optsGu:["(A) DT","(B) Rules","(C) Sig","(D) None"],ans:"(B) Set of rules to communicate data machine to machine"},
+  {qEn:"59. At network layer, data packet is known as",qGu:"59. Network layer PDU:",opts:["(A) Frame","(B) Packet","(C) Datagram","(D) Circuit"],optsGu:["(A) Fr","(B) Pkt","(C) DG","(D) Cir"],ans:"(B) Packet"},
+  {qEn:"60. A store-and-forward network uses ____ technique",qGu:"60. Store and forward technique:",opts:["(A) Circuit switching","(B) Message switching","(C) Packet switching","(D) Both Circuit and Message"],optsGu:["(A) CS","(B) MS","(C) PS","(D) Both"],ans:"(B) Message switching"},
+  {qEn:"61. File server is a ______ storing files from client machines",qGu:"61. File server is:",opts:["(A) Specialized computer system","(B) Modem","(C) Router","(D) Transponder"],optsGu:["(A) Comp","(B) Modem","(C) Router","(D) Trans"],ans:"(A) Specialized computer system"},
+  {qEn:"62. Which is a recovery technique?",qGu:"62. Recovery technique:",opts:["(A) Public key encryption","(B) Shadow paging","(C) Hash file organization","(D) Indexed file organization"],optsGu:["(A) PKE","(B) Shad","(C) Hash","(D) Idx"],ans:"(B) Shadow paging"},
+  {qEn:"63. Encryption is a technique",qGu:"63. Encryption technique:",opts:["(A) To design conceptual schema","(B) To translate global data","(C) To provide privacy of data","(D) To update database"],optsGu:["(A) Sch","(B) Trans","(C) Priv","(D) DB"],ans:"(C) To provide privacy of data"},
+  {qEn:"64. When DNS uses incorrect info from unauthorized host, it is called",qGu:"64. DNS accepts unauthorized info:",opts:["(A) DNS lookup","(B) DNS hijacking","(C) DNS spoofing","(D) None mentioned"],optsGu:["(A) Look","(B) Hijack","(C) Spoof","(D) None"],ans:"(C) DNS spoofing"},
+  {qEn:"65. Max data size application layer can pass to TCP layer?",qGu:"65. App→TCP max data size:",opts:["(A) Any size","(B) 2^16 bytes – TCP header","(C) 2^16 bytes","(D) 1500 bytes"],optsGu:["(A) Any","(B) 2^16-H","(C) 2^16","(D) 1500"],ans:"(A) Any size"},
+  {qEn:"66. Bit stuffing refers to",qGu:"66. Bit stuffing:",opts:["(A) Inserting '0' in user stream to differentiate from flag","(B) Inserting '0' in flag stream","(C) Appending nibble to flag sequence","(D) Appending nibble to user data"],optsGu:["(A) User 0","(B) Flag 0","(C) Nib flag","(D) Nib data"],ans:"(A) Inserting '0' in user stream to differentiate from flag"},
+  {qEn:"67. Dynamic routing protocol enables routers to:",qGu:"67. Dynamic routing enables:",opts:["(A) Dynamically discover and maintain routes","(B) Distribute routing updates","(C) Reach agreement on topology","(D) All of the above"],optsGu:["(A) Disc","(B) Dist","(C) Agree","(D) All"],ans:"(D) All of the above"},
+  {qEn:"68. Special bit sequence to handle collision in CSMA/CD is called",qGu:"68. Collision handling bit sequence:",opts:["(A) Preamble","(B) Post amble","(C) Jam","(D) None of these"],optsGu:["(A) Pre","(B) Post","(C) Jam","(D) None"],ans:"(C) Jam"},
+  {qEn:"69. Which protocol gives hosts a unique IP on each bootup?",qGu:"69. Dynamic IP assignment:",opts:["(A) DHCP","(B) BOOTP","(C) RARP","(D) ARP"],optsGu:["(A) DHCP","(B) BOOT","(C) RARP","(D) ARP"],ans:"(A) DHCP"},
+  {qEn:"70. Class B with 6-bit subnet: max subnets and hosts per subnet?",qGu:"70. Class B, 6-bit subnet:",opts:["(A) 62 subnets","(B) 64 subnets 262142 hosts","(C) 62 subnets 262142 hosts","(D) 64 subnets 1022 hosts"],optsGu:["(A) 62S","(B) 64S,262142H","(C) 62S,262142H","(D) 64S,1022H"],ans:"(C) 62 subnets 262142 hosts"},
+  {qEn:"71. Token ring: 10^7 bps, propagation 200 m/μs. 1-bit delay = ?",qGu:"71. 1-bit delay cable equivalent:",opts:["(A) 500 m","(B) 200 m","(C) 20 m","(D) 50 m"],optsGu:["(A) 500","(B) 200","(C) 20","(D) 50"],ans:"(C) 20 m"},
+  {qEn:"72. SAN switch 24 ports @ 8 Gbps FC. Aggregate bandwidth?",qGu:"72. SAN 24×8Gbps aggregate BW:",opts:["(A) 96 Gbps","(B) 192 Mbps","(C) 512 Gbps","(D) 192 Gbps"],optsGu:["(A) 96","(B) 192M","(C) 512","(D) 192G"],ans:"(D) 192 Gbps"},
+  {qEn:"73. LDAP (Lightweight Directory Access Protocol) is used for",qGu:"73. LDAP used for:",opts:["(A) Routing packets","(B) Authentication","(C) Obtaining IP address","(D) Domain name resolving"],optsGu:["(A) Route","(B) Auth","(C) IP","(D) DNS"],ans:"(B) Authentication"},
+  {qEn:"74. Broadcast address for 172.16.0.0/255.255.0.0?",qGu:"74. Broadcast 172.16.0.0/16:",opts:["(A) 172.16.0.255","(B) 172.16.255.255","(C) 255.255.255.255","(D) 172.255.255.255"],optsGu:["(A) .0.255","(B) .255.255","(C) 255.x4","(D) 172.255.255.255"],ans:"(B) 172.16.255.255"},
+  {qEn:"75. Which RAID level gives block-level striping with double distributed parity?",qGu:"75. RAID double distributed parity:",opts:["(A) RAID 10","(B) RAID 2","(C) RAID 6","(D) RAID 5"],optsGu:["(A) 10","(B) 2","(C) 6","(D) 5"],ans:"(C) RAID 6"},
+  {qEn:"76. IEEE standard for Wi-MAX:",qGu:"76. Wi-MAX IEEE standard:",opts:["(A) IEEE 802.16","(B) IEEE 802.36","(C) IEEE 812.16","(D) IEEE 806.16"],optsGu:["(A) 802.16","(B) 802.36","(C) 812.16","(D) 806.16"],ans:"(A) IEEE 802.16"},
+  {qEn:"77. Encoding for Giga Ethernet over fiber:",qGu:"77. Giga Ethernet fiber encoding:",opts:["(A) Differential Manchester","(B) NRZ","(C) 4B/5B","(D) 8B/10B"],optsGu:["(A) DM","(B) NRZ","(C) 4B5B","(D) 8B10B"],ans:"(D) 8B/10B"},
+  {qEn:"78. IPSEC in tunnel mode results in",qGu:"78. IPSec tunnel mode →",opts:["(A) IP packet with same header","(B) IP packet with new header","(C) IP packet without header","(D) No changes"],optsGu:["(A) Same","(B) New","(C) None","(D) No change"],ans:"(B) IP packet with new header"},
+  {qEn:"79. Subnet 255.255.31.0 — which IP pair belongs to same network?",qGu:"79. Same subnet 255.255.31.0:",opts:["(A) 172.57.88.62 & 172.56.87.23","(B) 10.35.28.2 & 10.35.29.4","(C) 191.203.31.87 & 191.234.31.88","(D) 128.8.129.43 & 128.8.161.55"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(D) 128.8.129.43 & 128.8.161.55"},
+  {qEn:"80. UTP stands for",qGu:"80. UTP full form:",opts:["(A) Unshielded T-connector port","(B) Unshielded twisted pair","(C) Unshielded terminating pair","(D) Unshielded transmission process"],optsGu:["(A) UTP-A","(B) UTP-B","(C) UTP-C","(D) UTP-D"],ans:"(B) Unshielded twisted pair"},
+  {qEn:"81. Which is a MAC address?",qGu:"81. MAC address which?",opts:["(A) 192.166.200.50","(B) 00056A:01A01A5CCA7FF60","(C) 568, Airport Road","(D) 01:A5:BB:A7:FF:60"],optsGu:["(A) IP","(B) Long hex","(C) Text","(D) Colon hex"],ans:"(D) 01:A5:BB:A7:FF:60"},
+  {qEn:"82. Physical topology of FDDI:",qGu:"82. FDDI physical topology:",opts:["(A) Bus","(B) Ring","(C) Star","(D) None"],optsGu:["(A) Bus","(B) Ring","(C) Star","(D) None"],ans:"(B) Ring"},
+  {qEn:"83. Primary purpose of a VLAN?",qGu:"83. VLAN purpose:",opts:["(A) Show network layout","(B) Simulate a network","(C) Create VPN","(D) Segment network inside switch"],optsGu:["(A) Layout","(B) Sim","(C) VPN","(D) Seg"],ans:"(D) Segment network inside switch"},
+  {qEn:"84. SHA-1 is a",qGu:"84. SHA-1 is:",opts:["(A) Encryption algorithm","(B) Decryption algorithm","(C) Key exchange algorithm","(D) Message digest function"],optsGu:["(A) Enc","(B) Dec","(C) KE","(D) MDF"],ans:"(D) Message digest function"},
+  {qEn:"85. AES is based on",qGu:"85. AES based on:",opts:["(A) Asymmetric key algorithm","(B) Symmetric key algorithm","(C) Public key algorithm","(D) Key exchange"],optsGu:["(A) Asym","(B) Sym","(C) PK","(D) KE"],ans:"(B) Symmetric key algorithm"},
+  {qEn:"86. Characteristic of RAID 5:",qGu:"86. RAID 5 feature:",opts:["(A) Dedicated parity","(B) Double parity","(C) Hamming code parity","(D) Distributed parity"],optsGu:["(A) Ded","(B) Dbl","(C) Ham","(D) Dist"],ans:"(D) Distributed parity"},
+  {qEn:"87. IETF protocol suite for packet security at Internet layer:",qGu:"87. Internet layer security:",opts:["(A) IP sec","(B) Net Sec","(C) Packet Sec","(D) SSL"],optsGu:["(A) IPsec","(B) NS","(C) PS","(D) SSL"],ans:"(A) IP sec"},
+  {qEn:"88. Default subnet mask for class B:",qGu:"88. Class B default mask:",opts:["(A) 255.255.255.0","(B) 255.0.0.0","(C) 255.255.192.0","(D) 255.255.0.0"],optsGu:["(A) /24","(B) /8","(C) /18","(D) /16"],ans:"(D) 255.255.0.0"},
+  {qEn:"89. n devices: cable links for full mesh and star?",qGu:"89. n nodes mesh vs star links:",opts:["(A) n(n-1)/2, n-1","(B) n, n-1","(C) n-1, n","(D) n-1, n(n-1)/2"],optsGu:["(A) n(n-1)/2,n-1","(B) n,n-1","(C) n-1,n","(D) n-1,n(n-1)/2"],ans:"(A) n(n-1)/2, n-1"},
+  {qEn:"90. Protocol for transferring electronic mail machine-to-machine:",qGu:"90. Email machine-to-machine protocol:",opts:["(A) TELNET","(B) FTP","(C) SNMP","(D) SMTP"],optsGu:["(A) TEL","(B) FTP","(C) SNMP","(D) SMTP"],ans:"(D) SMTP"},
+  {qEn:"91. Ethernet frame < 64 octets (IEEE 802.3 minimum) is called",qGu:"91. Frame < 64 octets:",opts:["(A) Short frame","(B) Small frame","(C) Mini frame","(D) Runt frame"],optsGu:["(A) Short","(B) Small","(C) Mini","(D) Runt"],ans:"(D) Runt frame"},
+  {qEn:"92. Match: A-SNMP, B-BOOTP, C-FTP(data), D-TELNET with services",qGu:"92. Match protocols with services",opts:["(A) A-2, B-3, C-4, D-1","(B) A-2, B-4, C-3, D-1","(C) A-3, B-4, C-1, D-2","(D) A-3, B-1, C-4, D-2"],optsGu:["(A)","(B)","(C)","(D)"],ans:"(A) A-2, B-3, C-4, D-1"},
+  {qEn:"93. Optimal Asymmetric Encryption Padding in RSA counters",qGu:"93. OAEP in RSA counters:",opts:["(A) Known Ciphertext Attack","(B) Chosen Ciphertext Attack","(C) Known Plaintext Attack","(D) Chosen Plaintext Attack"],optsGu:["(A) KCA","(B) CCA","(C) KPA","(D) CPA"],ans:"(B) Chosen Ciphertext Attack"},
+  {qEn:"94. In Digital Signature: ____ used for ____, ____ used for ____",qGu:"94. Digital signature keys:",opts:["(A) Private Key, Encryption, Public Key, Decryption","(B) Private Key, Decryption, Public Key, Encryption","(C) DES, Encryption, DES, Decryption","(D) None correct"],optsGu:["(A) PK-Enc,Pub-Dec","(B) PK-Dec,Pub-Enc","(C) DES","(D) None"],ans:"(A) Private Key, Encryption, Public Key, Decryption"},
+  {qEn:"95. Correct attack ordering by difficulty (high to low)?",qGu:"95. Attack difficulty high→low:",opts:["(A) known PT, chosen PT, chosen CT, CT only","(B) known PT, chosen CT, chosen PT, CT only","(C) CT only, known PT, chosen PT, chosen CT","(D) CT only, chosen PT, known PT, chosen CT"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(C) CT only, known PT, chosen PT, chosen CT"},
+  {qEn:"96. Security service NOT provided by IPSec:",qGu:"96. IPSec does not provide:",opts:["(A) Access control","(B) Connectionless integrity","(C) User authentication","(D) Rejection of replayed packets"],optsGu:["(A) AC","(B) CI","(C) UA","(D) RR"],ans:"(C) User authentication"},
+  {qEn:"97. Attack using same protocol in both directions on challenge-response auth:",qGu:"97. Challenge-response same protocol attack:",opts:["(A) Replay attack","(B) Denial of Service","(C) Masquerading","(D) Reflection Attack"],optsGu:["(A) Rep","(B) DoS","(C) Mask","(D) Ref"],ans:"(D) Reflection Attack"},
+  {qEn:"98. Encryption primarily used to provide ____ security service:",qGu:"98. Encryption primary service:",opts:["(A) Confidentiality","(B) Access Control","(C) Non-repudiation","(D) User Authentication"],optsGu:["(A) Conf","(B) AC","(C) NR","(D) UA"],ans:"(A) Confidentiality"},
+  {qEn:"99. ATM cell payload field size:",qGu:"99. ATM payload:",opts:["(A) 53 bytes","(B) 48 bytes","(C) 64 bytes","(D) 56 bytes"],optsGu:["(A) 53","(B) 48","(C) 64","(D) 56"],ans:"(B) 48 bytes"},
+  {qEn:"100. Which is NOT a function of data link layer?",qGu:"100. NOT data link function:",opts:["(A) Framing","(B) Flow Control","(C) Signal encoding","(D) Error control"],optsGu:["(A) Fr","(B) FC","(C) SE","(D) EC"],ans:"(C) Signal encoding"},
+  {qEn:"101. In Manchester Encoding, data bits represented by",qGu:"101. Manchester encoding:",opts:["(A) 0 as high, 1 as low","(B) Both 0 and 1 as transition in middle of bit period","(C) 0 as transition at start, 1 as no transition","(D) Both 0 and 1 as No transition in middle"],optsGu:["(A) 0Hi,1Lo","(B) Both trans","(C) 0=trans","(D) No trans"],ans:"(B) Both 0 and 1 as transition in middle of bit period"},
+  {qEn:"102. TCP/IP: Network & Transport layer services respectively:",qGu:"102. Net+Transport services:",opts:["(A) Only connectionless, Both CL and CO","(B) Both CL and CO, Only CL","(C) Connectionless, Connection-Oriented","(D) CO, Connectionless"],optsGu:["(A) CL, Both","(B) Both, CL","(C) CL, CO","(D) CO, CL"],ans:"(A) Only connectionless, Both CL and CO"},
+  {qEn:"103. Error-free frames after erroneous frame are buffered, oldest retransmitted — this is:",qGu:"103. Buffer + retransmit oldest:",opts:["(A) Go Back N","(B) Selective Repeat","(C) One bit Sliding Window","(D) All the above"],optsGu:["(A) GBN","(B) SR","(C) 1SW","(D) All"],ans:"(B) Selective Repeat"},
+  {qEn:"104. ______ interconnects two networks at data link layer",qGu:"104. Interconnect at data link layer:",opts:["(A) Hub","(B) Repeater","(C) Bridge","(D) Router"],optsGu:["(A) H","(B) R","(C) Br","(D) Ro"],ans:"(C) Bridge"},
+  {qEn:"105. In PPP, network layer options negotiated using",qGu:"105. PPP network layer negotiation:",opts:["(A) Link Control Protocol","(B) Dynamic Host Control Protocol","(C) Internet Protocol","(D) Network Control Protocol"],optsGu:["(A) LCP","(B) DHCP","(C) IP","(D) NCP"],ans:"(D) Network Control Protocol"},
+  {qEn:"106. Sender starts transmitting as soon as it has data — this is",qGu:"106. Transmit immediately on data ready:",opts:["(A) Pure ALOHA","(B) Slotted ALOHA","(C) Persistent CSMA","(D) Non-persistent CSMA"],optsGu:["(A) Pure","(B) Slot","(C) Pers","(D) Non-p"],ans:"(A) Pure ALOHA"},
+  {qEn:"107. 100 BaseFX: max distance between station and hub?",qGu:"107. 100BaseFX max distance:",opts:["(A) 100 m","(B) 1000 m","(C) 2000 m","(D) 10000 m"],optsGu:["(A) 100","(B) 1000","(C) 2000","(D) 10000"],ans:"(C) 2000 m"},
+  {qEn:"108. ______ routing algorithm suffers from count-to-infinity problem",qGu:"108. Count-to-infinity problem:",opts:["(A) Link State","(B) Flooding","(C) Distance Vector","(D) Reverse Path Forwarding"],optsGu:["(A) LS","(B) Fl","(C) DV","(D) RPF"],ans:"(C) Distance Vector"},
+  {qEn:"109. In Link State Routing, ______ distributes link state packets",qGu:"109. LSR packet distribution:",opts:["(A) Broadcasting","(B) Hierarchical Routing","(C) Distance Vector Routing","(D) Flooding"],optsGu:["(A) Bcast","(B) Hier","(C) DVR","(D) Flood"],ans:"(D) Flooding"},
+  {qEn:"110. In real-time video conference, data from server is ____ to clients",qGu:"110. Video conference data type:",opts:["(A) Unicast","(B) Multicast","(C) Broadcast","(D) None"],optsGu:["(A) Uni","(B) Multi","(C) Broad","(D) None"],ans:"(B) Multicast"},
+  {qEn:"111. Match: RAID0-Striping, RAID1-Mirrored, RAID2-Hamming, RAID3-Parallel",qGu:"111. RAID match:",opts:["(A) A-2 B-4 C-3 D-1","(B) A-1 B-2 C-3 D-4","(C) A-2 B-3 C-4 D-1","(D) A-3 B-2 C-1 D-4"],optsGu:["(A)","(B)","(C)","(D)"],ans:"(A) A-2 B-4 C-3 D-1"},
+  {qEn:"112. Routers forward packets based on ______",qGu:"112. Routers forward based on:",opts:["(A) MAC","(B) IP Address","(C) Host name","(D) Neighbour table"],optsGu:["(A) MAC","(B) IP","(C) Host","(D) NT"],ans:"(B) IP Address"},
+  {qEn:"113. DES algorithm key length:",qGu:"113. DES key length:",opts:["(A) 128 bits","(B) 32 bits","(C) 64 bits","(D) 16 bits"],optsGu:["(A) 128","(B) 32","(C) 64","(D) 16"],ans:"(C) 64 bits"},
+  {qEn:"114. Intrusion detection system components:",qGu:"114. IDS components:",opts:["(A) Analysis Engine","(B) Alert Database","(C) Both","(D) None"],optsGu:["(A) AE","(B) AD","(C) Both","(D) None"],ans:"(C) Both"},
+  {qEn:"115. TCP connection establishment protocol:",qGu:"115. TCP connection setup:",opts:["(A) Three way handshake","(B) One way handshake","(C) Two way handshake","(D) None"],optsGu:["(A) 3W","(B) 1W","(C) 2W","(D) None"],ans:"(A) Three way handshake"},
+  {qEn:"116. ISDN is an example of ______",qGu:"116. ISDN example of:",opts:["(A) Circuit switched","(B) Packet switched","(C) Electric switch","(D) None"],optsGu:["(A) CS","(B) PS","(C) ES","(D) None"],ans:"(A) Circuit switched"},
+  {qEn:"117. Transport layer protocol deals with ______",qGu:"117. Transport layer deals with:",opts:["(A) Application to application","(B) Process to process","(C) Node to Node","(D) None"],optsGu:["(A) A-A","(B) P-P","(C) N-N","(D) None"],ans:"(B) Process to process"},
+  {qEn:"118. Default gateway handles routes not in ______",qGu:"118. Default gateway handles missing routes in:",opts:["(A) Topology table","(B) Routing table","(C) Neighbour table","(D) Find best path"],optsGu:["(A) Topo","(B) Route","(C) Neigh","(D) Best"],ans:"(B) Routing table"},
+  {qEn:"119. Cell Relay, also known as ______",qGu:"119. Cell Relay = ?",opts:["(A) ISDN","(B) X.25","(C) ATM","(D) Frame Relay"],optsGu:["(A) ISDN","(B) X.25","(C) ATM","(D) FR"],ans:"(C) ATM"},
+  {qEn:"120. DES encrypts data in block size of ______ bits",qGu:"120. DES block size:",opts:["(A) 64","(B) 128","(C) 32","(D) 56"],optsGu:["(A) 64","(B) 128","(C) 32","(D) 56"],ans:"(A) 64"},
+  {qEn:"121. UDP socket is:",qGu:"121. UDP socket:",opts:["(A) Connection oriented","(B) Connectionless socket","(C) Multicast socket","(D) CO and multicast"],optsGu:["(A) CO","(B) CL","(C) MC","(D) Both"],ans:"(B) Connectionless socket"},
+  {qEn:"122. ______ obtains IP address from physical address",qGu:"122. Physical→IP address:",opts:["(A) RARP","(B) IPV6","(C) TFTP","(D) TELNET"],optsGu:["(A) RARP","(B) IPV6","(C) TFTP","(D) TEL"],ans:"(A) RARP"},
+  {qEn:"123. Hamming distance d code: detection and correction ability?",qGu:"123. Hamming distance d ability:",opts:["(A) detect d, correct (d-1)","(B) detect (d-1) only","(C) detect (d-1), correct (d-1)/2","(D) detect & correct all d"],optsGu:["(A) d,d-1","(B) d-1 only","(C) d-1,(d-1)/2","(D) All"],ans:"(C) detect (d-1), correct (d-1)/2"},
+  {qEn:"124. Stop-and-wait: 1Mbps, 1000-bit packets, RTT=20ms. Link utilization?",qGu:"124. Stop-wait utilization:",opts:["(A) 0.5","(B) 0.05","(C) 0.005","(D) 5.0"],optsGu:["(A) 0.5","(B) 0.05","(C) 0.005","(D) 5.0"],ans:"(B) 0.05"},
+  {qEn:"125. Symmetric key crypto cannot provide digital signature because:",qGu:"125. Symmetric crypto no digital sig because:",opts:["(A) Computationally infeasible","(B) Involves key distribution","(C) Unreliable","(D) Requires private-public key pair"],optsGu:["(A) Comp","(B) Dist","(C) Unrel","(D) PK pair"],ans:"(D) Requires private-public key pair"},
+  {qEn:"126. CONGRATS→AMLEPYRQ. Encryption key is:",qGu:"126. CONGRATS→AMLEPYRQ key:",opts:["(A) +3","(B) +2","(C) -3","(D) -2"],optsGu:["(A) +3","(B) +2","(C) -3","(D) -2"],ans:"(D) -2"},
+  {qEn:"127. Gateway between mobile network and Internet in GPRS is called:",qGu:"127. GPRS Internet gateway:",opts:["(A) CCSN","(B) SGGN","(C) SGSN","(D) GGSN"],optsGu:["(A) CCSN","(B) SGGN","(C) SGSN","(D) GGSN"],ans:"(D) GGSN"},
+  {qEn:"128. Which is NOT a valid IPv4 address?",qGu:"128. Invalid IPv4:",opts:["(A) 192.10.14.3","(B) 200.172.287.33","(C) 65.92.11.00","(D) 10.34.110.77"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(B) 200.172.287.33"},
+  {qEn:"129. Communication where all duplicates have same destination address:",qGu:"129. Same destination all duplicates:",opts:["(A) Unicasting","(B) Multicasting","(C) Multiple unicasting","(D) Broadcasting"],optsGu:["(A) Uni","(B) Multi","(C) M-Uni","(D) Broad"],ans:"(B) Multicasting"},
+  {qEn:"130. IPv4 classful address space divided into how many classes?",qGu:"130. IPv4 classful classes count:",opts:["(A) 8","(B) 16","(C) 24","(D) 5"],optsGu:["(A) 8","(B) 16","(C) 24","(D) 5"],ans:"(D) 5"},
+  {qEn:"131. Block size in 56-bit DES and 128-bit DES respectively:",qGu:"131. DES56 and DES128 block sizes:",opts:["(A) 64 and 64 bits","(B) 64 and 128 bits","(C) 128 and 128 bits","(D) 128 and 256 bits"],optsGu:["(A) 64,64","(B) 64,128","(C) 128,128","(D) 128,256"],ans:"(A) 64 and 64 bits"},
+  {qEn:"132. A router must have at least ____ NICs",qGu:"132. Router minimum NICs:",opts:["(A) 3","(B) 4","(C) 2","(D) 5"],optsGu:["(A) 3","(B) 4","(C) 2","(D) 5"],ans:"(C) 2"},
+  {qEn:"133. IP starts with 11110 → Class ____",qGu:"133. 11110 → class:",opts:["(A) B","(B) C","(C) D","(D) E"],optsGu:["(A) B","(B) C","(C) D","(D) E"],ans:"(D) E"},
+  {qEn:"134. Which statement about 'Bridge' is NOT correct?",qGu:"134. Bridge incorrect statement:",opts:["(A) Acts as address filter","(B) Connects two LANs with similar protocols","(C) Does not modify packet contents","(D) Operates at Layer-3 of OSI"],optsGu:["(A) Addr","(B) LAN","(C) Content","(D) L3"],ans:"(D) Operates at Layer-3 of OSI"},
+  {qEn:"135. TCP Checksum field size in TCP header:",qGu:"135. TCP Checksum bits:",opts:["(A) 16","(B) 8","(C) 64","(D) 32"],optsGu:["(A) 16","(B) 8","(C) 64","(D) 32"],ans:"(A) 16"},
+  {qEn:"136. OSI layer between Data Link and Transport:",qGu:"136. Between DL and Transport:",opts:["(A) Network layer","(B) Session layer","(C) Presentation layer","(D) Physical layer"],optsGu:["(A) Net","(B) Ses","(C) Pres","(D) Phy"],ans:"(A) Network layer"},
+  {qEn:"137. OSI layer responsible for segmentation, acknowledgment, multiplexing:",qGu:"137. Seg+ACK+Mux layer:",opts:["(A) Network","(B) Session","(C) Data link","(D) Transport"],optsGu:["(A) Net","(B) Ses","(C) DL","(D) Trans"],ans:"(D) Transport"},
+  {qEn:"138. Protocol using port number 25:",qGu:"138. Port 25 protocol:",opts:["(A) HTTP","(B) POP3","(C) FTP","(D) SMTP"],optsGu:["(A) HTTP","(B) POP3","(C) FTP","(D) SMTP"],ans:"(D) SMTP"},
+  {qEn:"139. IPv6 uses ____ as loopback address (NOT 127.0.0.1)",qGu:"139. IPv6 loopback address:",opts:["(A) It uses 127.0.0.1 as loopback","(B) Supports globally unique unicast","(C) Uses ::1 as loopback","(D) Uses :: as unspecified"],optsGu:["(A) 127.0.0.1","(B) Unicast","(C) ::1","(D) ::"],ans:"(A) It uses 127.0.0.1 as loopback"},
+  {qEn:"140. Which is NOT true about circuit-switched networks?",qGu:"140. Circuit-switch NOT true:",opts:["(A) Circuit switching at physical layer","(B) Data not packetised","(C) No addressing during data transfer","(D) Resources NOT required to be reserved during setup"],optsGu:["(A) Phy","(B) NoPkt","(C) NoAddr","(D) NoRes"],ans:"(D) Resources NOT required to be reserved during setup"},
+  {qEn:"141. Packet with M bit = 0 means:",qGu:"141. M bit = 0 means:",opts:["(A) First fragment","(B) Last fragment","(C) Middle fragment","(D) Fragmented packet"],optsGu:["(A) First","(B) Last","(C) Mid","(D) Frag"],ans:"(B) Last fragment"},
+  {qEn:"142. IPv4 and IPv6 hop limit bits respectively:",qGu:"142. IPv4/IPv6 hop limit bits:",opts:["(A) 8 bits, 8 bits","(B) 12 bits, 8 bits","(C) 8 bits, 12 bits","(D) 6 bits, 8 bits"],optsGu:["(A) 8,8","(B) 12,8","(C) 8,12","(D) 6,8"],ans:"(A) 8 bits, 8 bits"},
+  {qEn:"143. WAP (Wireless Application Protocol):",qGu:"143. WAP:",opts:["(A) W3C product","(B) Data link layer of OSI","(C) Ensures interoperability among service providers","(D) High protocol overhead"],optsGu:["(A) W3C","(B) DL","(C) Interop","(D) Overhead"],ans:"(C) Ensures interoperability among service providers"},
+  {qEn:"144. Error reporting protocol:",qGu:"144. Error reporting protocol:",opts:["(A) ARP","(B) TCP","(C) ICMP","(D) UDP"],optsGu:["(A) ARP","(B) TCP","(C) ICMP","(D) UDP"],ans:"(C) ICMP"},
+  {qEn:"145. In OSI, routing performed by:",qGu:"145. OSI routing layer:",opts:["(A) Network layer","(B) Data link layer","(C) Transport layer","(D) Session layer"],optsGu:["(A) Net","(B) DL","(C) Trans","(D) Ses"],ans:"(A) Network layer"},
+  {qEn:"146. TCP-IP Model does NOT include:",qGu:"146. TCP-IP missing layer:",opts:["(A) Application layer","(B) Physical layer","(C) Session layer","(D) Data link layer"],optsGu:["(A) App","(B) Phy","(C) Ses","(D) DL"],ans:"(C) Session layer"},
+  {qEn:"147. BGP uses which algorithm?",qGu:"147. BGP algorithm:",opts:["(A) Bellman Ford","(B) Insertion Sort","(C) Dijkstra","(D) Kruskal"],optsGu:["(A) BF","(B) IS","(C) Dijkstra","(D) Krus"],ans:"(C) Dijkstra"},
+  {qEn:"148. Full duplex most widely used error recovery technique:",qGu:"148. Full duplex error recovery:",opts:["(A) Backward Error Correction","(B) Forward Error Correction","(C) ARQ","(D) Huffman"],ans:"(C) ARQ",opts:["(A) BEC","(B) FEC","(C) ARQ","(D) Huffman"],optsGu:["(A) BEC","(B) FEC","(C) ARQ","(D) Huff"]},
+  {qEn:"149. Any electronic device on a network is called:",qGu:"149. Network electronic device:",opts:["(A) Node","(B) Hub","(C) Router","(D) Cable"],optsGu:["(A) Node","(B) Hub","(C) Router","(D) Cable"],ans:"(A) Node"},
+  {qEn:"150. Device installed in PC to connect to network:",qGu:"150. PC network connection device:",opts:["(A) Hub","(B) Access Router","(C) Graphic Accelerator","(D) Network Interface Card"],optsGu:["(A) Hub","(B) AR","(C) GPU","(D) NIC"],ans:"(D) Network Interface Card"},
+  {qEn:"151. Two bits on shared medium simultaneously causes:",qGu:"151. Two bits same medium simultaneously:",opts:["(A) Latency","(B) Dispersion","(C) Collision","(D) Obstruction"],optsGu:["(A) Lat","(B) Dis","(C) Col","(D) Obs"],ans:"(C) Collision"},
+  {qEn:"152. Network area where packets originate and collide is:",qGu:"152. Packet origin and collision area:",opts:["(A) Network segment","(B) Collision segment","(C) Network domain","(D) Collision domain"],optsGu:["(A) NS","(B) CS","(C) ND","(D) CD"],ans:"(D) Collision domain"},
+  {qEn:"153. Another name for a rollover cable:",qGu:"153. Rollover cable = ?",opts:["(A) Inverted cable","(B) Console cable","(C) Cross connect cable","(D) Patch cable"],optsGu:["(A) Inv","(B) Con","(C) Cross","(D) Patch"],ans:"(B) Console cable"},
+  {qEn:"154. Default port number for HTTP:",qGu:"154. HTTP port:",opts:["(A) 440","(B) 80","(C) 90","(D) 21"],optsGu:["(A) 440","(B) 80","(C) 90","(D) 21"],ans:"(B) 80"},
+  {qEn:"155. Layer 3 switch recognizes:",qGu:"155. L3 switch recognizes:",opts:["(A) MAC address","(B) IP address","(C) Both MAC & IP","(D) None"],optsGu:["(A) MAC","(B) IP","(C) Both","(D) None"],ans:"(C) Both MAC & IP"},
+  {qEn:"156. A frame is a:",qGu:"156. Frame is:",opts:["(A) layer 2 PDU","(B) layer 3 PDU","(C) encapsulated packet","(D) both L2 PDU and encapsulated packet"],optsGu:["(A) L2","(B) L3","(C) Encap","(D) Both"],ans:"(D) both L2 PDU and encapsulated packet"},
+  {qEn:"157. FDDI primary reason for reliability:",qGu:"157. FDDI reliability reason:",opts:["(A) Dual ring design","(B) CSMA/CD","(C) Stations guaranteed turn","(D) Both dual ring and CSMA/CD"],optsGu:["(A) Dual","(B) CSMA","(C) Guar","(D) Both"],ans:"(D) Both dual ring and CSMA/CD"},
+  {qEn:"158. FDDI between buildings — which fiber mode?",qGu:"158. FDDI between buildings fiber:",opts:["(A) inter mode","(B) intra mode","(C) multi mode","(D) single mode"],optsGu:["(A) Inter","(B) Intra","(C) Multi","(D) Single"],ans:"(A) inter mode"},
+  {qEn:"159. MIME full form:",qGu:"159. MIME full form:",opts:["(A) Multipurpose Internet Mail Extension","(B) Multimedia Intranet Mail Extension","(C) Multipurpose Intranet Mail Extension","(D) Multimedia Internet Mail Extension"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(A) Multipurpose Internet Mail Extension"},
+  {qEn:"160. 802.11i implemented at which OSI layer?",qGu:"160. 802.11i OSI layer:",opts:["(A) Layer 1","(B) Layer 2","(C) Layer 3","(D) Layer 7"],optsGu:["(A) L1","(B) L2","(C) L3","(D) L7"],ans:"(B) Layer 2"},
+  {qEn:"161. Nat Borenstein discovered which internet mailing extension?",qGu:"161. Nat Borenstein discovered:",opts:["(A) SMTP","(B) MIME","(C) DNS","(D) PPP"],optsGu:["(A) SMTP","(B) MIME","(C) DNS","(D) PPP"],ans:"(B) MIME"},
+  {qEn:"162. HTTPS default port:",qGu:"162. HTTPS port:",opts:["(A) 99","(B) 80","(C) 443","(D) 400"],optsGu:["(A) 99","(B) 80","(C) 443","(D) 400"],ans:"(C) 443"},
+  {qEn:"163. Slowest transmission speeds:",qGu:"163. Slowest transmission medium:",opts:["(A) Twisted-pair wire","(B) Coaxial cable","(C) Fiber-optic cable","(D) Copper cable"],optsGu:["(A) TP","(B) Coax","(C) FO","(D) Cu"],ans:"(A) Twisted-pair wire"},
+  {qEn:"164. Noiseless 3 KHz binary channel max data rate?",qGu:"164. Noiseless 3KHz max rate:",opts:["(A) 3 Kbps","(B) 6 Kbps","(C) 12 Kbps","(D) 24 Kbps"],optsGu:["(A) 3K","(B) 6K","(C) 12K","(D) 24K"],ans:"(B) 6 Kbps"},
+  {qEn:"165. Standard protocol suite used by Internet, Intranets, Extranets:",qGu:"165. Internet standard suite:",opts:["(A) TCP/IP","(B) Protocol","(C) Open system","(D) Internet work processor"],optsGu:["(A) TCP/IP","(B) Prot","(C) OS","(D) IWP"],ans:"(A) TCP/IP"},
+  {qEn:"166. DHCP Server can greatly reduce ______",qGu:"166. DHCP reduces:",opts:["(A) WINS Server issues","(B) WINS Proxy issues","(C) TCP/IP configuration problems","(D) PDC issues"],optsGu:["(A) WINS","(B) Proxy","(C) TCP/IP config","(D) PDC"],ans:"(C) TCP/IP configuration problems"},
+  {qEn:"167. Used for modulation and demodulation:",qGu:"167. Modulation device:",opts:["(A) Modem","(B) Protocols","(C) Gateway","(D) Multiplexer"],optsGu:["(A) Modem","(B) Prot","(C) GW","(D) Mux"],ans:"(A) Modem"},
+  {qEn:"168. LAN frames transmitted to another LAN via:",qGu:"168. LAN-to-LAN device:",opts:["(A) Router","(B) Bridge","(C) Repeater","(D) Switch"],optsGu:["(A) R","(B) Br","(C) Rep","(D) Sw"],ans:"(B) Bridge"},
+  {qEn:"169. Correct order of encapsulation:",qGu:"169. Encapsulation order:",opts:["(A) Data, segment, packet, frame, bits","(B) Data, frame, packet, segment, bits","(C) Bits, data, packet, frame","(D) Bits, frame, data, packet"],optsGu:["(A) D,S,P,F,B","(B) D,F,P,S,B","(C) B,D,P,F","(D) B,F,D,P"],ans:"(A) Data, segment, packet, frame, bits"},
+  {qEn:"170. DNS can obtain ______ if domain name known:",qGu:"170. DNS domain→ ?",opts:["(A) Station address","(B) IP address","(C) Port address","(D) Checksum"],optsGu:["(A) Sta","(B) IP","(C) Port","(D) CS"],ans:"(B) IP address"},
+  {qEn:"171. CSMA stands for:",qGu:"171. CSMA full form:",opts:["(A) Carrier Sense Multiple Access","(B) Carrier Switch Multiple Access","(C) Carrier Switch Medium Access","(D) Control Sense Multiple Access"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(A) Carrier Sense Multiple Access"},
+  {qEn:"172. Selective repeat: sender/receiver window max size (m=seq field bits)?",qGu:"172. Selective repeat window max:",opts:["(A) 2m","(B) 2m-1","(C) 2²m","(D) 2²m-1"],optsGu:["(A) 2m","(B) 2m-1","(C) 2²m","(D) 2²m-1"],ans:"(B) 2m-1"},
+  {qEn:"173. TCP slow start phase: congestion window size",qGu:"173. TCP slow start window:",opts:["(A) does not increase","(B) increases linearly","(C) increases quadratically","(D) increases exponentially"],optsGu:["(A) None","(B) Lin","(C) Quad","(D) Exp"],ans:"(D) increases exponentially"},
+  {qEn:"174. Uncertainty in system of symbols is called:",qGu:"174. Symbol uncertainty:",opts:["(A) Bandwidth","(B) Entropy","(C) Loss","(D) Quantum"],optsGu:["(A) BW","(B) Entropy","(C) Loss","(D) Q"],ans:"(B) Entropy"},
+  {qEn:"175. ARP request frame destination address:",qGu:"175. ARP request destination:",opts:["(A) Broadcast IP address","(B) Broadcast MAC address","(C) Default gateway IP","(D) Default gateway MAC"],optsGu:["(A) BC IP","(B) BC MAC","(C) GW IP","(D) GW MAC"],ans:"(B) Broadcast MAC address"},
+  {qEn:"176. X.25 standard serial interface gateway protocol layers count:",qGu:"176. X.25 gateway protocol layers:",opts:["(A) 4","(B) 2","(C) 6","(D) 3"],optsGu:["(A) 4","(B) 2","(C) 6","(D) 3"],ans:"(D) 3"},
+  {qEn:"177. In OSI, routing performed by:",qGu:"177. OSI routing layer:",opts:["(A) Network layer","(B) Data link layer","(C) Transport layer","(D) Session layer"],optsGu:["(A) Net","(B) DL","(C) Trans","(D) Ses"],ans:"(A) Network layer"},
+  {qEn:"178. Encryption and compression done by which OSI layer?",qGu:"178. Encryption+compression layer:",opts:["(A) Session","(B) Application","(C) Transport","(D) Presentation"],optsGu:["(A) Ses","(B) App","(C) Trans","(D) Pres"],ans:"(D) Presentation"},
+  {qEn:"179. Find class of IP address: 129.6.8.4",qGu:"179. Class of 129.6.8.4:",opts:["(A) Class A","(B) Class B","(C) Class C","(D) Class D"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(B) Class B"},
+  {qEn:"180. IPv6 address is ______ bits long",qGu:"180. IPv6 bits:",opts:["(A) 16","(B) 32","(C) 64","(D) 128"],optsGu:["(A) 16","(B) 32","(C) 64","(D) 128"],ans:"(D) 128"},
+  {qEn:"181. TCP/IP internet — bits assigned to each host?",qGu:"181. TCP/IP host address bits:",opts:["(A) 16 bits","(B) 32 bits","(C) 48 bits","(D) 64 bits"],optsGu:["(A) 16","(B) 32","(C) 48","(D) 64"],ans:"(B) 32 bits"},
+  {qEn:"182. Which is NOT a function of network layer?",qGu:"182. NOT network layer function:",opts:["(A) routing","(B) inter-networking","(C) congestion control","(D) none of the options"],optsGu:["(A) Route","(B) Internetwork","(C) CC","(D) None"],ans:"(D) none of the options"},
+  {qEn:"183. URL which part specifies directory sequence to target?",qGu:"183. URL directory path part:",opts:["(A) Server","(B) resource","(C) path","(D) Scheme"],optsGu:["(A) Srv","(B) Res","(C) Path","(D) Scheme"],ans:"(C) path"},
+  {qEn:"184. A pointer to some data on the web is:",qGu:"184. Web data pointer:",opts:["(A) Firewall","(B) World Wide Web","(C) Network protocol","(D) Uniform Resource Locator"],optsGu:["(A) FW","(B) WWW","(C) NP","(D) URL"],ans:"(D) Uniform Resource Locator"},
+  {qEn:"185. HTML document translated by web browser is called:",qGu:"185. HTML doc displayed by browser:",opts:["(A) Web server","(B) Internet","(C) Domain","(D) Web page"],optsGu:["(A) WS","(B) Net","(C) Dom","(D) Page"],ans:"(D) Web page"},
+  {qEn:"186. HTTP response message from server contains which section?",qGu:"186. HTTP response section:",opts:["(A) Status Line","(B) GET Method","(C) Request Line","(D) Accept Field"],optsGu:["(A) Status","(B) GET","(C) Req","(D) Accept"],ans:"(A) Status Line"},
+  {qEn:"187. URN stands for:",qGu:"187. URN full form:",opts:["(A) Uniform Resource Network","(B) Uniform Resource Name","(C) Unique Resource Name","(D) Unique Resource Network"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(B) Uniform Resource Name"},
+  {qEn:"188. Which gives document location on Internet?",qGu:"188. Document location on internet:",opts:["(A) UML","(B) UDL","(C) URL","(D) UHL"],optsGu:["(A) UML","(B) UDL","(C) URL","(D) UHL"],ans:"(C) URL"},
+  {qEn:"189. Addressing scheme used by WWW browser to locate websites:",qGu:"189. Browser address scheme:",opts:["(A) HTTP","(B) URL","(C) TCP","(D) DNS"],optsGu:["(A) HTTP","(B) URL","(C) TCP","(D) DNS"],ans:"(B) URL"},
+  {qEn:"190. URL stands for:",qGu:"190. URL full form:",opts:["(A) Unique Resource Label","(B) Uniform Resource Locator","(C) Unique Reference Label","(D) Uniform Reference Locator"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(B) Uniform Resource Locator"},
+  {qEn:"191. Which is NOT a search engine?",qGu:"191. NOT search engine:",opts:["(A) Google","(B) Yahoo","(C) Twitter","(D) AltaVista"],optsGu:["(A) Goog","(B) Yahoo","(C) Twitter","(D) AV"],ans:"(C) Twitter"},
+  {qEn:"192. DNS servers translate web addresses to:",qGu:"192. DNS translates to:",opts:["(A) MAC address","(B) FTP address","(C) IP address","(D) Host Name"],optsGu:["(A) MAC","(B) FTP","(C) IP","(D) Host"],ans:"(C) IP address"},
+  {qEn:"193. To host a website which is required?",qGu:"193. Website hosting requires:",opts:["(A) Web Server","(B) Exchange Server","(C) Mail Server","(D) Database Server"],optsGu:["(A) Web","(B) Ex","(C) Mail","(D) DB"],ans:"(A) Web Server"},
+  {qEn:"194. Which is NOT part of IPv4 header?",qGu:"194. NOT in IPv4 header:",opts:["(A) Fragment Offset","(B) Source IP address","(C) Destination IP address","(D) Destination port number"],optsGu:["(A) FO","(B) SrcIP","(C) DstIP","(D) DstPort"],ans:"(D) Destination port number"},
+  {qEn:"195. Hub creates:",qGu:"195. Hub creates:",opts:["(A) Multiple collision domains","(B) Multiple broadcast domains","(C) One collision domain, multiple broadcast domains","(D) One big collision domain and one large broadcast domain"],optsGu:["(A) Multi CD","(B) Multi BD","(C) 1CD,Multi BD","(D) 1CD,1BD"],ans:"(D) One big collision domain and one large broadcast domain"},
+  {qEn:"196. How many bits in IPv4 datagram Header Checksum?",qGu:"196. IPv4 Header Checksum bits:",opts:["(A) 16","(B) 2","(C) 4","(D) 8"],optsGu:["(A) 16","(B) 2","(C) 4","(D) 8"],ans:"(A) 16"},
+  {qEn:"197. Attack that changes DNS entries directing users to invalid site:",qGu:"197. DNS redirect attack:",opts:["(A) Phishing","(B) Masquerade","(C) Worm","(D) Pharming"],optsGu:["(A) Ph","(B) Mask","(C) Worm","(D) Farm"],ans:"(D) Pharming"},
+  {qEn:"198. ICMP allows gateways to:",qGu:"198. ICMP function:",opts:["(A) Send error control messages","(B) Provide communication between IP software","(C) Report error conditions to source","(D) All of the options"],optsGu:["(A) Err msg","(B) Comm","(C) Report","(D) All"],ans:"(D) All of the options"},
+  {qEn:"199. Fiber optic advantage for high-speed networks:",qGu:"199. Fiber optic advantage:",opts:["(A) Immense bandwidth","(B) Extremely low error rates","(C) Large geographic distances without repeater","(D) All of the above"],optsGu:["(A) BW","(B) Low err","(C) Dist","(D) All"],ans:"(D) All of the above"},
+  {qEn:"200. ICANN is:",qGu:"200. ICANN is:",opts:["(A) Corporation for assigning names & numbers to domains","(B) Rules for Internet operation","(C) Security organization","(D) Network administration"],optsGu:["(A) Corp","(B) Rules","(C) Sec","(D) Admin"],ans:"(A) Corporation for assigning names & numbers to domains"},
+  {qEn:"201. RIP stands for:",qGu:"201. RIP full form:",opts:["(A) Routing Information Protocol","(B) Route Internet Protocol","(C) Router Information Protocol","(D) Route Intranet Protocol"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(A) Routing Information Protocol"},
+  {qEn:"202. BGP stands for:",qGu:"202. BGP full form:",opts:["(A) Bridged Gateway Protocol","(B) Border Gateway Protocol","(C) Bridge Gateway Protocol","(D) Border Gone Protocol"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(B) Border Gateway Protocol"},
+  {qEn:"203. IEEE 802.11 stands for:",qGu:"203. IEEE 802.11 = ?",opts:["(A) Wireless LAN","(B) Wired LAN","(C) Bluetooth","(D) Wi-MAX"],optsGu:["(A) WLAN","(B) LAN","(C) BT","(D) WiMAX"],ans:"(A) Wireless LAN"},
+  {qEn:"204. RS-232 applies to:",qGu:"204. RS-232 applies to:",opts:["(A) Parallel port","(B) Serial port","(C) Game port","(D) All"],optsGu:["(A) Par","(B) Ser","(C) Game","(D) All"],ans:"(B) Serial port"},
+  {qEn:"205. WiMAX belongs to IEEE family:",qGu:"205. WiMAX IEEE family:",opts:["(A) 802.14","(B) 802.13","(C) 802.16","(D) 802.11"],optsGu:["(A) .14","(B) .13","(C) .16","(D) .11"],ans:"(C) 802.16"},
+  {qEn:"206. Scripting technology NOT used at server side:",qGu:"206. NOT server-side scripting:",opts:["(A) JSP","(B) ASP","(C) HTML","(D) PHP"],optsGu:["(A) JSP","(B) ASP","(C) HTML","(D) PHP"],ans:"(C) HTML"},
+  {qEn:"207. What part of 192.168.10.51 is Network ID (default mask)?",qGu:"207. Network ID of 192.168.10.51:",opts:["(A) 192","(B) 192.168.10","(C) 0.0.0.5","(D) 51"],optsGu:["(A) 192","(B) 192.168.10","(C) 0.0.0.5","(D) 51"],ans:"(B) 192.168.10"},
+  {qEn:"208. Connectionless transport protocol:",qGu:"208. Connectionless transport:",opts:["(A) UDP","(B) TCP","(C) FTP","(D) SMTP"],optsGu:["(A) UDP","(B) TCP","(C) FTP","(D) SMTP"],ans:"(A) UDP"},
+  {qEn:"209. Default subnet mask for class C:",qGu:"209. Class C default mask:",opts:["(A) 127.0.0.1","(B) 255.0.0.0","(C) 255.255.0.0","(D) 255.255.255.0"],optsGu:["(A) 127.0.0.1","(B) /8","(C) /16","(D) /24"],ans:"(D) 255.255.255.0"},
+  {qEn:"210. OSI layer determining system-user interface:",qGu:"210. System-user interface layer:",opts:["(A) Network","(B) Application","(C) Data link","(D) Session"],optsGu:["(A) Net","(B) App","(C) DL","(D) Ses"],ans:"(B) Application"},
+  {qEn:"211. Which IPv4 class for 129.x.x.x?",qGu:"211. 129.x.x.x class:",opts:["(A) Class A","(B) Class B","(C) Class C","(D) Class D"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(B) Class B"},
+  {qEn:"212. Full duplex: sender and receiver can:",qGu:"212. Full duplex capability:",opts:["(A) cannot talk at once","(B) receive and send simultaneously","(C) send or receive one at a time","(D) one-way only"],optsGu:["(A) No sim","(B) Sim","(C) One","(D) 1-way"],ans:"(B) receive and send simultaneously"},
+  {qEn:"213. Broadcast address for subnet 172.16.99.99/255.255.192.0:",qGu:"213. Broadcast 172.16.99.99/255.255.192.0:",opts:["(A) 172.16.99.255","(B) 172.16.64.127","(C) 172.16.127.255","(D) 172.16.255.255"],optsGu:["(A) .99.255","(B) .64.127","(C) .127.255","(D) .255.255"],ans:"(C) 172.16.127.255"},
+  {qEn:"214. Class B broadcast address example:",qGu:"214. Class B broadcast example:",opts:["(A) 123.255.255.255","(B) 123.14.255.255","(C) 123.13.0.0","(D) 123.1.1.1"],optsGu:["(A) .255.255.255","(B) .14.255.255","(C) .13.0.0","(D) .1.1.1"],ans:"(A) 123.255.255.255"},
+  {qEn:"215. How many host addresses available in class C network?",qGu:"215. Class C host addresses:",opts:["(A) 254","(B) 255","(C) 256","(D) none of options"],optsGu:["(A) 254","(B) 255","(C) 256","(D) None"],ans:"(D) none of options"},
+  {qEn:"216. Bits borrowed to create subnet for class C?",qGu:"216. Class C subnet bits borrowed:",opts:["(A) 2","(B) 4","(C) 6","(D) 8"],optsGu:["(A) 2","(B) 4","(C) 6","(D) 8"],ans:"(C) 6"},
+  {qEn:"217. Router ANDs subnet mask with destination address to:",qGu:"217. Subnet mask AND purpose:",opts:["(A) Derive host numbers","(B) Compare subnet masks","(C) Derive network and subnet for packet","(D) none"],optsGu:["(A) Host","(B) Mask","(C) Net+Sub","(D) None"],ans:"(C) Derive network and subnet for packet"},
+  {qEn:"218. Token Ring data transfer rates and topology:",qGu:"218. Token Ring rates+topology:",opts:["(A) 4 or 16 mbps only","(B) Star topology only","(C) Only fiber","(D) Both 4/16mbps and star topology"],optsGu:["(A) Rates","(B) Star","(C) Fiber","(D) Both"],ans:"(D) Both 4/16mbps and star topology"},
+  {qEn:"219. Token Ring vs Ethernet differences:",qGu:"219. Token Ring vs Ethernet:",opts:["(A) No collision problems","(B) Deterministic","(C) Neither","(D) Both A and B"],optsGu:["(A) No col","(B) Det","(C) None","(D) Both"],ans:"(D) Both A and B"},
+  {qEn:"220. Backbone cabling using single-mode fiber max distance:",qGu:"220. Single-mode backbone max dist:",opts:["(A) 500 m","(B) 1000 m","(C) 2500 m","(D) 3000 m"],optsGu:["(A) 500","(B) 1000","(C) 2500","(D) 3000"],ans:"(B) 1000 m"},
+  {qEn:"221. Backbone cabling interconnects:",qGu:"221. Backbone cabling:",opts:["(A) token ring","(B) backbone cabling","(C) coaxial","(D) horizontal"],optsGu:["(A) TR","(B) Back","(C) Coax","(D) Horiz"],ans:"(B) backbone cabling"},
+  {qEn:"222. Class C network subnets count:",qGu:"222. Class C subnets:",opts:["(A) 245","(B) 26","(C) 256","(D) none"],optsGu:["(A) 245","(B) 26","(C) 256","(D) None"],ans:"(C) 256"},
+  {qEn:"223. Loopback ping — packet goes:",qGu:"223. Loopback ping goes:",opts:["(A) On the network","(B) Down IP layers then up again","(C) Across the wire","(D) Through loopback dongle"],optsGu:["(A) Net","(B) Layers","(C) Wire","(D) Dongle"],ans:"(B) Down IP layers then up again"},
+  {qEn:"224. Which TCP/IP protocol sends datagram between applications?",qGu:"224. App-to-app datagram:",opts:["(A) UDP","(B) VMTP","(C) X.25","(D) SMTP"],optsGu:["(A) UDP","(B) VMTP","(C) X.25","(D) SMTP"],ans:"(A) UDP"},
+  {qEn:"225. Remote batch input-only to central computer requires:",qGu:"225. Remote batch input-only:",opts:["(A) Telegraph line","(B) Simplex lines","(C) Mixedband channel","(D) All"],optsGu:["(A) Tel","(B) Simplex","(C) Mixed","(D) All"],ans:"(B) Simplex lines"},
+  {qEn:"226. Two systems using different protocols connected by:",qGu:"226. Different protocol connection:",opts:["(A) Hub","(B) Bridge","(C) Gateway","(D) Repeater"],optsGu:["(A) Hub","(B) Bridge","(C) Gateway","(D) Rep"],ans:"(C) Gateway"},
+  {qEn:"227. ADSL technology statement that is correct:",qGu:"227. ADSL correct statement:",opts:["(A) Two different data rates upstream/downstream","(B) 64 kbps leased line","(C) Needs special cabling","(D) Cannot share domestic telephone"],optsGu:["(A) Asym rates","(B) 64K","(C) Special cable","(D) No share"],ans:"(A) Two different data rates upstream/downstream"},
+  {qEn:"228. Multimode fiber: transmitted light travels by",qGu:"228. Multimode fiber light travel:",opts:["(A) Straight through core","(B) Bouncing off cladding","(C) Total internal reflection","(D) Absorption"],optsGu:["(A) Straight","(B) Bounce","(C) TIR","(D) Abs"],ans:"(B) Bouncing off cladding"},
+  {qEn:"229. Token Ring network: node wishing to send must:",qGu:"229. Token Ring node sending:",opts:["(A) Send immediately","(B) Wait for free token","(C) Broadcast request","(D) Check collision"],optsGu:["(A) Imm","(B) Wait token","(C) Bcast","(D) Collision"],ans:"(B) Wait for free token"},
+  {qEn:"230. Match: SMTP, BGP, TCP, PPP with OSI layers",qGu:"230. Match protocols to layers:",opts:["(A) SMTP-App, BGP-Net, TCP-DL, PPP-Trans","(B) SMTP-App, BGP-DL, TCP-Trans, PPP-Net","(C) SMTP-Trans, BGP-DL, TCP-Net, PPP-App","(D) SMTP-App, BGP-Net, TCP-Trans, PPP-DL"],optsGu:["(A)","(B)","(C)","(D)"],ans:"(D) SMTP-App, BGP-Net, TCP-Trans, PPP-DL"},
+  {qEn:"231. Max data rate for noiseless 3-kHz binary channel (Nyquist):",qGu:"231. Nyquist 3kHz binary max rate:",opts:["(A) 3000 bps","(B) 6000 bps","(C) 9000 bps","(D) 15000 bps"],optsGu:["(A) 3K","(B) 6K","(C) 9K","(D) 15K"],ans:"(B) 6000 bps"},
+  {qEn:"232. Digital fingerprint of a file using:",qGu:"232. File digital fingerprint:",opts:["(A) Netstart","(B) Cryptcat","(C) Md5sum","(D) All"],optsGu:["(A) NS","(B) CC","(C) MD5","(D) All"],ans:"(C) Md5sum"},
+  {qEn:"233. IPC-based process on different systems communicating via messages:",qGu:"233. IPC message process:",opts:["(A) Remote Machine Invocation","(B) Inter Process Communication","(C) Remote Procedure Call","(D) Local Procedure Call"],optsGu:["(A) RMI","(B) IPC","(C) RPC","(D) LPC"],ans:"(C) Remote Procedure Call"},
+  {qEn:"234. AM carrier 1160W, each sideband 80W. Modulation index?",qGu:"234. AM modulation index:",opts:["(A) 0.08","(B) 0.2","(C) 0.4","(D) 0.81"],optsGu:["(A) 0.08","(B) 0.2","(C) 0.4","(D) 0.81"],ans:"(C) 0.4"},
+  {qEn:"235. Standard AM receiver intermediate frequency (IF):",qGu:"235. AM receiver IF:",opts:["(A) 455 Hz","(B) 455 kHz","(C) 4.55 MHz","(D) 45.5 MHz"],optsGu:["(A) 455Hz","(B) 455kHz","(C) 4.55M","(D) 45.5M"],ans:"(B) 455 kHz"},
+  {qEn:"236. Host broadcasts frame to assign IP address to itself — uses:",qGu:"236. Self IP assignment protocol:",opts:["(A) RARP","(B) ARPA","(C) ICMP","(D) TCP"],optsGu:["(A) RARP","(B) ARPA","(C) ICMP","(D) TCP"],ans:"(A) RARP"},
+  {qEn:"237. Class B first octet range:",qGu:"237. Class B first octet range:",opts:["(A) 1-126","(B) 1-127","(C) 128-190","(D) 128-191"],optsGu:["(A) 1-126","(B) 1-127","(C) 128-190","(D) 128-191"],ans:"(D) 128-191"},
+  {qEn:"238. Non-hardware level LAN identification:",qGu:"238. Non-hardware LAN ID:",opts:["(A) Name","(B) MAC Address","(C) IP Address","(D) Serial number"],optsGu:["(A) Name","(B) MAC","(C) IP","(D) Serial"],ans:"(C) IP Address"},
+  {qEn:"239. Poll/select line discipline requires ____ to identify packet recipient:",qGu:"239. Poll/select requires:",opts:["(A) Timer","(B) Buffer","(C) Address","(D) Dedicated line"],optsGu:["(A) Timer","(B) Buf","(C) Addr","(D) Ded"],ans:"(C) Address"},
+  {qEn:"240. Memory bandwidth if access=45ns, settling=5ns?",qGu:"240. Memory bandwidth (access=45ns,settle=5ns):",opts:["(A) 20 Hz","(B) 50 MHz","(C) 20 KHz","(D) 20 MHz"],optsGu:["(A) 20Hz","(B) 50M","(C) 20K","(D) 20M"],ans:"(D) 20 MHz"},
+  {qEn:"241. In IPv4 vs IPv6, which is NOT true about IPv6?",qGu:"241. IPv6 NOT true statement:",opts:["(A) Uses 127.0.0.1 as loopback","(B) Supports globally unique unicast","(C) Uses ::1 as loopback","(D) Uses :: as unspecified"],optsGu:["(A) 127","(B) Unicast","(C) ::1","(D) ::"],ans:"(A) Uses 127.0.0.1 as loopback"},
+  {qEn:"242. TCP/IP mail transfer protocol:",qGu:"242. TCP/IP mail transfer:",opts:["(A) FTP","(B) SNMP","(C) SMTP/RPC","(D) none"],optsGu:["(A) FTP","(B) SNMP","(C) SMTP","(D) None"],ans:"(C) SMTP/RPC"},
+  {qEn:"243. Packet switching advantages include:",qGu:"243. Packet switching includes:",opts:["(A) subdivision into packets","(B) additional network intelligence","(C) wide bandwidth circuits","(D) All of the options"],optsGu:["(A) Sub","(B) Int","(C) BW","(D) All"],ans:"(D) All of the options"},
+  {qEn:"244. In 802.11i, where is it implemented in OSI?",qGu:"244. 802.11i OSI layer:",opts:["(A) Layer 1","(B) Layer 2","(C) Layer 3","(D) Layer 7"],optsGu:["(A) L1","(B) L2","(C) L3","(D) L7"],ans:"(B) Layer 2"},
+  {qEn:"245. Subnet 123.224.00.00/12 — how many host interfaces?",qGu:"245. 123.224.00.00/12 host interfaces:",opts:["(A) 2048","(B) 2,097,150","(C) 1,000,192","(D) 2,097,152"],optsGu:["(A) 2048","(B) 2097150","(C) 1000192","(D) 2097152"],ans:"(B) 2,097,150"},
+  {qEn:"246. Check bit for message 111101 using Hamming code:",qGu:"246. Hamming check bit of 111101:",opts:["(A) 1101","(B) 0101","(C) 1001","(D) 0001"],optsGu:["(A) 1101","(B) 0101","(C) 1001","(D) 0001"],ans:"(D) 0001"},
+  {qEn:"247. FDDI does NOT support which of the following?",qGu:"247. FDDI does NOT support:",opts:["(A) data encoding/decoding","(B) transmission media","(C) fault tolerant transmission","(D) media access control"],optsGu:["(A) Enc","(B) Media","(C) FT","(D) MAC"],ans:"(B) transmission media"},
+  {qEn:"248. If class B used 21 bits for network instead of 16, how many class B networks?",qGu:"248. Class B 21-bit network count:",opts:["(A) 2²¹","(B) 2¹⁶","(C) 2¹⁹","(D) 2²³"],optsGu:["(A) 2²¹","(B) 2¹⁶","(C) 2¹⁹","(D) 2²³"],ans:"(C) 2¹⁹"},
+  {qEn:"249. Correct statement about fiber optic cables:",qGu:"249. Fiber optic correct statement:",opts:["(A) Not suitable for short distances","(B) Multimode: light bounced off cladding","(C) Susceptible to electromagnetic interference","(D) Single mode NOT higher bandwidth than multimode"],optsGu:["(A) Short","(B) Bounce","(C) EMI","(D) SM BW"],ans:"(B) Multimode: light bounced off cladding"},
+  {qEn:"250. ARQ — on full duplex data link, most used error recovery:",qGu:"250. Full duplex error recovery:",opts:["(A) BEC","(B) FEC","(C) ARQ","(D) Huffman"],optsGu:["(A) BEC","(B) FEC","(C) ARQ","(D) Huff"],ans:"(C) ARQ"},
+  {qEn:"251. Match: A-SMTP/App, B-BGP/Net, C-TCP/Trans, D-PPP/DataLink",qGu:"251. Match SMTP/BGP/TCP/PPP:",opts:["(A) i-P,ii-S,iii-R,iv-Q","(B) i-P,ii-R,iii-Q,iv-S","(C) i-Q,ii-R,iii-S,iv-P","(D) i-P,ii-R,iii-S,iv-Q"],optsGu:["(A)","(B)","(C)","(D)"],ans:"(D) i-P,ii-R,iii-S,iv-Q"},
+  {qEn:"252. Mask for 172.16.0.0 with 300+ subnets, <500 hosts each?",qGu:"252. Mask for 300+ subnets, <500 hosts:",opts:["(A) 255.255.255.0","(B) 255.255.0.0","(C) 255.255.252.0","(D) 255.255.254.0"],optsGu:["(A) /24","(B) /16","(C) /22","(D) /23"],ans:"(A) 255.255.255.0"},
+  {qEn:"253. DMA transfers performed by:",qGu:"253. DMA transfer controller:",opts:["(A) Device interface","(B) DMA controller","(C) Data controller","(D) Overlooker"],optsGu:["(A) DI","(B) DMA","(C) DC","(D) Over"],ans:"(B) DMA controller"},
+  {qEn:"254. Incorrect statement about OSI model:",qGu:"254. OSI model incorrect statement:",opts:["(A) Layer created where different abstraction needed","(B) Each layer performs well-defined function","(C) Functions defined per international protocol","(D) Layer boundaries maximize information flow across interface"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(D) Layer boundaries maximize information flow across interface"},
+  {qEn:"255. Which is NOT a consumable resource?",qGu:"255. NOT consumable resource:",opts:["(A) Interrupts","(B) Signals","(C) I/O devices","(D) Messages"],optsGu:["(A) Int","(B) Sig","(C) I/O","(D) Msg"],ans:"(C) I/O devices"},
+  {qEn:"256. KDC secret key between members must be a ______ key:",qGu:"256. KDC members secret key type:",opts:["(A) Public","(B) Session","(C) Complimentary","(D) None"],optsGu:["(A) Pub","(B) Ses","(C) Comp","(D) None"],ans:"(B) Session"},
+  {qEn:"257. RSA P=7, Q=7. Public key and private key values?",qGu:"257. RSA P=7,Q=7 keys:",opts:["(A) 5 and 72","(B) 6 and 77","(C) 5 and 77","(D) None of these"],optsGu:["(A) 5,72","(B) 6,77","(C) 5,77","(D) None"],ans:"(D) None of these"},
+  {qEn:"258. SMTP provides which basic facility?",qGu:"258. SMTP provides:",opts:["(A) TELENET","(B) SNMP","(C) SMTP","(D) UDP"],optsGu:["(A) TEL","(B) SNMP","(C) SMTP","(D) UDP"],ans:"(C) SMTP"},
+  {qEn:"259. Avalanche photodiode detects data by receiving how many photons?",qGu:"259. Avalanche photodiode photons:",opts:["(A) 100","(B) 200","(C) 300","(D) 400"],optsGu:["(A) 100","(B) 200","(C) 300","(D) 400"],ans:"(B) 200"},
+  {qEn:"260. Which is used to close active tab in Google Chrome?",qGu:"260. Chrome close tab shortcut:",opts:["(A) Shift+W","(B) Ctrl+T","(C) Alt+W","(D) Ctrl+W"],optsGu:["(A) Sh+W","(B) Ctrl+T","(C) Alt+W","(D) Ctrl+W"],ans:"(D) Ctrl+W"},
+  {qEn:"261. Outlook email client configuration:",qGu:"261. Outlook configuration:",opts:["(A) Actions→Account Settings","(B) Tools→Account Settings","(C) View→Account Settings","(D) Edit→Account Settings"],optsGu:["(A) Actions","(B) Tools","(C) View","(D) Edit"],ans:"(B) Tools→Account Settings"},
+  {qEn:"262. Incorrect statement about sending new email:",qGu:"262. Email sending incorrect:",opts:["(A) Subject entered in subject field","(B) CC = Carbon Copy","(C) Sender email auto-stored in To field","(D) BCC = Blind Carbon Copy"],optsGu:["(A) Sub","(B) CC","(C) Sender→To","(D) BCC"],ans:"(C) Sender email auto-stored in To field"},
+  {qEn:"263. True about instant messaging smileys:",qGu:"263. Smiley true statements:",opts:["(A) Smileys sent with text only","(B) Smiley is pictorial emotion — both i and ii true","(C) Smileys cannot be sent","(D) Smileys only in images"],optsGu:["(A) Text only","(B) Both true","(C) Cannot","(D) Images only"],ans:"(B) Smiley is pictorial emotion — both i and ii true"},
+  {qEn:"264. VPN terminated at primary location by:",qGu:"264. VPN termination:",opts:["(A) Router","(B) ASA","(C) Head-end device","(D) Software client"],optsGu:["(A) Router","(B) ASA","(C) Head-end","(D) SW client"],ans:"(C) Head-end device"},
+  {qEn:"265. SDM wizard for choosing VPN:",qGu:"265. SDM VPN wizard:",opts:["(A) VPN Design Guide","(B) IPSec Wizard","(C) VPN Recommendation Guide","(D) IPSec Guide"],optsGu:["(A) VPN DG","(B) IPSec W","(C) VPN RG","(D) IPSec G"],ans:"(A) VPN Design Guide"},
+  {qEn:"266. Network layer concerns with:",qGu:"266. Network layer unit:",opts:["(A) bits","(B) frames","(C) packets","(D) none"],optsGu:["(A) bits","(B) frames","(C) packets","(D) none"],ans:"(C) packets"},
+  {qEn:"267. Wireless LAN disadvantages include:",qGu:"267. WLAN disadvantages:",opts:["(A) Slower data transmission","(B) Higher error rate","(C) Interference from different computers","(D) All of the options"],optsGu:["(A) Slow","(B) Err","(C) Interf","(D) All"],ans:"(D) All of the options"},
+  {qEn:"268. LAN in downtown + manufacturing plant needs:",qGu:"268. Connect two distant LANs:",opts:["(A) Modem","(B) Cable","(C) Hub","(D) Router"],optsGu:["(A) Modem","(B) Cable","(C) Hub","(D) Router"],ans:"(D) Router"},
+  {qEn:"269. MDF location in multi-story building with extended star LAN:",qGu:"269. MDF location extended star:",opts:["(A) First floor","(B) Next to the POP","(C) Middle floor","(D) Basement"],optsGu:["(A) 1st","(B) POP","(C) Mid","(D) Base"],ans:"(B) Next to the POP"},
+  {qEn:"270. What type of cabling interconnects wiring closets and POP?",qGu:"270. Wiring closets and POP cabling:",opts:["(A) Token ring","(B) Backbone cabling","(C) Coaxial","(D) Horizontal"],optsGu:["(A) TR","(B) Backbone","(C) Coax","(D) Horiz"],ans:"(B) Backbone cabling"},
+  {qEn:"271. Ethernet 10 Base-T uses cat 5 cable; 100 Base-Fx is multimode fiber — both correct?",qGu:"271. 10Base-T and 100Base-Fx statements:",opts:["(A) Only 10 Base-T correct","(B) Only 100 Base-Fx correct","(C) Both are correct","(D) Neither correct"],optsGu:["(A) A only","(B) B only","(C) Both","(D) Neither"],ans:"(C) Both are correct"},
+  {qEn:"272. Class B address example 123.14.255.255 is:",qGu:"272. 123.14.255.255 is:",opts:["(A) Network address","(B) Broadcast address","(C) Host address","(D) Subnet address"],optsGu:["(A) Net","(B) BC","(C) Host","(D) Subnet"],ans:"(B) Broadcast address"},
+  {qEn:"273. In selective repeat, window max size if m = sequence field bits:",qGu:"273. Selective repeat window:",opts:["(A) 2^m","(B) 2^(m-1)","(C) 2^(m/2)","(D) 2^m - 1"],optsGu:["(A) 2^m","(B) 2^m-1","(C) 2^m/2","(D) 2^m-1"],ans:"(D) 2^m - 1"},
+  {qEn:"274. Carrier is:",qGu:"274. Carrier is:",opts:["(A) Group of conductors","(B) Continuous frequency capable of being modulated","(C) Two sections using same channel","(D) Data stations attached to network"],optsGu:["(A) Cond","(B) Freq","(C) Shared","(D) Sta"],ans:"(B) Continuous frequency capable of being modulated"},
+  {qEn:"275. ICANN stands for:",qGu:"275. ICANN full form:",opts:["(A) Internet Corporation for Assigned Names and Numbers","(B) Internet Control for Network Addresses","(C) Internet Committee for Allocated Network Names","(D) International Corporation for Allocated Names"],optsGu:["(A) A","(B) B","(C) C","(D) D"],ans:"(A) Internet Corporation for Assigned Names and Numbers"},
+  {qEn:"276. How many class B networks with 21-bit network part?",qGu:"276. 21-bit Class B networks:",opts:["(A) 2^21","(B) 2^16","(C) 2^19","(D) 2^23"],optsGu:["(A) 2^21","(B) 2^16","(C) 2^19","(D) 2^23"],ans:"(C) 2^19"},
+  {qEn:"277. Broadcast address for 172.16.0.0/255.255.0.0:",qGu:"277. Broadcast 172.16.0.0/16:",opts:["(A) 172.16.0.255","(B) 172.16.255.255","(C) 255.255.255.255","(D) 172.255.255.255"],optsGu:["(A)","(B)","(C)","(D)"],ans:"(B) 172.16.255.255"},
+  {qEn:"278. IP sec in tunnel mode results in packet with:",qGu:"278. IPsec tunnel result:",opts:["(A) Same header","(B) New header","(C) No header","(D) No change"],optsGu:["(A) Same","(B) New","(C) None","(D) NC"],ans:"(B) New header"},
+  {qEn:"279. Which is an error reporting protocol?",qGu:"279. Error reporting protocol:",opts:["(A) ARP","(B) TCP","(C) ICMP","(D) UDP"],optsGu:["(A) ARP","(B) TCP","(C) ICMP","(D) UDP"],ans:"(C) ICMP"},
+  {qEn:"280. ADSL stands for and has characteristic:",qGu:"280. ADSL characteristic:",opts:["(A) Asymmetric — same rate up/down","(B) Asymmetric — different rates up/down","(C) Symmetric — same rate","(D) Synchronous — high speed"],optsGu:["(A) Same","(B) Different","(C) Sym","(D) Sync"],ans:"(B) Asymmetric — different rates up/down"},
+  {qEn:"281. Token Ring: node wanting to transmit must wait for:",qGu:"281. Token Ring transmission wait:",opts:["(A) Carrier detection","(B) Free token","(C) Broadcast acknowledgment","(D) Collision resolution"],optsGu:["(A) Car","(B) Free token","(C) BC ack","(D) Col"],ans:"(B) Free token"},
+  {qEn:"282. Which is correct for 10 Base-T Ethernet variety?",qGu:"282. 10Base-T correct?",opts:["(A) Uses coaxial cable","(B) Uses cat 3 or cat 5 twisted pair","(C) Uses fiber optic","(D) Uses wireless"],optsGu:["(A) Coax","(B) TP","(C) FO","(D) Wireless"],ans:"(B) Uses cat 3 or cat 5 twisted pair"},
+  {qEn:"283. MAN in multi-story building MDF should be located:",qGu:"283. MDF best location:",opts:["(A) Top floor","(B) Next to POP","(C) Middle floor","(D) Basement"],optsGu:["(A) Top","(B) POP","(C) Mid","(D) Base"],ans:"(B) Next to POP"},
+  {qEn:"284. Ethernet collision is best described as:",qGu:"284. Ethernet collision description:",opts:["(A) Non-OSI protocol result","(B) Two nodes same MAC","(C) Two nodes transmitting simultaneously","(D) Too many repeaters"],optsGu:["(A) Non-OSI","(B) Same MAC","(C) Sim TX","(D) Repeaters"],ans:"(C) Two nodes transmitting simultaneously"},
+  {qEn:"285. Optical fiber for high-speed networks because:",qGu:"285. Fiber optic high-speed advantage:",opts:["(A) Immense bandwidth","(B) Extremely low error rates","(C) Large distances without repeater","(D) All of the above"],optsGu:["(A) BW","(B) Low err","(C) Dist","(D) All"],ans:"(D) All of the above"},
+  {qEn:"286. Full duplex means sender and receiver can:",qGu:"286. Full duplex definition:",opts:["(A) Not communicate simultaneously","(B) Send and receive simultaneously","(C) Only send at one time","(D) Only one-way communication"],optsGu:["(A) No sim","(B) Sim","(C) One","(D) 1-way"],ans:"(B) Send and receive simultaneously"},
+  {qEn:"287. Class B network first octet address range:",qGu:"287. Class B first octet:",opts:["(A) 1-127","(B) 128-191","(C) 192-223","(D) 224-239"],optsGu:["(A) 1-127","(B) 128-191","(C) 192-223","(D) 224-239"],ans:"(B) 128-191"},
+  {qEn:"288. Multicast data from server to clients is used in:",qGu:"288. Multicast used in:",opts:["(A) P2P file sharing","(B) Real-time video conferencing","(C) Email delivery","(D) FTP"],optsGu:["(A) P2P","(B) Video","(C) Email","(D) FTP"],ans:"(B) Real-time video conferencing"},
+  {qEn:"289. In 100BaseFX, max distance between station and hub:",qGu:"289. 100BaseFX max distance:",opts:["(A) 100 m","(B) 500 m","(C) 1000 m","(D) 2000 m"],optsGu:["(A) 100","(B) 500","(C) 1000","(D) 2000"],ans:"(D) 2000 m"},
+  {qEn:"290. Which device creates multiple collision domains and single broadcast domain?",qGu:"290. Multiple CD, single BD device:",opts:["(A) Hub","(B) Switch","(C) Router","(D) Repeater"],optsGu:["(A) Hub","(B) Switch","(C) Router","(D) Rep"],ans:"(B) Switch"},
+  {qEn:"291. AES block size and key size:",qGu:"291. AES block and key size:",opts:["(A) 64-bit block, 56-bit key","(B) 128-bit block, 128/192/256-bit key","(C) 128-bit block, 64-bit key","(D) 256-bit block, 256-bit key"],optsGu:["(A) 64/56","(B) 128/128+","(C) 128/64","(D) 256/256"],ans:"(B) 128-bit block, 128/192/256-bit key"}
+];
+
+// ===== STATE =====
+const PART_SIZE = 100;
+const TOTAL = ALL_MCQS.length;
+const PARTS = Math.ceil(TOTAL / PART_SIZE);
+
+let currentPart = 0;
+let globalLang = 'en';
+let mode = 'practice';
+let answers = new Array(TOTAL).fill(null); // null | 'correct' | 'wrong'
+let selectedOpts = new Array(TOTAL).fill(null);
+let cardLangs = new Array(TOTAL).fill('en');
+let searchText = '';
+
+// ===== INIT =====
+function init() {
+  buildPartTabs();
+  renderPart(0);
+  updateProgress();
+
+  window.addEventListener('scroll', onScroll);
+  let lastScroll = 0;
+  function onScroll() {
+    const st = window.scrollY;
+    const header = document.getElementById('header');
+    if (st > lastScroll && st > 100) header.classList.add('hide');
+    else header.classList.remove('hide');
+    lastScroll = st <= 0 ? 0 : st;
+    document.getElementById('scrollTop').classList.toggle('show', st > 400);
+  }
+}
+
+function buildPartTabs() {
+  const container = document.getElementById('partTabs');
+  container.innerHTML = '';
+  for (let p = 0; p < PARTS; p++) {
+    const start = p * PART_SIZE + 1;
+    const end = Math.min((p + 1) * PART_SIZE, TOTAL);
+    const btn = document.createElement('button');
+    btn.className = 'part-tab' + (p === 0 ? ' active' : '');
+    btn.innerHTML = `Part ${p + 1} <span class="tab-badge">${start}–${end}</span>`;
+    btn.onclick = () => switchPart(p);
+    container.appendChild(btn);
+  }
+}
+
+function switchPart(p) {
+  currentPart = p;
+  document.querySelectorAll('.part-tab').forEach((t, i) => t.classList.toggle('active', i === p));
+  searchText = '';
+  document.getElementById('searchInput').value = '';
+  renderPart(p);
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => {
+    document.querySelector('.part-tabs').scrollTo({
+      left: document.querySelectorAll('.part-tab')[p].offsetLeft - 60,
+      behavior: 'smooth'
+    });
+  }, 100);
+}
+
+function getPartMCQs() {
+  const start = currentPart * PART_SIZE;
+  const end = Math.min(start + PART_SIZE, TOTAL);
+  return ALL_MCQS.slice(start, end).map((q, localIdx) => ({
+    ...q, globalIdx: start + localIdx, localIdx
+  }));
+}
+
+function renderPart(p) {
+  const container = document.getElementById('mcqContainer');
+  container.innerHTML = '';
+  const partMCQs = getPartMCQs();
+  const filtered = partMCQs.filter(q => {
+    if (!searchText) return true;
+    const s = searchText.toLowerCase();
+    return q.qEn.toLowerCase().includes(s) ||
+      (q.qGu && q.qGu.toLowerCase().includes(s)) ||
+      q.opts.some(o => o.toLowerCase().includes(s));
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">🔍</div>No questions match your search.</div>`;
+    return;
+  }
+
+  filtered.forEach(q => {
+    const gi = q.globalIdx;
+    const lang = cardLangs[gi];
+    const question = lang === 'gu' && q.qGu ? q.qGu : q.qEn;
+    const opts = (lang === 'gu' && q.optsGu) ? q.optsGu : q.opts;
+    const isAnswered = answers[gi] !== null;
+    const globalNum = gi + 1;
+
+    let optBtns = opts.map((opt, oi) => {
+      let cls = 'option-btn';
+      if (mode === 'practice' && isAnswered) {
+        if (opt === q.ans) cls += ' correct';
+        else if (oi === selectedOpts[gi] && opt !== q.ans) cls += ' wrong';
+      } else if (mode === 'test') {
+        if (oi === selectedOpts[gi]) cls += ' selected';
+      }
+      const disabled = (mode === 'practice' && isAnswered) || (mode === 'test' && isAnswered) ? 'disabled' : '';
+      const label = opt.substring(0, 3);
+      const text = opt.substring(3);
+      return `<button class="${cls}" ${disabled} onclick="handleAnswer(${gi},${oi},'${escQ(opt)}')">
+        <span class="opt-label">${label}</span>${text}
+      </button>`;
+    }).join('');
+
+    const ansReveal = mode === 'practice' && isAnswered
+      ? `<div class="answer-reveal" style="display:block"><strong>✓ Correct:</strong> ${q.ans}</div>` : '';
+
+    const statusCls = answers[gi] === 'correct' ? 'correct' : answers[gi] === 'wrong' ? 'wrong' : '';
+    const answeredCls = isAnswered ? ' answered' : '';
+
+    container.innerHTML += `
+      <div class="mcq-card${answeredCls}" id="qcard-${gi}">
+        <div class="card-header">
+          <span class="q-num">Q ${globalNum}</span>
+          <div class="q-status ${statusCls}"></div>
+        </div>
+        <div class="card-lang">
+          <button class="${lang==='en'?'active':''}" onclick="setCardLang(${gi},'en')">EN</button>
+          <button class="${lang==='gu'?'active':''}" onclick="setCardLang(${gi},'gu')">ગુ</button>
+        </div>
+        <div class="question-text">${question}</div>
+        <div class="options-grid">${optBtns}</div>
+        ${ansReveal}
+      </div>`;
+  });
+
+  updateFooter();
+}
+
+function escQ(s) { return s.replace(/'/g, "\\'"); }
+
+function handleAnswer(gi, optIdx, optText) {
+  if (answers[gi] !== null) return;
+  selectedOpts[gi] = optIdx;
+  const q = ALL_MCQS[gi];
+  answers[gi] = optText === q.ans ? 'correct' : 'wrong';
+  if (mode === 'practice') {
+    renderPart(currentPart);
+    updateProgress();
+    showToast(answers[gi] === 'correct' ? '✓ Correct!' : '✗ Wrong!');
+  } else {
+    // just re-render to show selection
+    renderPart(currentPart);
+    updateFooter();
+  }
+}
+
+function setCardLang(gi, lang) {
+  cardLangs[gi] = lang;
+  renderPart(currentPart);
+}
+
+function setGlobalLang(lang) {
+  globalLang = lang;
+  const start = currentPart * PART_SIZE;
+  const end = Math.min(start + PART_SIZE, TOTAL);
+  for (let i = start; i < end; i++) cardLangs[i] = lang;
+  document.getElementById('gLangEn').classList.toggle('active', lang === 'en');
+  document.getElementById('gLangGu').classList.toggle('active', lang === 'gu');
+  renderPart(currentPart);
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnPractice').classList.toggle('active', m === 'practice');
+  document.getElementById('btnTest').classList.toggle('active', m === 'test');
+  const start = currentPart * PART_SIZE;
+  const end = Math.min(start + PART_SIZE, TOTAL);
+  for (let i = start; i < end; i++) { answers[i] = null; selectedOpts[i] = null; }
+  renderPart(currentPart);
+  updateProgress();
+  updateFooter();
+}
+
+function filterCards() {
+  searchText = document.getElementById('searchInput').value;
+  renderPart(currentPart);
+}
+
+function updateProgress() {
+  const start = currentPart * PART_SIZE;
+  const end = Math.min(start + PART_SIZE, TOTAL);
+  let answered = 0;
+  for (let i = start; i < end; i++) if (answers[i] !== null) answered++;
+  const total = end - start;
+  const pct = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+  const wrap = document.getElementById('progressWrap');
+  if (mode === 'practice') {
+    wrap.style.display = 'block';
+    document.getElementById('progressText').textContent = `${answered} / ${total} answered`;
+    document.getElementById('progressPct').textContent = `${pct}%`;
+    document.getElementById('progressFill').style.width = pct + '%';
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
+function updateFooter() {
+  const footer = document.getElementById('testFooter');
+  const ac = document.getElementById('answeredCount');
+  if (mode === 'test') {
+    footer.style.display = 'block';
+    const start = currentPart * PART_SIZE;
+    const end = Math.min(start + PART_SIZE, TOTAL);
+    let sel = 0;
+    for (let i = start; i < end; i++) if (selectedOpts[i] !== null) sel++;
+    ac.textContent = `${sel} / ${end - start}`;
+  } else {
+    footer.style.display = 'none';
+  }
+}
+
+function submitTest() {
+  const start = currentPart * PART_SIZE;
+  const end = Math.min(start + PART_SIZE, TOTAL);
+  let correct = 0, wrong = 0, unanswered = 0;
+
+  for (let i = start; i < end; i++) {
+    if (selectedOpts[i] === null) { unanswered++; continue; }
+    const q = ALL_MCQS[i];
+    if (q.opts[selectedOpts[i]] === q.ans) { correct++; answers[i] = 'correct'; }
+    else { wrong++; answers[i] = 'wrong'; }
+  }
+
+  const total = end - start - unanswered + 0;
+  const attempted = end - start - unanswered;
+  const pct = attempted > 0 ? Math.round((correct / (end - start)) * 100) : 0;
+
+  document.getElementById('scorePct').textContent = pct + '%';
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('scoreDetail').textContent =
+    `${correct} correct out of ${end - start} questions (${unanswered} unanswered)`;
+
+  const icon = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : pct >= 40 ? '📚' : '💪';
+  const title = pct >= 80 ? 'Excellent!' : pct >= 60 ? 'Good Job!' : pct >= 40 ? 'Keep Studying' : 'Keep Practicing!';
+  document.getElementById('modalIcon').textContent = icon;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalOverlay').classList.add('show');
+
+  renderPart(currentPart);
+  updateProgress();
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  mode = 'practice';
+  document.getElementById('btnPractice').classList.add('active');
+  document.getElementById('btnTest').classList.remove('active');
+  document.getElementById('testFooter').style.display = 'none';
+  updateProgress();
+}
+
+function resetPart() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  const start = currentPart * PART_SIZE;
+  const end = Math.min(start + PART_SIZE, TOTAL);
+  for (let i = start; i < end; i++) { answers[i] = null; selectedOpts[i] = null; }
+  renderPart(currentPart);
+  updateFooter();
+  updateProgress();
+}
+
+function goTo() {
+  const num = parseInt(document.getElementById('gotoInput').value);
+  if (num >= 1 && num <= TOTAL) {
+    const partIdx = Math.floor((num - 1) / PART_SIZE);
+    if (partIdx !== currentPart) switchPart(partIdx);
+    setTimeout(() => {
+      const card = document.getElementById('qcard-' + (num - 1));
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 400);
+  }
+  document.getElementById('gotoInput').value = '';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+document.getElementById('gotoInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') goTo();
+});
+
+window.onload = init;
+</script>
+</body>
+</html>

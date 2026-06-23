@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="gu" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>કમ્પ્યુટર નેટવર્ક્સ - સંપૂર્ણ પુનરાવર્તન (PSI Exam)</title>
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #2d3748;
+            --bg-table-alt: #2d3748;
+            --bg-highlight: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #cbd5e1;
+            --text-light: #f1f5f9;
+            --border-color: #475569;
+            --accent: #facc15;
+            --accent-dark: #eab308;
+            --fire: #f97316;
+            --shadow: 0 10px 30px rgba(0,0,0,0.7);
+            --radius: 12px;
+            --transition: 0.35s ease;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f1f5f9;
+            --bg-secondary: #ffffff;
+            --bg-card: #e2e8f0;
+            --bg-table-alt: #f8fafc;
+            --bg-highlight: #cbd5e1;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #1e293b;
+            --text-light: #0f172a;
+            --border-color: #94a3b8;
+            --shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Gujarati', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 16px;
+            line-height: 1.8;
+            transition: background var(--transition), color var(--transition);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            box-shadow: var(--shadow);
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 18px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: clamp(1.5rem, 4.5vw, 2.6rem);
+            color: var(--accent);
+            letter-spacing: 0.5px;
+            flex: 1;
+        }
+
+        .header-sub {
+            font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+            color: var(--text-secondary);
+            text-align: right;
+        }
+
+        /* ===== THEME TOGGLE ===== */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            padding: 6px 14px 6px 18px;
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background var(--transition), border var(--transition);
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-highlight);
+        }
+
+        .theme-toggle .icon {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .theme-toggle .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: color var(--transition);
+        }
+
+        /* The switch – custom toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #475569;
+            border-radius: 34px;
+            transition: background var(--transition);
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: transform var(--transition), background var(--transition);
+        }
+
+        input:checked + .slider {
+            background: var(--accent);
+        }
+
+        input:checked + .slider::before {
+            transform: translateX(20px);
+            background: #0f172a;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h2 {
+            color: var(--accent);
+            background: var(--bg-card);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 42px;
+            margin-bottom: 22px;
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            border-left: 6px solid var(--accent);
+            transition: background var(--transition), color var(--transition);
+        }
+
+        h3 {
+            color: var(--text-secondary);
+            margin-top: 30px;
+            margin-bottom: 14px;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            transition: color var(--transition), border var(--transition);
+        }
+
+        h4 {
+            color: var(--text-muted);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            transition: color var(--transition);
+        }
+
+        /* ===== HIGHLIGHT BOXES ===== */
+        .highlight {
+            background: var(--bg-card);
+            padding: 16px 22px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            margin: 16px 0;
+            color: var(--text-light);
+            transition: background var(--transition), color var(--transition);
+        }
+
+        .highlight p {
+            margin: 6px 0;
+        }
+
+        .trick-box {
+            background: var(--bg-primary);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 16px 22px;
+            margin: 20px 0;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+            transition: background var(--transition), border var(--transition);
+        }
+
+        /* ===== TABLES ===== */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 18px 0;
+            border-radius: var(--radius);
+            background: var(--bg-secondary);
+            transition: background var(--transition);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+            background: var(--bg-secondary);
+            min-width: 500px;
+            transition: background var(--transition);
+        }
+
+        th {
+            background: var(--accent);
+            color: #0f172a;
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            vertical-align: top;
+            transition: border var(--transition);
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-table-alt);
+        }
+
+        tr:hover {
+            background: var(--bg-highlight);
+            transition: background 0.2s;
+        }
+
+        /* ===== LISTS ===== */
+        ul, ol {
+            padding-left: 25px;
+            margin: 14px 0;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+        }
+
+        .fire {
+            color: var(--fire);
+            font-weight: 700;
+        }
+
+        .star {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ===== ONE-LINER ===== */
+        .one-liner {
+            background: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin: 5px 0;
+            font-size: clamp(0.85rem, 1.1vw, 0.98rem);
+            transition: background var(--transition), border var(--transition);
+        }
+
+        /* ===== CHECKLIST ===== */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px 25px;
+            background: var(--bg-card);
+            padding: 18px 22px;
+            border-radius: var(--radius);
+            margin: 14px 0;
+            transition: background var(--transition);
+        }
+
+        .checklist-grid li {
+            list-style: none;
+            padding: 4px 0;
+        }
+
+        .checklist-grid li::before {
+            content: "☐ ";
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ===== FINAL TIPS ===== */
+        .final-tips {
+            background: var(--bg-primary);
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            padding: 22px 28px;
+            margin: 30px 0;
+            transition: background var(--transition), border var(--transition);
+        }
+
+        .final-tips li {
+            list-style: none;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: border var(--transition);
+        }
+
+        .final-tips li::before {
+            content: "🔥 ";
+            color: var(--fire);
+        }
+
+        .final-tips li:last-child {
+            border-bottom: none;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 860px) {
+            .container {
+                padding: 16px 14px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .header-sub {
+                text-align: center;
+            }
+
+            .theme-toggle {
+                align-self: center;
+                padding: 6px 14px;
+            }
+
+            table {
+                font-size: 0.75rem;
+                min-width: 400px;
+            }
+
+            td, th {
+                padding: 6px 8px;
+            }
+
+            .checklist-grid {
+                grid-template-columns: 1fr 1fr;
+                padding: 14px 16px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 8px;
+            }
+
+            .container {
+                padding: 12px 10px;
+                border-radius: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                padding: 4px 10px;
+                gap: 6px;
+            }
+
+            .theme-toggle .label {
+                font-size: 0.7rem;
+            }
+
+            .switch {
+                width: 38px;
+                height: 22px;
+            }
+
+            .slider::before {
+                height: 16px;
+                width: 16px;
+                left: 3px;
+                bottom: 3px;
+            }
+
+            input:checked + .slider::before {
+                transform: translateX(16px);
+            }
+
+            h2 {
+                font-size: 1.1rem;
+                padding: 10px 14px;
+            }
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            h4 {
+                font-size: 0.95rem;
+            }
+
+            table {
+                font-size: 0.68rem;
+                min-width: 320px;
+            }
+
+            td, th {
+                padding: 5px 6px;
+            }
+
+            .checklist-grid {
+                grid-template-columns: 1fr;
+                padding: 12px 14px;
+            }
+
+            .highlight, .trick-box, .final-tips {
+                padding: 12px 14px;
+            }
+
+            .one-liner {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+
+            .final-tips {
+                padding: 16px 18px;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        .table-wrap::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .table-wrap::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+            border-radius: 10px;
+        }
+
+        .table-wrap::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* ===== MISC ===== */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .gap-8 {
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h1>📚 કમ્પ્યુટર નેટવર્ક્સ</h1>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px;">
+            <span class="header-sub">ગુજરાત પોલીસ વાયરલેસ PSI</span>
+            <div class="theme-toggle" id="themeToggle" role="button" tabindex="0" aria-label="Toggle theme">
+                <span class="icon" id="themeIcon">🌙</span>
+                <span class="label" id="themeLabel">ડાર્ક</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeCheckbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <p style="text-align:center; color:var(--text-secondary); font-size:clamp(0.95rem,1.5vw,1.2rem); margin-bottom:10px;">
+        સંપૂર્ણ પુનરાવર્તન · PSI પરીક્ષા માટે સંપૂર્ણ માર્ગદર્શિકા
+    </p>
+
+    <!-- ==================== KEY MNEMONICS ==================== -->
+    <h2>🎯 KEY MNEMONICS (યાદ રાખવાની ટૂંકી ટ્રિક્સ)</h2>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">1. OSI 7 લેયર્સ યાદ રાખવાની Trick</h3>
+        <p><strong>"A P S T N D P"</strong> (ઉપરથી નીચે)</p>
+        <p><strong>"All People Seem To Need Data Processing"</strong><br>
+        <span class="badge">A</span> Application (7) · <span class="badge">P</span> Presentation (6) · <span class="badge">S</span> Session (5) · <span class="badge">T</span> Transport (4) · <span class="badge">N</span> Network (3) · <span class="badge">D</span> Data Link (2) · <span class="badge">P</span> Physical (1)</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">2. TCP/IP 4 લેયર્સ યાદ રાખવાની Trick</h3>
+        <p><strong>"A T I N"</strong> → <strong>"All The Internet Networks"</strong></p>
+        <p><span class="badge">A</span> Application · <span class="badge">T</span> Transport · <span class="badge">I</span> Internet · <span class="badge">N</span> Network Access</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">3. પોર્ટ નંબર્સ યાદ રાખવાની Trick</h3>
+        <p><strong>"HTTP = 80"</strong> → H = 8 → 80 &nbsp;|&nbsp; <strong>"HTTPS = 443"</strong> → સુરક્ષિત = 443<br>
+        <strong>"FTP = 21"</strong> → File Transfer = 21 &nbsp;|&nbsp; <strong>"SMTP = 25"</strong> → Send Mail = 25<br>
+        <strong>"DNS = 53"</strong> → Domain Name = 53</p>
+        <p><strong>"H F S D"</strong> યાદ રાખો: <span class="badge">H</span> HTTP(80) · <span class="badge">F</span> FTP(21) · <span class="badge">S</span> SMTP(25) · <span class="badge">D</span> DNS(53)</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">4. IP Classes યાદ રાખવાની Trick</h3>
+        <p><strong>"A B C D E"</strong> → <strong>"A Big Cat Danced Everywhere"</strong></p>
+        <p><span class="badge">A</span> 1-126 (Large) · <span class="badge">B</span> 128-191 (Medium) · <span class="badge">C</span> 192-223 (Small) · <span class="badge">D</span> 224-239 (Multicast) · <span class="badge">E</span> 240-255 (Experimental)</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">5. Private IP Ranges યાદ રાખવાની Trick</h3>
+        <p><strong>"10. 172.16 192.168"</strong></p>
+        <p>10.0.0.0 – 10.255.255.255 (એક મોટું)<br>
+        172.16.0.0 – 172.31.255.255 (સોળથી એકત્રીસ)<br>
+        192.168.0.0 – 192.168.255.255 (એકસો અઠ્ઠાસી)</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">6. Network Devices OSI Layers યાદ રાખવાની Trick</h3>
+        <p><strong>"R H B S R G"</strong> → <strong>"Raju Has Been Selling Real Gold"</strong></p>
+        <p><span class="badge">R</span> Repeater (L1) · <span class="badge">H</span> Hub (L1) · <span class="badge">B</span> Bridge (L2) · <span class="badge">S</span> Switch (L2) · <span class="badge">R</span> Router (L3) · <span class="badge">G</span> Gateway (All)</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">7. TCP vs UDP યાદ રાખવાની Trick</h3>
+        <p><strong>"TCP = Trustworthy"</strong> (વિશ્વસનીય) &nbsp;|&nbsp; <strong>"UDP = Ultra Fast"</strong> (ઝડપી)</p>
+        <p>TCP = Connection-Oriented &nbsp;|&nbsp; UDP = Connectionless</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">8. LAN Technologies યાદ રાખવાની Trick</h3>
+        <p><strong>"E T F"</strong> → <strong>"Every Teacher Feeds Students"</strong></p>
+        <p><span class="badge">E</span> Ethernet (10 Mbps) · <span class="badge">T</span> Token Ring (16 Mbps) · <span class="badge">F</span> FDDI (100 Mbps)</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">9. Network Security યાદ રાખવાની Trick</h3>
+        <p><strong>"F V E"</strong></p>
+        <p><span class="badge">F</span> Firewall = Filter (ટ્રાફિક ફિલ્ટર)<br>
+        <span class="badge">V</span> VPN = Vault (ડેટા સુરક્ષિત)<br>
+        <span class="badge">E</span> Encryption = Encode (ડેટા એન્કોડ)</p>
+    </div>
+
+    <div class="highlight">
+        <h3 style="margin-top:0; border-bottom:0; padding-bottom:0;">10. High Speed Technologies યાદ રાખવાની Trick</h3>
+        <p><strong>"A F G"</strong> → <strong>"All Friends Gather"</strong></p>
+        <p><span class="badge">A</span> ATM (53-byte cells) · <span class="badge">F</span> Frame Relay (WAN) · <span class="badge">G</span> Gigabit Ethernet (1000 Mbps)</p>
+    </div>
+
+    <!-- ==================== MASTER COMPARISON TABLES ==================== -->
+    <h2>📊 MASTER COMPARISON TABLES</h2>
+
+    <h3>TABLE 1: OSI vs TCP/IP - Complete Comparison</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>પાસું</th><th>OSI Model</th><th>TCP/IP Model</th></tr>
+            <tr><td>લેયર્સ</td><td>7 લેયર</td><td>4 લેયર</td></tr>
+            <tr><td>ડેવલપર</td><td>ISO</td><td>DARPA</td></tr>
+            <tr><td>પ્રકાર</td><td>Reference Model</td><td>Protocol Model</td></tr>
+            <tr><td>ઉપયોગ</td><td>થિયોરેટિકલ</td><td>પ્રેક્ટિકલ</td></tr>
+            <tr><td>વર્ષ</td><td>1984</td><td>1970s</td></tr>
+            <tr><td>પ્રોટોકોલ</td><td>Generic</td><td>Specific (TCP/IP)</td></tr>
+        </table>
+    </div>
+
+    <h4>Layer Mapping:</h4>
+    <div class="table-wrap">
+        <table>
+            <tr><th>OSI Layer</th><th>TCP/IP Layer</th></tr>
+            <tr><td>Application (7)</td><td>Application</td></tr>
+            <tr><td>Presentation (6)</td><td>Application</td></tr>
+            <tr><td>Session (5)</td><td>Application</td></tr>
+            <tr><td>Transport (4)</td><td>Transport</td></tr>
+            <tr><td>Network (3)</td><td>Internet</td></tr>
+            <tr><td>Data Link (2)</td><td>Network Access</td></tr>
+            <tr><td>Physical (1)</td><td>Network Access</td></tr>
+        </table>
+    </div>
+
+    <h3>TABLE 2: Network Devices - Complete Comparison</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ઉપકરણ</th><th>OSI Layer</th><th>કામ</th><th>ફાયદો</th><th>ગેરફાયદો</th></tr>
+            <tr><td>Repeater</td><td>Layer 1</td><td>Signal Regenerate</td><td>સસ્તું, સરળ</td><td>No filtering</td></tr>
+            <tr><td>Hub</td><td>Layer 1</td><td>Multiport Repeater</td><td>ખૂબ સસ્તું</td><td>Collision, No intelligence</td></tr>
+            <tr><td>Bridge</td><td>Layer 2</td><td>MAC based filtering</td><td>Traffic reduction</td><td>Only 2 ports</td></tr>
+            <tr><td>Switch</td><td>Layer 2</td><td>Multiport Bridge</td><td>Intelligent, Fast</td><td>ખર્ચાળ</td></tr>
+            <tr><td>Router</td><td>Layer 3</td><td>IP based routing</td><td>Best path, Security</td><td>ખૂબ ખર્ચાળ</td></tr>
+            <tr><td>Gateway</td><td>All Layers</td><td>Protocol Translation</td><td>Universal</td><td>ખૂબ જ ખર્ચાળ</td></tr>
+        </table>
+    </div>
+
+    <h4>Collision vs Broadcast Domain:</h4>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ઉપકરણ</th><th>Collision Domain</th><th>Broadcast Domain</th></tr>
+            <tr><td>Hub</td><td>1 (બધા એક જ)</td><td>1</td></tr>
+            <tr><td>Switch</td><td>દરેક પોર્ટ અલગ</td><td>1</td></tr>
+            <tr><td>Router</td><td>દરેક પોર્ટ અલગ</td><td>દરેક પોર્ટ અલગ</td></tr>
+        </table>
+    </div>
+
+    <h3>TABLE 3: LAN Technologies - Complete Comparison</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ટેકનોલોજી</th><th>ઝડપ</th><th>ટોપોલોજી</th><th>એક્સેસ મેથડ</th><th>કેબલ</th><th>IEEE Std</th></tr>
+            <tr><td>Ethernet</td><td>10 Mbps</td><td>Bus/Star</td><td>CSMA/CD</td><td>Coaxial/UTP</td><td>802.3</td></tr>
+            <tr><td>Fast Ethernet</td><td>100 Mbps</td><td>Star</td><td>CSMA/CD</td><td>UTP/Fiber</td><td>802.3u</td></tr>
+            <tr><td>Gigabit Ethernet</td><td>1000 Mbps</td><td>Star</td><td>CSMA/CD</td><td>Fiber/Copper</td><td>802.3z</td></tr>
+            <tr><td>Token Ring</td><td>16 Mbps</td><td>Ring/Star</td><td>Token Passing</td><td>UTP</td><td>802.5</td></tr>
+            <tr><td>FDDI</td><td>100 Mbps</td><td>Dual Ring</td><td>Token Passing</td><td>Fiber Optic</td><td>-</td></tr>
+        </table>
+    </div>
+
+    <h4>Frame Sizes:</h4>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ટેકનોલોજી</th><th>Frame Size</th></tr>
+            <tr><td>Ethernet</td><td>64-1518 bytes</td></tr>
+            <tr><td>Token Ring</td><td>Variable</td></tr>
+            <tr><td>FDDI</td><td>Variable</td></tr>
+            <tr><td>ATM</td><td>53 bytes (fixed)</td></tr>
+        </table>
+    </div>
+
+    <h3>TABLE 4: TCP vs UDP - Complete Comparison</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>પાસું</th><th>TCP</th><th>UDP</th></tr>
+            <tr><td>કનેક્શન</td><td>Connection-Oriented</td><td>Connectionless</td></tr>
+            <tr><td>વિશ્વસનીયતા</td><td>Reliable (વિશ્વસનીય)</td><td>Unreliable (અવિશ્વસનીય)</td></tr>
+            <tr><td>સ્પીડ</td><td>Slow (ધીમું)</td><td>Fast (ઝડપી)</td></tr>
+            <tr><td>Error Checking</td><td>Yes</td><td>Yes (checksum)</td></tr>
+            <tr><td>Flow Control</td><td>Yes</td><td>No</td></tr>
+            <tr><td>Ordering</td><td>Yes (ક્રમમાં)</td><td>No</td></tr>
+            <tr><td>Retransmission</td><td>Yes</td><td>No</td></tr>
+            <tr><td>ઉપયોગ</td><td>Email, Web, FTP</td><td>Video, VoIP, DNS</td></tr>
+        </table>
+    </div>
+
+    <h3>TABLE 5: IP Classes - Complete Comparison</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Class</th><th>First Octet</th><th>Default Mask</th><th>Network Bits</th><th>Host Bits</th><th>Total Networks</th><th>Total Hosts</th><th>ઉપયોગ</th></tr>
+            <tr><td>A</td><td>1-126</td><td>255.0.0.0</td><td>8</td><td>24</td><td>126</td><td>16,777,214</td><td>Large Networks</td></tr>
+            <tr><td>B</td><td>128-191</td><td>255.255.0.0</td><td>16</td><td>16</td><td>16,384</td><td>65,534</td><td>Medium Networks</td></tr>
+            <tr><td>C</td><td>192-223</td><td>255.255.255.0</td><td>24</td><td>8</td><td>2,097,152</td><td>254</td><td>Small Networks</td></tr>
+            <tr><td>D</td><td>224-239</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>Multicast</td></tr>
+            <tr><td>E</td><td>240-255</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>Experimental</td></tr>
+        </table>
+    </div>
+
+    <h4>Special IP Addresses:</h4>
+    <div class="table-wrap">
+        <table>
+            <tr><th>IP Address</th><th>ઉપયોગ</th></tr>
+            <tr><td>127.0.0.1</td><td>Localhost (તમારું પોતાનું કમ્પ્યુટર)</td></tr>
+            <tr><td>0.0.0.0</td><td>Unknown / Default Route</td></tr>
+            <tr><td>255.255.255.255</td><td>Broadcast (બધા ઉપકરણો)</td></tr>
+            <tr><td>169.254.x.x</td><td>APIPA (Automatic Private IP)</td></tr>
+        </table>
+    </div>
+
+    <h3>TABLE 6: IPv4 Header Fields - Complete Reference</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ફીલ્ડ</th><th>Size (bits)</th><th>Purpose</th></tr>
+            <tr><td>Version</td><td>4</td><td>IP વર્ઝન (IPv4 = 4)</td></tr>
+            <tr><td>IHL</td><td>4</td><td>Header Length (20-60 bytes)</td></tr>
+            <tr><td>ToS/DSCP</td><td>8</td><td>Quality of Service</td></tr>
+            <tr><td>Total Length</td><td>16</td><td>Packet total size</td></tr>
+            <tr><td>Identification</td><td>16</td><td>Fragmentation tracking</td></tr>
+            <tr><td>Flags</td><td>3</td><td>Fragmentation control</td></tr>
+            <tr><td>Fragment Offset</td><td>13</td><td>Fragment position</td></tr>
+            <tr><td>TTL</td><td>8</td><td>Time To Live (hops)</td></tr>
+            <tr><td>Protocol</td><td>8</td><td>TCP=6, UDP=17</td></tr>
+            <tr><td>Header Checksum</td><td>16</td><td>Error detection</td></tr>
+            <tr><td>Source IP</td><td>32</td><td>Sender's IP address</td></tr>
+            <tr><td>Destination IP</td><td>32</td><td>Receiver's IP address</td></tr>
+            <tr><td>Options</td><td>Variable</td><td>Optional fields</td></tr>
+        </table>
+    </div>
+    <p><strong>Header Size:</strong> Minimum 20 bytes | Maximum 60 bytes</p>
+
+    <h3>TABLE 7: Internet Applications (Port Numbers)</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>પ્રોટોકોલ</th><th>પોર્ટ</th><th>કામ</th><th>Transport</th></tr>
+            <tr><td>HTTP</td><td>80</td><td>Web pages</td><td>TCP</td></tr>
+            <tr><td>HTTPS</td><td>443</td><td>Secure Web</td><td>TCP</td></tr>
+            <tr><td>FTP</td><td>21</td><td>File Transfer</td><td>TCP</td></tr>
+            <tr><td>SMTP</td><td>25</td><td>Send Email</td><td>TCP</td></tr>
+            <tr><td>POP3</td><td>110</td><td>Receive Email</td><td>TCP</td></tr>
+            <tr><td>IMAP</td><td>143</td><td>Email (advanced)</td><td>TCP</td></tr>
+            <tr><td>DNS</td><td>53</td><td>Name → IP</td><td>UDP/TCP</td></tr>
+            <tr><td>DHCP</td><td>67/68</td><td>IP Assignment</td><td>UDP</td></tr>
+            <tr><td>SSH</td><td>22</td><td>Secure Shell</td><td>TCP</td></tr>
+            <tr><td>Telnet</td><td>23</td><td>Remote Access</td><td>TCP</td></tr>
+        </table>
+    </div>
+
+    <h3>TABLE 8: Network Security - Complete Comparison</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ટેકનોલોજી</th><th>Purpose</th><th>How Works</th><th>Type</th></tr>
+            <tr><td>Firewall</td><td>Traffic filtering</td><td>Rule-based</td><td>Hardware/Software</td></tr>
+            <tr><td>VPN</td><td>Secure tunnel</td><td>Encryption</td><td>Software</td></tr>
+            <tr><td>Encryption</td><td>Data protection</td><td>Algorithm + Key</td><td>Software</td></tr>
+            <tr><td>IDS</td><td>Threat detection</td><td>Signature/Anomaly</td><td>Hardware/Software</td></tr>
+            <tr><td>IPS</td><td>Threat prevention</td><td>Active blocking</td><td>Hardware/Software</td></tr>
+            <tr><td>SSL/TLS</td><td>Secure communication</td><td>Encryption</td><td>Software</td></tr>
+        </table>
+    </div>
+
+    <h4>VPN Types:</h4>
+    <ul><li>Remote Access VPN (Personal)</li><li>Site-to-Site VPN (Business)</li></ul>
+    <h4>Firewall Types:</h4>
+    <ul><li>Packet Filtering (Layer 3)</li><li>Stateful Inspection (Layer 4)</li><li>Application Gateway (Layer 7)</li><li>Next-Gen Firewall (NGFW)</li></ul>
+
+    <h3>TABLE 9: High Speed Technologies - Complete Comparison</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ટેકનોલોજી</th><th>ઝડપ</th><th>Unit</th><th>Medium</th><th>ઉપયોગ</th></tr>
+            <tr><td>ATM</td><td>155-622 Mbps</td><td>53-byte cells</td><td>Fiber</td><td>WAN</td></tr>
+            <tr><td>Frame Relay</td><td>64k-45 Mbps</td><td>Frames</td><td>Copper/Fiber</td><td>WAN</td></tr>
+            <tr><td>Ethernet</td><td>10 Mbps</td><td>Frames</td><td>Coaxial/UTP</td><td>LAN</td></tr>
+            <tr><td>Fast Ethernet</td><td>100 Mbps</td><td>Frames</td><td>UTP/Fiber</td><td>LAN</td></tr>
+            <tr><td>Gigabit Ethernet</td><td>1000 Mbps</td><td>Frames</td><td>Fiber/Copper</td><td>LAN</td></tr>
+            <tr><td>10-Gigabit Ethernet</td><td>10000 Mbps</td><td>Frames</td><td>Fiber</td><td>Data Center</td></tr>
+        </table>
+    </div>
+
+    <h3>TABLE 10: Subnetting Quick Reference</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>CIDR</th><th>Subnet Mask</th><th>Total Addresses</th><th>Usable Hosts</th></tr>
+            <tr><td>/8</td><td>255.0.0.0</td><td>16,777,216</td><td>16,777,214</td></tr>
+            <tr><td>/16</td><td>255.255.0.0</td><td>65,536</td><td>65,534</td></tr>
+            <tr><td>/24</td><td>255.255.255.0</td><td>256</td><td>254</td></tr>
+            <tr><td>/25</td><td>255.255.255.128</td><td>128</td><td>126</td></tr>
+            <tr><td>/26</td><td>255.255.255.192</td><td>64</td><td>62</td></tr>
+            <tr><td>/27</td><td>255.255.255.224</td><td>32</td><td>30</td></tr>
+            <tr><td>/28</td><td>255.255.255.240</td><td>16</td><td>14</td></tr>
+            <tr><td>/29</td><td>255.255.255.248</td><td>8</td><td>6</td></tr>
+            <tr><td>/30</td><td>255.255.255.252</td><td>4</td><td>2</td></tr>
+        </table>
+    </div>
+
+    <!-- ==================== QUICK FACTS ==================== -->
+    <h2>⭐ QUICK FACTS (ઝડપી તથ્યો)</h2>
+
+    <h3>OSI Model Facts</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Fact</th><th>Value</th></tr>
+            <tr><td>OSI લેયર્સ</td><td>7</td></tr>
+            <tr><td>OSI ડેવલપર</td><td>ISO</td></tr>
+            <tr><td>OSI વર્ષ</td><td>1984</td></tr>
+            <tr><td>Highest Layer</td><td>Application (7)</td></tr>
+            <tr><td>Lowest Layer</td><td>Physical (1)</td></tr>
+        </table>
+    </div>
+
+    <h3>TCP/IP Facts</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Fact</th><th>Value</th></tr>
+            <tr><td>TCP/IP લેયર્સ</td><td>4</td></tr>
+            <tr><td>TCP/IP ડેવલપર</td><td>DARPA</td></tr>
+            <tr><td>TCP/IP વર્ષ</td><td>1970s</td></tr>
+            <tr><td>IP</td><td>Internet Protocol</td></tr>
+            <tr><td>TCP</td><td>Transmission Control Protocol</td></tr>
+        </table>
+    </div>
+
+    <h3>IPv4 Facts</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Fact</th><th>Value</th></tr>
+            <tr><td>IP Address size</td><td>32 bits</td></tr>
+            <tr><td>IP Address format</td><td>x.x.x.x</td></tr>
+            <tr><td>Max addresses</td><td>4.3 billion</td></tr>
+            <tr><td>Header min size</td><td>20 bytes</td></tr>
+            <tr><td>Header max size</td><td>60 bytes</td></tr>
+            <tr><td>TTL default</td><td>64</td></tr>
+            <tr><td>TCP Protocol number</td><td>6</td></tr>
+            <tr><td>UDP Protocol number</td><td>17</td></tr>
+        </table>
+    </div>
+
+    <h3>Port Numbers Facts</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>પ્રોટોકોલ</th><th>પોર્ટ</th></tr>
+            <tr><td>HTTP</td><td>80</td></tr>
+            <tr><td>HTTPS</td><td>443</td></tr>
+            <tr><td>FTP</td><td>21</td></tr>
+            <tr><td>SMTP</td><td>25</td></tr>
+            <tr><td>DNS</td><td>53</td></tr>
+        </table>
+    </div>
+
+    <h3>LAN Technologies Facts</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ટેકનોલોજી</th><th>ઝડપ</th></tr>
+            <tr><td>Ethernet</td><td>10 Mbps</td></tr>
+            <tr><td>Fast Ethernet</td><td>100 Mbps</td></tr>
+            <tr><td>Gigabit Ethernet</td><td>1000 Mbps</td></tr>
+            <tr><td>Token Ring</td><td>16 Mbps</td></tr>
+            <tr><td>FDDI</td><td>100 Mbps</td></tr>
+        </table>
+    </div>
+
+    <h3>Private IP Facts</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Range</th><th>Class</th></tr>
+            <tr><td>10.0.0.0 - 10.255.255.255</td><td>Class A</td></tr>
+            <tr><td>172.16.0.0 - 172.31.255.255</td><td>Class B</td></tr>
+            <tr><td>192.168.0.0 - 192.168.255.255</td><td>Class C</td></tr>
+        </table>
+    </div>
+
+    <!-- ==================== MOST IMPORTANT EXAM POINTS ==================== -->
+    <h2>🔥 MOST IMPORTANT EXAM POINTS</h2>
+
+    <h3>Layer-Wise Protocol Mapping (OSI)</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>OSI Layer</th><th>Protocols</th></tr>
+            <tr><td>Application</td><td>HTTP, FTP, SMTP, DNS, DHCP</td></tr>
+            <tr><td>Presentation</td><td>SSL/TLS, JPEG, MPEG</td></tr>
+            <tr><td>Session</td><td>NetBIOS, RPC</td></tr>
+            <tr><td>Transport</td><td>TCP, UDP</td></tr>
+            <tr><td>Network</td><td>IP, ARP, ICMP, IGMP</td></tr>
+            <tr><td>Data Link</td><td>Ethernet, PPP, Frame Relay</td></tr>
+            <tr><td>Physical</td><td>-</td></tr>
+        </table>
+    </div>
+
+    <h3>TCP/IP Layer Protocol Mapping</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>TCP/IP Layer</th><th>Protocols</th></tr>
+            <tr><td>Application</td><td>HTTP, FTP, SMTP, DNS, DHCP</td></tr>
+            <tr><td>Transport</td><td>TCP, UDP</td></tr>
+            <tr><td>Internet</td><td>IP, ARP, ICMP, IGMP</td></tr>
+            <tr><td>Network Access</td><td>Ethernet, Wi-Fi, PPP</td></tr>
+        </table>
+    </div>
+
+    <h3>Network Devices - Layer Summary</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ઉપકરણ</th><th>OSI Layer</th><th>Function</th></tr>
+            <tr><td>Repeater</td><td>Layer 1</td><td>Signal regenerate</td></tr>
+            <tr><td>Hub</td><td>Layer 1</td><td>Multiport repeater</td></tr>
+            <tr><td>Bridge</td><td>Layer 2</td><td>MAC filtering</td></tr>
+            <tr><td>Switch</td><td>Layer 2</td><td>Multiport bridge</td></tr>
+            <tr><td>Router</td><td>Layer 3</td><td>IP routing</td></tr>
+            <tr><td>Gateway</td><td>All Layers</td><td>Protocol translation</td></tr>
+        </table>
+    </div>
+
+    <h3>TCP vs UDP - Key Differences</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>TCP</th><th>UDP</th></tr>
+            <tr><td>Connection-Oriented</td><td>Connectionless</td></tr>
+            <tr><td>Reliable</td><td>Unreliable</td></tr>
+            <tr><td>Slow</td><td>Fast</td></tr>
+            <tr><td>Email, Web</td><td>Video, DNS</td></tr>
+            <tr><td>Error checking</td><td>No error checking</td></tr>
+            <tr><td>Flow control</td><td>No flow control</td></tr>
+        </table>
+    </div>
+
+    <h3>IP Classes - Key Differences</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Class</th><th>First Octet</th><th>Mask</th><th>Use</th></tr>
+            <tr><td>A</td><td>1-126</td><td>255.0.0.0</td><td>Large networks</td></tr>
+            <tr><td>B</td><td>128-191</td><td>255.255.0.0</td><td>Medium networks</td></tr>
+            <tr><td>C</td><td>192-223</td><td>255.255.255.0</td><td>Small networks</td></tr>
+            <tr><td>D</td><td>224-239</td><td>-</td><td>Multicast</td></tr>
+            <tr><td>E</td><td>240-255</td><td>-</td><td>Experimental</td></tr>
+        </table>
+    </div>
+
+    <h3>Firewall vs VPN</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Firewall</th><th>VPN</th></tr>
+            <tr><td>Traffic filtering</td><td>Encrypted tunnel</td></tr>
+            <tr><td>Allow/Block traffic</td><td>Secure communication</td></tr>
+            <tr><td>Network perimeter</td><td>Remote access</td></tr>
+            <tr><td>Hardware/Software</td><td>Software</td></tr>
+        </table>
+    </div>
+
+    <!-- ==================== ONE-LINER FACTS ==================== -->
+    <h2>📝 ONE-LINER FACTS</h2>
+    <div class="one-liner">1. OSI = Open Systems Interconnection</div>
+    <div class="one-liner">2. TCP/IP = Transmission Control Protocol/Internet Protocol</div>
+    <div class="one-liner">3. IP = Internet Protocol (Layer 3)</div>
+    <div class="one-liner">4. TCP = Transport Control Protocol (Layer 4)</div>
+    <div class="one-liner">5. UDP = User Datagram Protocol (Layer 4)</div>
+    <div class="one-liner">6. HTTP = HyperText Transfer Protocol (Port 80)</div>
+    <div class="one-liner">7. HTTPS = HTTP Secure (Port 443)</div>
+    <div class="one-liner">8. FTP = File Transfer Protocol (Port 21)</div>
+    <div class="one-liner">9. SMTP = Simple Mail Transfer Protocol (Port 25)</div>
+    <div class="one-liner">10. DNS = Domain Name System (Port 53)</div>
+    <div class="one-liner">11. ATM = Asynchronous Transfer Mode (53-byte cells)</div>
+    <div class="one-liner">12. FDDI = Fiber Distributed Data Interface (100 Mbps)</div>
+    <div class="one-liner">13. CSMA/CD = Carrier Sense Multiple Access with Collision Detection</div>
+    <div class="one-liner">14. MAC = Media Access Control</div>
+    <div class="one-liner">15. CIDR = Classless Inter-Domain Routing</div>
+    <div class="one-liner">16. VPN = Virtual Private Network</div>
+    <div class="one-liner">17. TTL = Time To Live</div>
+    <div class="one-liner">18. IHL = Internet Header Length</div>
+    <div class="one-liner">19. ToS = Type of Service</div>
+    <div class="one-liner">20. LAN = Local Area Network</div>
+    <div class="one-liner">21. WAN = Wide Area Network</div>
+    <div class="one-liner">22. NIC = Network Interface Card</div>
+    <div class="one-liner">23. DHCP = Dynamic Host Configuration Protocol</div>
+    <div class="one-liner">24. SSL = Secure Sockets Layer</div>
+    <div class="one-liner">25. TLS = Transport Layer Security</div>
+
+    <!-- ==================== FINAL MASTER COMPARISON TABLE ==================== -->
+    <h2>📊 FINAL MASTER COMPARISON TABLE</h2>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Concept</th><th>What is it?</th><th>Why Used?</th><th>How Works?</th><th>Advantages</th><th>Disadvantages</th><th>Real Life Example</th><th>Exam Trick</th></tr>
+            <tr><td>OSI Model</td><td>7-layer Reference Model</td><td>Standardization</td><td>Encapsulation/Decapsulation</td><td>Universal standard</td><td>Complex</td><td>Network education</td><td>"All People Seem To Need Data Processing"</td></tr>
+            <tr><td>TCP/IP Model</td><td>4-layer Protocol Model</td><td>Internet communication</td><td>Protocol Stack</td><td>Simple, Practical</td><td>Less layers</td><td>Internet</td><td>"All The Internet Networks"</td></tr>
+            <tr><td>Ethernet</td><td>Bus-based LAN</td><td>Low cost, Simple</td><td>CSMA/CD</td><td>Cheap, Widely used</td><td>Collision</td><td>Office LAN</td><td>"CSMA/CD = Check Signal"</td></tr>
+            <tr><td>Token Ring</td><td>Ring-based LAN</td><td>No collision</td><td>Token Passing</td><td>No collision</td><td>Expensive</td><td>IBM networks</td><td>"Token = Turn"</td></tr>
+            <tr><td>FDDI</td><td>Fiber-optic LAN</td><td>High speed</td><td>Token + Fiber</td><td>Fast, Reliable</td><td>Very expensive</td><td>Campus networks</td><td>"FDDI = Fast"</td></tr>
+            <tr><td>Repeater</td><td>Signal regenerator</td><td>Long distance</td><td>Copy + Regenerate</td><td>Cheap</td><td>No filter</td><td>Wi-Fi extender</td><td>Layer 1</td></tr>
+            <tr><td>Hub</td><td>Multiport repeater</td><td>Connect many</td><td>Broadcast all</td><td>Cheap</td><td>Collision</td><td>Old office</td><td>Layer 1</td></tr>
+            <tr><td>Bridge</td><td>2-port MAC filter</td><td>Reduce traffic</td><td>MAC based</td><td>Traffic control</td><td>2 ports only</td><td>Two LANs</td><td>Layer 2</td></tr>
+            <tr><td>Switch</td><td>Multiport bridge</td><td>Efficient LAN</td><td>MAC based</td><td>Fast, Intelligent</td><td>Expensive</td><td>Office LAN</td><td>Layer 2</td></tr>
+            <tr><td>Router</td><td>IP router</td><td>Internet connect</td><td>IP routing</td><td>Best path</td><td>Very expensive</td><td>Home WiFi</td><td>Layer 3</td></tr>
+            <tr><td>Gateway</td><td>Protocol translator</td><td>Different networks</td><td>Translate</td><td>Universal</td><td>Very expensive</td><td>Enterprise</td><td>All layers</td></tr>
+            <tr><td>TCP</td><td>Reliable transport</td><td>Guaranteed delivery</td><td>3-way handshake</td><td>Reliable</td><td>Slow</td><td>Email, Web</td><td>"Trustworthy"</td></tr>
+            <tr><td>UDP</td><td>Fast transport</td><td>Quick delivery</td><td>Connectionless</td><td>Fast</td><td>Unreliable</td><td>Video, DNS</td><td>"Ultra Fast"</td></tr>
+            <tr><td>IPv4</td><td>32-bit addressing</td><td>Device identification</td><td>Packet routing</td><td>Widely used</td><td>Address shortage</td><td>Internet</td><td>32 bits</td></tr>
+            <tr><td>IPv6</td><td>128-bit addressing</td><td>More addresses</td><td>Packet routing</td><td>Many addresses</td><td>Adoption slow</td><td>Modern networks</td><td>128 bits</td></tr>
+            <tr><td>Firewall</td><td>Traffic filter</td><td>Block threats</td><td>Rule-based</td><td>Security</td><td>Can block legitimate</td><td>Windows Firewall</td><td>"Filter"</td></tr>
+            <tr><td>VPN</td><td>Encrypted tunnel</td><td>Privacy/Security</td><td>Encryption</td><td>Secure</td><td>Can be slow</td><td>Remote work</td><td>"Vault"</td></tr>
+            <tr><td>ATM</td><td>Cell switching</td><td>Voice/Video/Data</td><td>53-byte cells</td><td>QoS</td><td>Complex</td><td>Old telecom</td><td>"53 bytes"</td></tr>
+            <tr><td>Gigabit Ethernet</td><td>High-speed LAN</td><td>Speed</td><td>Ethernet frames</td><td>Very fast</td><td>Expensive</td><td>Modern LAN</td><td>"1000 Mbps"</td></tr>
+            <tr><td>HTTP</td><td>Web protocol</td><td>Web pages</td><td>Request-Response</td><td>Simple</td><td>Not secure</td><td>Website browsing</td><td>Port 80</td></tr>
+            <tr><td>HTTPS</td><td>Secure web</td><td>Secure pages</td><td>HTTP + SSL/TLS</td><td>Secure</td><td>Slightly slower</td><td>Online banking</td><td>Port 443</td></tr>
+            <tr><td>FTP</td><td>File transfer</td><td>File sharing</td><td>Client-Server</td><td>Simple</td><td>Not secure</td><td>File download</td><td>Port 21</td></tr>
+            <tr><td>SMTP</td><td>Email sending</td><td>Send emails</td><td>Push</td><td>Simple</td><td>Not secure</td><td>Sending email</td><td>Port 25</td></tr>
+            <tr><td>DNS</td><td>Name resolution</td><td>Name → IP</td><td>Query-Response</td><td>Easy to use</td><td>Single point of failure</td><td>google.com</td><td>Port 53</td></tr>
+        </table>
+    </div>
+
+    <!-- ==================== PSI EXAM - FINAL REVISION CHECKLIST ==================== -->
+    <h2>🎯 PSI EXAM - FINAL REVISION CHECKLIST</h2>
+    <p style="color:var(--text-secondary); margin-bottom:12px;">Day Before Exam – Quick Revision Points</p>
+
+    <h4>✅ OSI Model (7 Layers)</h4>
+    <ul class="checklist-grid">
+        <li>Physical (Layer 1) – Bits</li>
+        <li>Data Link (Layer 2) – Frames, MAC</li>
+        <li>Network (Layer 3) – Packets, IP</li>
+        <li>Transport (Layer 4) – Segments, TCP/UDP</li>
+        <li>Session (Layer 5) – Connection management</li>
+        <li>Presentation (Layer 6) – Encryption, Compression</li>
+        <li>Application (Layer 7) – HTTP, FTP, SMTP, DNS</li>
+    </ul>
+
+    <h4>✅ TCP/IP Model (4 Layers)</h4>
+    <ul class="checklist-grid">
+        <li>Network Access Layer</li>
+        <li>Internet Layer (IP)</li>
+        <li>Transport Layer (TCP/UDP)</li>
+        <li>Application Layer (HTTP, FTP, SMTP, DNS)</li>
+    </ul>
+
+    <h4>✅ Network Devices</h4>
+    <ul class="checklist-grid">
+        <li>Repeater – Layer 1</li>
+        <li>Hub – Layer 1</li>
+        <li>Bridge – Layer 2</li>
+        <li>Switch – Layer 2</li>
+        <li>Router – Layer 3</li>
+        <li>Gateway – All Layers</li>
+    </ul>
+
+    <h4>✅ Port Numbers</h4>
+    <ul class="checklist-grid">
+        <li>HTTP – 80</li>
+        <li>HTTPS – 443</li>
+        <li>FTP – 21</li>
+        <li>SMTP – 25</li>
+        <li>DNS – 53</li>
+    </ul>
+
+    <h4>✅ IP Classes</h4>
+    <ul class="checklist-grid">
+        <li>Class A – 1-126, 255.0.0.0</li>
+        <li>Class B – 128-191, 255.255.0.0</li>
+        <li>Class C – 192-223, 255.255.255.0</li>
+        <li>Class D – 224-239, Multicast</li>
+        <li>Class E – 240-255, Experimental</li>
+    </ul>
+
+    <h4>✅ Private IP Ranges</h4>
+    <ul class="checklist-grid">
+        <li>10.0.0.0 – 10.255.255.255</li>
+        <li>172.16.0.0 – 172.31.255.255</li>
+        <li>192.168.0.0 – 192.168.255.255</li>
+    </ul>
+
+    <h4>✅ TCP vs UDP</h4>
+    <ul class="checklist-grid">
+        <li>TCP = Reliable, Connection-Oriented</li>
+        <li>UDP = Fast, Connectionless</li>
+    </ul>
+
+    <h4>✅ Firewall vs VPN</h4>
+    <ul class="checklist-grid">
+        <li>Firewall = Traffic Filter</li>
+        <li>VPN = Encrypted Tunnel</li>
+    </ul>
+
+    <h4>✅ LAN Technologies</h4>
+    <ul class="checklist-grid">
+        <li>Ethernet – 10 Mbps, CSMA/CD</li>
+        <li>Token Ring – 16 Mbps, Token Passing</li>
+        <li>FDDI – 100 Mbps, Token Passing, Fiber</li>
+    </ul>
+
+    <h4>✅ High Speed Technologies</h4>
+    <ul class="checklist-grid">
+        <li>ATM – 53-byte cells</li>
+        <li>Frame Relay – WAN</li>
+        <li>Gigabit Ethernet – 1000 Mbps</li>
+    </ul>
+
+    <h4>✅ IPv4 Header</h4>
+    <ul class="checklist-grid">
+        <li>Version = 4</li>
+        <li>IHL = 5-15 (20-60 bytes)</li>
+        <li>TTL = 64 default</li>
+        <li>Protocol = TCP(6), UDP(17)</li>
+    </ul>
+
+    <!-- ==================== FINAL TIPS ==================== -->
+    <div class="final-tips">
+        <h2 style="margin-top:0; border-left:none; background:none; color:var(--accent); padding-left:0;">🏆 EXAM DAY – FINAL TIPS</h2>
+        <ol>
+            <li><strong>OSI Layers</strong> – "All People Seem To Need Data Processing" યાદ રાખો</li>
+            <li><strong>TCP/IP Layers</strong> – "All The Internet Networks" યાદ રાખો</li>
+            <li><strong>Port Numbers</strong> – HTTP(80), HTTPS(443), FTP(21), SMTP(25), DNS(53)</li>
+            <li><strong>IP Classes</strong> – "A Big Cat Danced Everywhere"</li>
+            <li><strong>Private IP</strong> – 10.x.x.x, 172.16-31.x.x, 192.168.x.x</li>
+            <li><strong>TCP vs UDP</strong> – TCP = Trustworthy, UDP = Ultra Fast</li>
+            <li><strong>Network Devices</strong> – "Raju Has Been Selling Real Gold"</li>
+            <li><strong>ATM</strong> = 53-byte cells</li>
+            <li><strong>Ethernet</strong> = CSMA/CD</li>
+            <li><strong>Firewall</strong> = Filter, VPN = Vault</li>
+        </ol>
+    </div>
+
+    <p class="text-center" style="color:var(--accent); font-size:clamp(1.4rem,3vw,2rem); margin:40px 0 16px;">💪 GOOD LUCK FOR YOUR PSI EXAM!</p>
+    <p class="text-center" style="color:var(--text-secondary); font-size:clamp(0.8rem,1.2vw,1rem);">કમ્પ્યુટર નેટવર્ક્સ – સંપૂર્ણ પુનરાવર્તન · ગુજરાત પોલીસ વાયરલેસ PSI</p>
+
+</div>
+
+<script>
+    (function() {
+        const checkbox = document.getElementById('themeCheckbox');
+        const html = document.documentElement;
+        const icon = document.getElementById('themeIcon');
+        const label = document.getElementById('themeLabel');
+
+        // Load saved theme
+        const saved = localStorage.getItem('psi-theme');
+        if (saved === 'light') {
+            html.setAttribute('data-theme', 'light');
+            checkbox.checked = false;
+            icon.textContent = '☀️';
+            label.textContent = 'લાઇટ';
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            checkbox.checked = true;
+            icon.textContent = '🌙';
+            label.textContent = 'ડાર્ક';
+        }
+
+        // Toggle function
+        function toggleTheme() {
+            const isDark = checkbox.checked;
+            if (isDark) {
+                html.setAttribute('data-theme', 'dark');
+                icon.textContent = '🌙';
+                label.textContent = 'ડાર્ક';
+                localStorage.setItem('psi-theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                icon.textContent = '☀️';
+                label.textContent = 'લાઇટ';
+                localStorage.setItem('psi-theme', 'light');
+            }
+        }
+
+        // Event listeners
+        checkbox.addEventListener('change', toggleTheme);
+
+        // Click on the whole toggle wrapper also triggers
+        const toggleWrap = document.getElementById('themeToggle');
+        toggleWrap.addEventListener('click', function(e) {
+            // If the click was directly on the label/icon or the wrapper, toggle
+            if (e.target.closest('.switch')) return; // let the checkbox handle it
+            checkbox.checked = !checkbox.checked;
+            toggleTheme();
+        });
+
+        // Keyboard accessibility
+        toggleWrap.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                checkbox.checked = !checkbox.checked;
+                toggleTheme();
+            }
+        });
+    })();
+</script>
+
+</body>
+</html>

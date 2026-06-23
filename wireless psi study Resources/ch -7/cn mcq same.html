@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetMaster • Computer Networks MCQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #3b82f6;
+  --success: #10b981;
+  --danger: #ef4444;
+  --bg: #f0f9ff;
+  --card: #ffffff;
+  --text: #1e3a8a;
+  --border: #bae6fd;
+  --shadow: 0 10px 30px rgba(59, 130, 246, 0.12);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Sticky Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  color: white;
+  padding: 14px 0;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+  transition: all 0.4s ease;
+}
+.header.hidden { transform: translateY(-100%); }
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand { font-size: 24px; font-weight: 700; }
+
+.go-to-q {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 30px;
+}
+.go-to-q input {
+  background: transparent;
+  border: none;
+  color: white;
+  width: 70px;
+  font-size: 15px;
+  text-align: center;
+  outline: none;
+}
+.go-to-q input::placeholder { color: rgba(255,255,255,0.7); }
+
+.global-lang {
+  display: flex;
+  background: rgba(255,255,255,0.2);
+  border-radius: 30px;
+  padding: 4px;
+}
+.global-lang button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: white;
+}
+.global-lang button.active {
+  background: white;
+  color: #3b82f6;
+}
+
+/* Rest of the page */
+.container { max-width: 1100px; margin: 100px auto 40px; padding: 0 20px; }
+
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+}
+.hero-title { font-size: 2.8rem; font-weight: 700; color: #1e40af; }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.search-box {
+  flex: 1;
+  max-width: 380px;
+  padding: 14px 20px;
+  border: 2px solid #bae6fd;
+  border-radius: 50px;
+  font-size: 16px;
+  background: white;
+}
+
+.mcq-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 25px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+}
+.mcq-card:hover { transform: translateY(-6px); }
+
+.question-num { color: var(--primary); font-weight: 700; margin-bottom: 12px; }
+
+.lang-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.lang-toggle button {
+  padding: 6px 16px;
+  font-size: 13px;
+  border: 1px solid #bae6fd;
+  border-radius: 30px;
+  background: white;
+  cursor: pointer;
+}
+.lang-toggle button.active {
+  background: var(--primary);
+  color: white;
+}
+
+.question { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; line-height: 1.6; }
+
+.options { display: grid; gap: 12px; }
+.option {
+  padding: 18px 22px;
+  border: 2px solid #bae6fd;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.option:hover { border-color: var(--primary); }
+.option.selected { border-color: var(--primary); background: rgba(59,130,246,0.08); }
+.option.correct { border-color: var(--success); background: rgba(16,185,129,0.1); color: var(--success); }
+.option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.1); color: var(--danger); }
+
+.answer {
+  margin-top: 20px;
+  padding: 18px;
+  background: #ecfdf5;
+  border-radius: 16px;
+  font-weight: 600;
+  display: none;
+}
+
+.footer { text-align: center; margin: 40px 0; }
+.btn-submit {
+  padding: 16px 50px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<header class="header" id="header">
+  <div class="header-inner">
+    <div class="brand">🌐 NetMaster</div>
+
+    <div class="go-to-q">
+      <span>Go to Q:</span>
+      <input type="number" id="gotoInput" placeholder="1-109" min="1" max="109" onkeypress="if(event.key==='Enter') goToQuestion()">
+    </div>
+
+    <div class="global-lang">
+      <button id="globalGu" class="active" onclick="setGlobalLang('gu')">Gujarati</button>
+      <button id="globalEn" onclick="setGlobalLang('en')">English</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="hero">
+    <h1 class="hero-title">Computer Networks MCQ</h1>
+    <p>109 Important Questions • English + Gujarati</p>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" class="search-box" 
+           placeholder="Search Question / પ્રશ્ન શોધો..." onkeyup="filterMCQs()">
+  </div>
+
+  <div id="mcqContainer"></div>
+
+  <div id="testFooter" class="footer" style="display:none;">
+    <button class="btn-submit" onclick="submitTest()">Submit Test &amp; See Result</button>
+  </div>
+
+  <div id="scoreDisplay"></div>
+</div>
+
+<script>
+// ==================== FULL 109 MCQs ====================
+// Replace the comment below with your complete array of 109 questions (same as previous versions)
+const mcqs = [
+      {qEn:"1. The portion of physical layer that interfaces with the media access control sublayer is called ______", qGu:"1. ફિઝિકલ લેયરનો તે ભાગ જે મીડિયા એક્સેસ કંટ્રોલ સબલેયર સાથે ઇન્ટરફેસ કરે છે તેને ______ કહેવામાં આવે છે", optionsEn:["(A) physical signaling sublayer","(B) physical data sublayer","(C) physical address sublayer","(D) physical transport sublayer"], optionsGu:["(A) ફિઝિકલ સિગ્નલિંગ સબલેયર","(B) ફિઝિકલ ડેટા સબલેયર","(C) ફિઝિકલ એડ્રેસ સબલેયર","(D) ફિઝિકલ ટ્રાન્સપોર્ટ સબલેયર"], answer:"(A) physical signaling sublayer"},
+      {qEn:"2. What is routing algorithm used by OSPF routing protocol?", qGu:"2. OSPF રાઉટિંગ પ્રોટોકોલ દ્વારા કયો રાઉટિંગ અલ્ગોરિધમ વપરાય છે?", optionsEn:["(A) Distance vector","(B) Flooding","(C) Path vector","(D) Link state"], optionsGu:["(A) ડિસ્ટન્સ વેક્ટર","(B) ફ્લડિંગ","(C) પાથ વેક્ટર","(D) લિંક સ્ટેટ"], answer:"(D) Link state"},
+      {qEn:"3. In the communication of two processes, an endpoint for communication is called :", qGu:"3. બે પ્રક્રિયાઓના સંચારમાં, સંચાર માટેના અંતિમ બિંદુને કહેવામાં આવે છે :", optionsEn:["(A) Socket","(B) Pipe","(C) Port","(D) Remote procedure call"], optionsGu:["(A) સોકેટ","(B) પાઈપ","(C) પોર્ટ","(D) રિમોટ પ્રોસીજર કોલ"], answer:"(A) Socket"},
+      {qEn:"4. Which of the following protocols may be used for accessing world wide Web?", qGu:"4. વર્લ્ડ વાઈડ વેબને એક્સેસ કરવા માટે નીચેના કયા પ્રોટોકોલનો ઉપયોગ કરી શકાય?", optionsEn:["(A) HTTP","(B) SMTP","(C) SLIP","(D) None of the above"], optionsGu:["(A) HTTP","(B) SMTP","(C) SLIP","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(A) HTTP"},
+      {qEn:"5. Web pages are created in a language called", qGu:"5. વેબ પેજીસ એક ભાષામાં બનાવવામાં આવે છે જેને કહેવામાં આવે છે", optionsEn:["(A) SLIP","(B) HTML","(C) HTTP","(D) WWW"], optionsGu:["(A) SLIP","(B) HTML","(C) HTTP","(D) WWW"], answer:"(B) HTML"},
+      {qEn:"6. What is data encryption standard (DES)?", qGu:"6. ડેટા એન્ક્રિપ્શન સ્ટાન્ડર્ડ (DES) શું છે?", optionsEn:["(A) Block cipher","(B) Stream cipher","(C) Bit cipher","(D) None of the above"], optionsGu:["(A) બ્લોક સાઇફર","(B) સ્ટ્રીમ સાઇફર","(C) બિટ સાઇફર","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(A) Block cipher"},
+      {qEn:"7. On what type of switching does internet work?", qGu:"7. ઇન્ટરનેટ કયા પ્રકારના સ્વિચિંગ પર કામ કરે છે?", optionsEn:["(A) Circuit","(B) Bit","(C) Packet","(D) Line"], optionsGu:["(A) સર્કિટ","(B) બિટ","(C) પેકેટ","(D) લાઇન"], answer:"(C) Packet"},
+      {qEn:"8. Which of the following techniques is used for transmitting digital signal?", qGu:"8. ડિજિટલ સિગ્નલ મોકલવા માટે નીચેની કઈ તકનીક વપરાય છે?", optionsEn:["(A) Amplitude modulation","(B) Frequency modulation","(C) Pulse code modulation","(D) Amplitude shift keying"], optionsGu:["(A) એમ્પ્લિટ્યુડ મોડ્યુલેશન","(B) ફ્રીક્વન્સી મોડ્યુલેશન","(C) પલ્સ કોડ મોડ્યુલેશન","(D) એમ્પ્લિટ્યુડ શિફ્ટ કીઇંગ"], answer:"(D) Amplitude shift keying"},
+      {qEn:"9. Which of the following is an advantage of computer networks?", qGu:"9. કમ્પ્યુટર નેટવર્કનો કયો ફાયદો છે?", optionsEn:["(A) Resource sharing","(B) Improving reliability and availability","(C) Enhancing performance","(D) All of the above"], optionsGu:["(A) રિસોર્સ શેરિંગ","(B) વિશ્વસનીયતા અને ઉપલબ્ધતા સુધારવી","(C) પર્ફોર્મન્સ વધારવી","(D) ઉપરોક્ત બધા"], answer:"(D) All of the above"},
+      {qEn:"10. A network spreading in different geographical locations is known as", qGu:"10. વિવિધ ભૌગોલિક સ્થાનોમાં ફેલાયેલા નેટવર્કને કહેવામાં આવે છે", optionsEn:["(A) LAN","(B) WAN","(C) Both (A) and (B)","(D) None of the above"], optionsGu:["(A) LAN","(B) WAN","(C) બંને (A) અને (B)","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(B) WAN"},
+      {qEn:"11. Which of the following is a token-based protocol?", qGu:"11. નીચેનામાંથી કયો ટોકન-આધારિત પ્રોટોકોલ છે?", optionsEn:["(A) CSMA/CD","(B) Slotted ring","(C) Both (A) and (B)","(D) None of the above"], optionsGu:["(A) CSMA/CD","(B) સ્લોટેડ રિંગ","(C) બંને (A) અને (B)","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(C) Both (A) and (B)"},
+      {qEn:"12. X.21 is", qGu:"12. X.21 શું છે?", optionsEn:["(A) a method of determining which device has access to the transmission medium at any time","(B) a method of access control technique or multiple access transmission media","(C) very common but oriented at linked protocol issued to ISO","(D) a network access standard for connecting stations to a circuit switch network"], optionsGu:["(A) એક પદ્ધતિ જે નક્કી કરે છે કે કયા ઉપકરણને ટ્રાન્સમિશન મીડિયમનો ઍક્સેસ છે","(B) મલ્ટિપલ એક્સેસ ટ્રાન્સમિશન મીડિયા માટે એક્સેસ કંટ્રોલ તકનીક","(C) ISOને જારી કરાયેલ લિંક્ડ પ્રોટોકોલ","(D) સર્કિટ સ્વિચ નેટવર્ક સાથે સ્ટેશન કનેક્ટ કરવાનો નેટવર્ક એક્સેસ સ્ટાન્ડર્ડ"], answer:"(D) a network access standard for connecting stations to a circuit switch network"},
+      {qEn:"13. Which type of support for TFTP is available from third parties, but is not included in Windows NT?", qGu:"13. TFTP માટે કયા પ્રકારનો સપોર્ટ તૃતીય પક્ષો પાસે ઉપલબ્ધ છે, પરંતુ Windows NTમાં શામેલ નથી?", optionsEn:["(A) As client","(B) As server","(C) Windows NT includes full TFTP support","(D) None of the above"], optionsGu:["(A) ક્લાયન્ટ તરીકે","(B) સર્વર તરીકે","(C) Windows NTમાં પૂર્ણ TFTP સપોર્ટ છે","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(B) As server"},
+      {qEn:"14. The media access control sublayer resides in which OSI layer?", qGu:"14. મીડિયા એક્સેસ કંટ્રોલ સબલેયર કયા OSI લેયરમાં રહે છે?", optionsEn:["(A) Transport","(B) Network","(C) Physical","(D) Data link"], optionsGu:["(A) ટ્રાન્સપોર્ટ","(B) નેટવર્ક","(C) ફિઝિકલ","(D) ડેટા લિંક"], answer:"(D) Data link"},
+      {qEn:"15. Which of the following is a communications protocol standard for securing credit card transactions over the Internet?", qGu:"15. ઇન્ટરનેટ પર ક્રેડિટ કાર્ડ ટ્રાન્ઝેક્શન સુરક્ષિત કરવા માટે કયો કોમ્યુનિકેશન પ્રોટોકોલ સ્ટાન્ડર્ડ છે?", optionsEn:["(A) Secure Electronic Transaction (SET)","(B) File Transfer Protocol (FTP)","(C) Post Office Protocol (POP)","(D) Hypertext Transfer Protocol (HTTP)"], optionsGu:["(A) Secure Electronic Transaction (SET)","(B) FTP","(C) POP","(D) HTTP"], answer:"(A) Secure Electronic Transaction (SET)"},
+      {qEn:"16. A ______ can forward packets across different networks that may also use different protocols:", qGu:"16. ______ અલગ-અલગ નેટવર્ક વચ્ચે પેકેટ્સ ફોર્વર્ડ કરી શકે છે જે અલગ પ્રોટોકોલ પણ વાપરતા હોય:", optionsEn:["(A) repeater","(B) bridge","(C) router","(D) gateway"], optionsGu:["(A) રિપીટર","(B) બ્રિજ","(C) રાઉટર","(D) ગેટવે"], answer:"(D) gateway"},
+      {qEn:"17. Which of the following is contention free protocol?", qGu:"17. નીચેનામાંથી કયો કોન્ટેન્શન ફ્રી પ્રોટોકોલ છે?", optionsEn:["(A) Pure Aloha","(B) Ethernet","(C) Non-persistent CSMA","(D) token Ring"], optionsGu:["(A) પ્યોર અલોહા","(B) ઇથરનેટ","(C) નોન-પર્સિસ્ટન્ટ CSMA","(D) ટોકન રિંગ"], answer:"(D) token Ring"},
+      {qEn:"18. Encryption and decryption provide secrecy, or confidentiality, but not", qGu:"18. એન્ક્રિપ્શન અને ડિક્રિપ્શન ગુપ્તતા અથવા કન્ફિડેન્શિયાલિટી આપે છે, પરંતુ ______ નહીં", optionsEn:["(A) Authentication","(B) Integrity","(C) Frames","(D) All of these"], optionsGu:["(A) ઓથેન્ટિકેશન","(B) ઇન્ટિગ્રિટી","(C) ફ્રેમ્સ","(D) બધા"], answer:"(B) Integrity"},
+      {qEn:"19. In symmetric key cryptography, for encrypting and decrypting the message, the key is", qGu:"19. સિમેટ્રિક કી ક્રિપ્ટોગ્રાફીમાં, મેસેજ એન્ક્રિપ્ટ અને ડિક્રિપ્ટ કરવા માટે કી ______ હોય છે", optionsEn:["(A) private","(B) public","(C) different","(D) same"], optionsGu:["(A) પ્રાઈવેટ","(B) પબ્લિક","(C) અલગ","(D) સમાન"], answer:"(D) same"},
+      {qEn:"20. In early ARPANET, which routing method was used", qGu:"20. પ્રારંભિક ARPANETમાં કયી રાઉટિંગ પદ્ધતિ વપરાતી હતી?", optionsEn:["(A) Distance vector routing","(B) Link state routing","(C) Least cost routing","(D) Flooding"], optionsGu:["(A) ડિસ્ટન્સ વેક્ટર રાઉટિંગ","(B) લિંક સ્ટેટ રાઉટિંગ","(C) લીસ્ટ કોસ્ટ રાઉટિંગ","(D) ફ્લડિંગ"], answer:"(A) Distance vector routing"},
+      {qEn:"21. Which of the 'following Ethernet encoding has the highest redundancy'", qGu:"21. નીચેના ઇથરનેટ એન્કોડિંગમાં સૌથી વધુ રીડન્ડન્સી કયામાં છે?", optionsEn:["(A) 1B2B","(B) 4B5B","(C) 5B6B","(D) 8B10B"], optionsGu:["(A) 1B2B","(B) 4B5B","(C) 5B6B","(D) 8B10B"], answer:"(D) 8B10B"},
+      {qEn:"22. An Ethernet hub", qGu:"22. ઇથરનેટ હબ", optionsEn:["(A) functions as a repeater","(B) connects to a digital PBX","(C) connects to a token-ring network","(D) functions as a gateway"], optionsGu:["(A) રિપીટર તરીકે કામ કરે છે","(B) ડિજિટલ PBX સાથે જોડાય છે","(C) ટોકન-રિંગ નેટવર્ક સાથે જોડાય છે","(D) ગેટવે તરીકે કામ કરે છે"], answer:"(A) functions as a repeater"},
+      {qEn:"23. If the bandwidth of a signal is 5 kHz and the lowest frequency is 52 kHz, what is the highest frequency", qGu:"23. જો સિગ્નલની બેન્ડવિડ્થ 5 kHz હોય અને નીચી ફ્રીક્વન્સી 52 kHz હોય, તો ઉચ્ચતમ ફ્રીક્વન્સી કેટલી છે?", optionsEn:["(A) 5kHz","(B) 10kHz","(C) 47kHz","(D) 57kHz"], optionsGu:["(A) 5kHz","(B) 10kHz","(C) 47kHz","(D) 57kHz"], answer:"(D) 57kHz"},
+      {qEn:"24. Which of the following error detection techniques is based on binary division?", qGu:"24. નીચેની કઈ ભૂલ શોધવાની તકનીક બાઈનરી ડિવિઝન પર આધારિત છે?", optionsEn:["(A) Checksum","(B) Cyclic Redundancy Check (CRC)","(C) Simple parity check","(D) Two-dimensional parity check"], optionsGu:["(A) ચેકસમ","(B) સાયક્લિક રીડન્ડન્સી ચેક (CRC)","(C) સિમ્પલ પેરિટી ચેક","(D) ટુ-ડાયમેન્શનલ પેરિટી ચેક"], answer:"(B) Cyclic Redundancy Check (CRC)"},
+      {qEn:"25. The length of an IPv6 address is:", qGu:"25. IPv6 એડ્રેસની લંબાઈ કેટલી છે?", optionsEn:["(A) 16 bits","(B) 32 bits","(C) 64 bits","(D) 128 bits"], optionsGu:["(A) 16 બિટ્સ","(B) 32 બિટ્સ","(C) 64 બિટ્સ","(D) 128 બિટ્સ"], answer:"(D) 128 bits"},
+      {qEn:"26. The term UPnP protocol is a short form for:", qGu:"26. UPnP પ્રોટોકોલ ટૂંકું નામ છે:", optionsEn:["(A) Uniform Plug and Play","(B) Unit Plug and Play","(C) Useful Plug and Play","(D) Universal Plug and Play"], optionsGu:["(A) Uniform Plug and Play","(B) Unit Plug and Play","(C) Useful Plug and Play","(D) Universal Plug and Play"], answer:"(D) Universal Plug and Play"},
+      {qEn:"27. Which of this is not a network edge device?", qGu:"27. નીચેનામાંથી કયું નેટવર્ક એજ ડિવાઇસ નથી?", optionsEn:["(A) PC","(B) Server","(C) Smartphone","(D) Switch"], optionsGu:["(A) PC","(B) સર્વર","(C) સ્માર્ટફોન","(D) સ્વિચ"], answer:"(D) Switch"},
+      {qEn:"28. Application layer protocol defines:", qGu:"28. એપ્લિકેશન લેયર પ્રોટોકોલ વ્યાખ્યાયિત કરે છે:", optionsEn:["(A) types of messages exchanged","(B) rules for when and how processes send and respond to messages","(C) message format, syntax and semantics","(D) all of above"], optionsGu:["(A) મેસેજના પ્રકાર","(B) પ્રક્રિયાઓ ક્યારે અને કેવી રીતે મેસેજ મોકલે અને જવાબ આપે તેના નિયમો","(C) મેસેજ ફોર્મેટ, સિન્ટેક્સ અને સેમેન્ટિક્સ","(D) ઉપરોક્ત બધા"], answer:"(D) all of above"},
+      {qEn:"29. The ______ is the physical path over which a message travels.", qGu:"29. ______ તે ભૌતિક માર્ગ છે જેના પર મેસેજ મુસાફરી કરે છે.", optionsEn:["(A) Path","(B) Protocol","(C) Route","(D) Medium"], optionsGu:["(A) પાથ","(B) પ્રોટોકોલ","(C) રૂટ","(D) મીડિયમ"], answer:"(D) Medium"},
+      {qEn:"30. A set of rules that governs data communication:", qGu:"30. ડેટા કોમ્યુનિકેશનને નિયંત્રિત કરતા નિયમોનો સમૂહ:", optionsEn:["(A) Rule","(B) Medium","(C) Link","(D) Protocol"], optionsGu:["(A) નિયમ","(B) મીડિયમ","(C) લિંક","(D) પ્રોટોકોલ"], answer:"(D) Protocol"},
+      {qEn:"31. Bluetooth is an example of:", qGu:"31. બ્લુટૂથ એક ઉદાહરણ છે:", optionsEn:["(A) local area network","(B) virtual private network","(C) personal area network","(D) none of the mentioned above"], optionsGu:["(A) લોકલ એરિયા નેટવર્ક","(B) વર્ચ્યુઅલ પ્રાઈવેટ નેટવર્ક","(C) પર્સનલ એરિયા નેટવર્ક","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(C) personal area network"},
+      {qEn:"32. Which protocol finds the MAC address from IP address?", qGu:"32. કયો પ્રોટોકોલ IP એડ્રેસમાંથી MAC એડ્રેસ શોધે છે?", optionsEn:["(A) SMTP","(B) ICMP","(C) ARP","(D) RARP"], optionsGu:["(A) SMTP","(B) ICMP","(C) ARP","(D) RARP"], answer:"(C) ARP"},
+      {qEn:"33. The structure of format of data is called:", qGu:"33. ડેટાના ફોર્મેટની રચનાને કહેવામાં આવે છે:", optionsEn:["(A) Syntax","(B) Struct","(C) Semantic","(D) none of the above"], optionsGu:["(A) સિન્ટેક્સ","(B) સ્ટ્રક્ટ","(C) સેમેન્ટિક","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(A) Syntax"},
+      {qEn:"34. The first Network:", qGu:"34. પ્રથમ નેટવર્ક:", optionsEn:["(A) ARPANET","(B) NFSNET","(C) CNNET","(D) ASAPNET"], optionsGu:["(A) ARPANET","(B) NFSNET","(C) CNNET","(D) ASAPNET"], answer:"(A) ARPANET"},
+      {qEn:"35. The noise due to random behavior of charge based carriers is:", qGu:"35. ચાર્જ આધારિત કેરિયર્સના રેન્ડમ વર્તનને કારણે થતો અવાજ:", optionsEn:["(A) Partition noise","(B) Industrial noise","(C) Shot noise","(D) Flicker noise"], optionsGu:["(A) પાર્ટિશન નોઈઝ","(B) ઇન્ડસ્ટ્રિયલ નોઈઝ","(C) શોટ નોઈઝ","(D) ફ્લિકર નોઈઝ"], answer:"(C) Shot noise"},
+      {qEn:"36. Which one of the following fields of an IP header is NOT modified by a typical IP router?", qGu:"36. IP હેડરના નીચેના કયા ક્ષેત્રને સામાન્ય IP રાઉટર સુધારતું નથી?", optionsEn:["(A) Checksum","(B) Source address","(C) Time to Live (TTL)","(D) Length"], optionsGu:["(A) ચેકસમ","(B) સોર્સ એડ્રેસ","(C) ટાઇમ ટુ લાઇવ (TTL)","(D) લેંગ્થ"], answer:"(B) Source address"},
+      {qEn:"37. In one of the pairs of protocols given below, both the protocols can use multiple TCP connections between the same client and the server. Which one is that?", qGu:"37. નીચે આપેલા પ્રોટોકોલ્સના જોડીમાંથી કઈ જોડીમાં બંને પ્રોટોકોલ એક જ ક્લાયન્ટ અને સર્વર વચ્ચે મલ્ટિપલ TCP કનેક્શન વાપરી શકે છે?", optionsEn:["(A) HTTP, FTP","(B) HTTP, TELNET","(C) FTP, SMTP","(D) HTTP, SMTP"], optionsGu:["(A) HTTP, FTP","(B) HTTP, TELNET","(C) FTP, SMTP","(D) HTTP, SMTP"], answer:"(D) HTTP, SMTP"},
+      {qEn:"38. Which of the following socket API function converts an unconnected active TCP socket into a passive socket?", qGu:"38. નીચેના સોકેટ API ફંક્શનમાંથી કયું અનકનેક્ટેડ એક્ટિવ TCP સોકેટને પેસિવ સોકેટમાં બદલે છે?", optionsEn:["(A) connect","(B) bind","(C) listen","(D) accept"], optionsGu:["(A) કનેક્ટ","(B) બાઇન્ડ","(C) લિસ્ટન","(D) એક્સેપ્ટ"], answer:"(C) listen"},
+      {qEn:"39. Which of the following transport layer protocols is used to support electronic mail?", qGu:"39. ઇલેક્ટ્રોનિક મેઇલને સપોર્ટ કરવા માટે કયો ટ્રાન્સપોર્ટ લેયર પ્રોટોકોલ વપરાય છે?", optionsEn:["(A) SMTP","(B) IP","(C) TCP","(D) UDP"], optionsGu:["(A) SMTP","(B) IP","(C) TCP","(D) UDP"], answer:"(C) TCP"},
+      {qEn:"40. The protocol data unit (PDU) for the application layer in the Internet stack is", qGu:"40. ઇન્ટરનેટ સ્ટેકમાં એપ્લિકેશન લેયર માટે પ્રોટોકોલ ડેટા યુનિટ (PDU) છે", optionsEn:["(A) Segment","(B) Datagram","(C) Message","(D) Frame"], optionsGu:["(A) સેગમેન્ટ","(B) ડેટાગ્રામ","(C) મેસેજ","(D) ફ્રેમ"], answer:"(C) Message"},
+      {qEn:"41. IP address consists of ____ parts separated by dots", qGu:"41. IP એડ્રેસમાં ____ ભાગ હોય છે જે ડોટથી અલગ પડેલા હોય છે", optionsEn:["(A) 2","(B) 3","(C) 4","(D) 1"], optionsGu:["(A) 2","(B) 3","(C) 4","(D) 1"], answer:"(C) 4"},
+      {qEn:"42. Domain name matching to IP address is performed by", qGu:"42. ડોમેન નામને IP એડ્રેસ સાથે મેચ કરવાનું કામ કોણ કરે છે?", optionsEn:["(A) Electronic mail","(B) URL","(C) DNS","(D) FTP"], optionsGu:["(A) ઇલેક્ટ્રોનિક મેઇલ","(B) URL","(C) DNS","(D) FTP"], answer:"(C) DNS"},
+      {qEn:"43. 'Internet' is an example of", qGu:"43. 'ઇન્ટરનેટ' એક ઉદાહરણ છે", optionsEn:["(A) LAN","(B) MAN","(C) WAN","(D) None of these"], optionsGu:["(A) LAN","(B) MAN","(C) WAN","(D) આમાંથી કોઈ નહીં"], answer:"(C) WAN"},
+      {qEn:"44. If a computer network cable is broken whole network goes down in ____ topology", qGu:"44. જો કમ્પ્યુટર નેટવર્ક કેબલ તૂટી જાય તો આખું નેટવર્ક ____ ટોપોલોજીમાં ડાઉન થઈ જાય છે", optionsEn:["(A) Star","(B) Ring","(C) Mesh","(D) All options are correct"], optionsGu:["(A) સ્ટાર","(B) રિંગ","(C) મેશ","(D) બધા વિકલ્પો સાચા છે"], answer:"(B) Ring"},
+      {qEn:"45. Which of the following is a most reliable topology?", qGu:"45. નીચેની કઈ ટોપોલોજી સૌથી વધુ વિશ્વસનીય છે?", optionsEn:["(A) Bus","(B) Star","(C) Ring","(D) Mesh"], optionsGu:["(A) બસ","(B) સ્ટાર","(C) રિંગ","(D) મેશ"], answer:"(D) Mesh"},
+      {qEn:"46. Hierarchical topology is used to establish a network which is also known as", qGu:"46. હાયરાર્કિકલ ટોપોલોજીનો ઉપયોગ નેટવર્ક સ્થાપિત કરવા માટે થાય છે જેને ______ તરીકે પણ ઓળખવામાં આવે છે", optionsEn:["(A) Bus network","(B) Star network","(C) Tree network","(D) Mesh network"], optionsGu:["(A) બસ નેટવર્ક","(B) સ્ટાર નેટવર્ક","(C) ટ્રી નેટવર્ક","(D) મેશ નેટવર્ક"], answer:"(C) Tree network"},
+      {qEn:"47. MAN stands for", qGu:"47. MAN નું પૂર્ણ નામ છે", optionsEn:["(A) Machine Area Network","(B) Metropolitan Area Network","(C) Metropolitan Asynchronous Network","(D) Machine asynchronous Network"], optionsGu:["(A) મશીન એરિયા નેટવર્ક","(B) મેટ્રોપોલિટન એરિયા નેટવર્ક","(C) મેટ્રોપોલિટન એસિંક્રોનસ નેટવર્ક","(D) મશીન એસિંક્રોનસ નેટવર્ક"], answer:"(B) Metropolitan Area Network"},
+      {qEn:"48. Which of the following component is responsible for network communication in a computer system?", qGu:"48. કમ્પ્યુટર સિસ્ટમમાં નેટવર્ક કોમ્યુનિકેશન માટે કયો ઘટક જવાબદાર છે?", optionsEn:["(A) UPS","(B) Ethernet card","(C) SVGA card","(D) SMPS"], optionsGu:["(A) UPS","(B) ઇથરનેટ કાર્ડ","(C) SVGA કાર્ડ","(D) SMPS"], answer:"(B) Ethernet card"},
+      {qEn:"49. Which of the following has minimum transmission speed?", qGu:"49. નીચેનામાંથી કયામાં ન્યૂનતમ ટ્રાન્સમિશન સ્પીડ છે?", optionsEn:["(A) Twisted pair wire","(B) Fiber optic cable","(C) Coaxial cable","(D) Microwave"], optionsGu:["(A) ટ્વિસ્ટેડ પેર વાયર","(B) ફાઇબર ઓપ્ટિક કેબલ","(C) કોએક્સિયલ કેબલ","(D) માઇક્રોવેવ"], answer:"(A) Twisted pair wire"},
+      {qEn:"50. Speed of internet connection is measured in", qGu:"50. ઇન્ટરનેટ કનેક્શનની ઝડપ કયા એકમમાં માપવામાં આવે છે?", optionsEn:["(A) Kilo bits per second","(B) Kilo Boolean per second","(C) Meter per second","(D) None of these"], optionsGu:["(A) કિલો બિટ્સ પર સેકન્ડ","(B) કિલો બુલિયન પર સેકન્ડ","(C) મીટર પર સેકન્ડ","(D) આમાંથી કોઈ નહીં"], answer:"(A) Kilo bits per second"},
+      {qEn:"51. Error correction can be done by using", qGu:"51. ભૂલ સુધારણા કરી શકાય છે", optionsEn:["(A) Hamming code","(B) CRC","(C) Framing","(D) Two dimensional parity check"], optionsGu:["(A) હેમિંગ કોડ","(B) CRC","(C) ફ્રેમિંગ","(D) ટુ ડાયમેન્શનલ પેરિટી ચેક"], answer:"(A) Hamming code"},
+      {qEn:"52. TCP/IP is an example of", qGu:"52. TCP/IP એક ઉદાહરણ છે", optionsEn:["(A) Communication protocol","(B) Networking protocol","(C) Data transfer protocol","(D) All options are correct"], optionsGu:["(A) કોમ્યુનિકેશન પ્રોટોકોલ","(B) નેટવર્કિંગ પ્રોટોકોલ","(C) ડેટા ટ્રાન્સફર પ્રોટોકોલ","(D) બધા વિકલ્પો સાચા છે"], answer:"(D) All options are correct"},
+      {qEn:"53. In a computer network, which of the following is a connecting device?", qGu:"53. કમ્પ્યુટર નેટવર્કમાં, નીચેનામાંથી કયું કનેક્ટિંગ ડિવાઇસ છે?", optionsEn:["(A) Router","(B) Hub","(C) Switch","(D) All options are correct"], optionsGu:["(A) રાઉટર","(B) હબ","(C) સ્વિચ","(D) બધા વિકલ્પો સાચા છે"], answer:"(D) All options are correct"},
+      {qEn:"54. ______ is a device that combines transmission from various I/O devices into one line", qGu:"54. ______ એવું ડિવાઇસ છે જે વિવિધ I/O ડિવાઇસીસના ટ્રાન્સમિશનને એક લાઇનમાં જોડે છે", optionsEn:["(A) Modifier","(B) Multiplexer","(C) Concentrator","(D) Gateway"], optionsGu:["(A) મોડિફાયર","(B) મલ્ટિપ્લેક્સર","(C) કોન્સન્ટ્રેટર","(D) ગેટવે"], answer:"(B) Multiplexer"},
+      {qEn:"55. The amount of data transmitted in a fixed amount of time is called", qGu:"55. નિશ્ચિત સમયમાં ટ્રાન્સમિટ થતા ડેટાની માત્રાને કહેવામાં આવે છે", optionsEn:["(A) Refresh rate","(B) Resolution","(C) Bandwidth","(D) Frequency"], optionsGu:["(A) રિફ્રેશ રેટ","(B) રિઝોલ્યુશન","(C) બેન્ડવિડ્થ","(D) ફ્રીક્વન્સી"], answer:"(C) Bandwidth"},
+      {qEn:"56. During data transmission, parity bits are attached with data bits for detecting", qGu:"56. ડેટા ટ્રાન્સમિશન દરમિયાન, પેરિટી બિટ્સ ડેટા બિટ્સ સાથે જોડવામાં આવે છે ______ શોધવા માટે", optionsEn:["(A) Buffer size","(B) Destination","(C) Errors","(D) None of these"], optionsGu:["(A) બફર સાઇઝ","(B) ડેસ્ટિનેશન","(C) ભૂલો","(D) આમાંથી કોઈ નહીં"], answer:"(C) Errors"},
+      {qEn:"57. In communication satellite, multiple repeaters are known as", qGu:"57. કોમ્યુનિકેશન સેટેલાઇટમાં, અનેક રિપીટર્સને કહેવામાં આવે છે", optionsEn:["(A) Detector","(B) Modulator","(C) Stations","(D) Transponders"], optionsGu:["(A) ડિટેક્ટર","(B) મોડ્યુલેટર","(C) સ્ટેશન્સ","(D) ટ્રાન્સપોન્ડર્સ"], answer:"(D) Transponders"},
+      {qEn:"58. 'Communication protocol' means", qGu:"58. 'કોમ્યુનિકેશન પ્રોટોકોલ'નો અર્થ છે", optionsEn:["(A) Data transformation","(B) Set of rules to communicate data from one machine to another machine","(C) Transmission signals","(D) None of these"], optionsGu:["(A) ડેટા ટ્રાન્સફોર્મેશન","(B) એક મશીનથી બીજા મશીનમાં ડેટા કોમ્યુનિકેટ કરવાના નિયમોનો સમૂહ","(C) ટ્રાન્સમિશન સિગ્નલ્સ","(D) આમાંથી કોઈ નહીં"], answer:"(B) Set of rules to communicate data from one machine to another machine"},
+      {qEn:"59. At network layer, the data packet is known by name", qGu:"59. નેટવર્ક લેયરમાં, ડેટા પેકેટને ______ તરીકે ઓળખવામાં આવે છે", optionsEn:["(A) Frame","(B) Packet","(C) Datagram","(D) Circuit"], optionsGu:["(A) ફ્રેમ","(B) પેકેટ","(C) ડેટાગ્રામ","(D) સર્કિટ"], answer:"(B) Packet"},
+      {qEn:"60. A network using ____ technique is called a store and forward network", qGu:"60. ____ ટેક્નિક વાપરતું નેટવર્ક સ્ટોર અને ફોર્વર્ડ નેટવર્ક કહેવાય છે", optionsEn:["(A) Circuit switching","(B) Message switching","(C) Packet switching","(D) Both (Circuit switching) and (Message switching)"], optionsGu:["(A) સર્કિટ સ્વિચિંગ","(B) મેસેજ સ્વિચિંગ","(C) પેકેટ સ્વિચિંગ","(D) બંને"], answer:"(B) Message switching"},
+      {qEn:"61. File server is a ____ which is used to store files received from various client machines", qGu:"61. ફાઇલ સર્વર એ ______ છે જે વિવિધ ક્લાયન્ટ મશીન્સમાંથી મળેલી ફાઇલ્સ સ્ટોર કરે છે", optionsEn:["(A) Specialized computer system","(B) Modem","(C) Router","(D) Transponder"], optionsGu:["(A) સ્પેશિયલાઇઝ્ડ કમ્પ્યુટર સિસ્ટમ","(B) મોડેમ","(C) રાઉટર","(D) ટ્રાન્સપોન્ડર"], answer:"(A) Specialized computer system"},
+      {qEn:"62. Which of the following is a recovery technique?", qGu:"62. નીચેનામાંથી કયી રિકવરી તકનીક છે?", optionsEn:["(A) Public key encryption","(B) Shadow paging","(C) Hash file organization","(D) Indexed file organization"], optionsGu:["(A) પબ્લિક કી એન્ક્રિપ્શન","(B) શેડો પેજિંગ","(C) હેશ ફાઇલ ઓર્ગેનાઇઝેશન","(D) ઇન્ડેક્સ્ડ ફાઇલ ઓર્ગેનાઇઝેશન"], answer:"(B) Shadow paging"},
+      {qEn:"63. Encryption is a technique", qGu:"63. એન્ક્રિપ્શન એક તકનીક છે", optionsEn:["(A) To design conceptual schema","(B) To translate global data","(C) To provide privacy of data","(D) To update database"], optionsGu:["(A) કોન્સેપ્ચ્યુઅલ સ્કીમા ડિઝાઇન કરવા માટે","(B) ગ્લોબલ ડેટા અનુવાદ કરવા માટે","(C) ડેટાની પ્રાઇવસી આપવા માટે","(D) ડેટાબેઝ અપડેટ કરવા માટે"], answer:"(C) To provide privacy of data"},
+      {qEn:"64. When a DNS serve accepts and uses incorrect information from a host that has no authority giving that information, then it is called", qGu:"64. જ્યારે DNS સર્વર અધિકાર વિનાના હોસ્ટમાંથી ખોટી માહિતી સ્વીકારે અને વાપરે ત્યારે તેને કહેવામાં આવે છે", optionsEn:["(A) DNS lookup","(B) DNS hijacking","(C) DNS spoofing","(D) None of the mentioned"], optionsGu:["(A) DNS લુકઅપ","(B) DNS હાઇજેકિંગ","(C) DNS સ્પૂફિંગ","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(C) DNS spoofing"},
+      {qEn:"65. What is the maximum size of data that application layer can pass on to the TCP layer below?", qGu:"65. એપ્લિકેશન લેયર TCP લેયરને મહત્તમ કેટલા સાઇઝનો ડેટા પાસ કરી શકે છે?", optionsEn:["(A) Any size","(B) (2^16 bytes – the size of TCP header)","(C) 2^16 bytes","(D) 1500 bytes"], optionsGu:["(A) કોઈ પણ સાઇઝ","(B) (2^16 બાઇટ્સ – TCP હેડરનું સાઇઝ)","(C) 2^16 બાઇટ્સ","(D) 1500 બાઇટ્સ"], answer:"(A) Any size"},
+      {qEn:"66. Bit stuffing refers to", qGu:"66. બિટ સ્ટફિંગનો અર્થ છે", optionsEn:["(A) Inserting a '0' in user stream to differentiate it with a flag","(B) Inserting a '0' in flag stream to avoid ambiguity","(C) appending a nibble to the flag sequence","(D) Appending a nibble to the user data stream"], optionsGu:["(A) યુઝર સ્ટ્રીમમાં '0' નાખવું જેથી ફ્લેગથી અલગ પડે","(B) ફ્લેગ સ્ટ્રીમમાં '0' નાખવું","(C) ફ્લેગ સિક્વન્સમાં નિબલ ઉમેરવું","(D) યુઝર ડેટા સ્ટ્રીમમાં નિબલ ઉમેરવું"], answer:"(A) Inserting a '0' in user stream to differentiate it with a flag"},
+      {qEn:"67. Dynamic routing protocol enable routers to:", qGu:"67. ડાયનેમિક રાઉટિંગ પ્રોટોકોલ રાઉટર્સને સક્ષમ કરે છે:", optionsEn:["(A) Dynamically discover and maintain routes","(B) distribute routing updates to other routers","(C) Reach agreement with other routers about the network topology","(D) All of the above"], optionsGu:["(A) ડાયનેમિક રીતે રૂટ્સ શોધવા અને જાળવવા","(B) અન્ય રાઉટર્સને રાઉટિંગ અપડેટ્સ વિતરિત કરવા","(C) નેટવર્ક ટોપોલોજી વિશે અન્ય રાઉટર્સ સાથે સમજૂતી કરવી","(D) ઉપરોક્ત બધા"], answer:"(D) All of the above"},
+      {qEn:"68. In Ethernet CSMA/CD, the special bit sequence is transmitted by media access management to handle collision is called", qGu:"68. ઇથરનેટ CSMA/CDમાં, કોલિઝન હેન્ડલ કરવા માટે મીડિયા એક્સેસ મેનેજમેન્ટ દ્વારા મોકલવામાં આવતી વિશેષ બિટ સિક્વન્સને કહેવામાં આવે છે", optionsEn:["(A) Preamble","(B) Post amble","(C) Jam","(D) None of these"], optionsGu:["(A) પ્રીએમ્બલ","(B) પોસ્ટ એમ્બલ","(C) જેમ","(D) આમાંથી કોઈ નહીં"], answer:"(C) Jam"},
+      {qEn:"69. Which network protocol allows hosts to dynamically get a unique IP number on each bootup?", qGu:"69. કયો નેટવર્ક પ્રોટોકોલ હોસ્ટ્સને દરેક બુટઅપ પર યુનિક IP નંબર મેળવવા દે છે?", optionsEn:["(A) DHCP","(B) BOOTP","(C) RARP","(D) ARP"], optionsGu:["(A) DHCP","(B) BOOTP","(C) RARP","(D) ARP"], answer:"(A) DHCP"},
+      {qEn:"70. The address of a class B host is to be split into subnets with a 6-bit subnet number. What is the maximum number of subnets and the maximum number of hosts in each subnet?", qGu:"70. ક્લાસ B હોસ્ટના એડ્રેસને 6-બિટ સબનેટ નંબર સાથે સબનેટ્સમાં વિભાજિત કરવામાં આવે છે. સબનેટ્સ અને દરેક સબનેટમાં મહત્તમ હોસ્ટ્સની સંખ્યા કેટલી?", optionsEn:["(A) 62 subnets","(B) 64 subnets and 262142 hosts","(C) 62 subnets and 262142 hosts","(D) 64 subnets and 1022 hosts"], optionsGu:["(A) 62 સબનેટ્સ","(B) 64 સબનેટ્સ અને 262142 હોસ્ટ્સ","(C) 62 સબનેટ્સ અને 262142 હોસ્ટ્સ","(D) 64 સબનેટ્સ અને 1022 હોસ્ટ્સ"], answer:"(C) 62 subnets and 262142 hosts"},
+      {qEn:"71. In a token ring network, the transmission speed is 107 bps and the propagation speed is 200 m/μs. Then 1 bit delay in this network is equivalent to", qGu:"71. ટોકન રિંગ નેટવર્કમાં, ટ્રાન્સમિશન સ્પીડ 10^7 bps અને પ્રોપગેશન સ્પીડ 200 m/μs છે. તો 1 બિટ ડિલે આ નેટવર્કમાં ______ બરાબર છે", optionsEn:["(A) 500 m of cable","(B) 200 m of cable","(C) 20 m of cable","(D) 50 m of cable"], optionsGu:["(A) 500 મીટર કેબલ","(B) 200 મીટર કેબલ","(C) 20 મીટર કેબલ","(D) 50 મીટર કેબલ"], answer:"(C) 20 m of cable"},
+      {qEn:"72. One SAN switch has 24 ports. All 24 port supports 8 Gbps fiber Channel technology. What is the aggregate bandwidth of that SAN switch?", qGu:"72. એક SAN સ્વિચમાં 24 પોર્ટ્સ છે. બધા 24 પોર્ટ 8 Gbps ફાઇબર ચેનલ ટેક્નોલોજી સપોર્ટ કરે છે. તે SAN સ્વિચની એગ્રીગેટ બેન્ડવિડ્થ કેટલી છે?", optionsEn:["(A) 96 Gbps","(B) 192 Mbps","(C) 512 Gbps","(D) 192 Gbps"], optionsGu:["(A) 96 Gbps","(B) 192 Mbps","(C) 512 Gbps","(D) 192 Gbps"], answer:"(D) 192 Gbps"},
+      {qEn:"73. Lightweight Directory Access Protocol is used for", qGu:"73. લાઇટવેઇટ ડિરેક્ટરી એક્સેસ પ્રોટોકોલનો ઉપયોગ ______ માટે થાય છે", optionsEn:["(A) Routing the packets","(B) Authentication","(C) Obtaining IP address","(D) Domain name resolving"], optionsGu:["(A) પેકેટ્સ રાઉટિંગ","(B) ઓથેન્ટિકેશન","(C) IP એડ્રેસ મેળવવા","(D) ડોમેન નામ રિઝોલ્વ કરવા"], answer:"(B) Authentication"},
+      {qEn:"74. The broadcast address for IP network 172.16.0.0 with subnet mask 255.255.0.0 is", qGu:"74. IP નેટવર્ક 172.16.0.0 માટે બ્રોડકાસ્ટ એડ્રેસ (સબનેટ માસ્ક 255.255.0.0 સાથે) છે", optionsEn:["(A) 172.16.0.255","(B) 172.16.255.255","(C) 255.255.255.255","(D) 172.255.255.255"], optionsGu:["(A) 172.16.0.255","(B) 172.16.255.255","(C) 255.255.255.255","(D) 172.255.255.255"], answer:"(B) 172.16.255.255"},
+      {qEn:"75. Which RAID level gives block level striping with double distributed parity?", qGu:"75. કયા RAID લેવલમાં બ્લોક લેવલ સ્ટ્રાઇપિંગ સાથે ડબલ ડિસ્ટ્રિબ્યુટેડ પેરિટી હોય છે?", optionsEn:["(A) RAID 10","(B) RAID 2","(C) RAID 6","(D) RAID 5"], optionsGu:["(A) RAID 10","(B) RAID 2","(C) RAID 6","(D) RAID 5"], answer:"(C) RAID 6"},
+      {qEn:"76. The IEEE standard for Wi-Max technology is", qGu:"76. Wi-Max ટેક્નોલોજી માટે IEEE સ્ટાન્ડર્ડ છે", optionsEn:["(A) IEEE 802.16","(B) IEEE 802.36","(C) IEEE 812.16","(D) IEEE 806.16"], optionsGu:["(A) IEEE 802.16","(B) IEEE 802.36","(C) IEEE 812.16","(D) IEEE 806.16"], answer:"(A) IEEE 802.16"},
+      {qEn:"77. The encoding technique used to transmit the signal in giga Ethernet technology over fiber optic medium is", qGu:"77. ગીગા ઇથરનેટ ટેક્નોલોજીમાં ફાઇબર ઓપ્ટિક મીડિયમ પર સિગ્નલ ટ્રાન્સમિટ કરવા માટે વપરાતી એન્કોડિંગ તકનીક છે", optionsEn:["(A) Differential manchester encoding","(B) Non Return to zero","(C) 4B/5B encoding","(D) 8B/10B encoding"], optionsGu:["(A) ડિફરેન્શિયલ મેન્ચેસ્ટર એન્કોડિંગ","(B) નોન રિટર્ન ટુ ઝીરો","(C) 4B/5B એન્કોડિંગ","(D) 8B/10B એન્કોડિંગ"], answer:"(D) 8B/10B encoding"},
+      {qEn:"78. Use of IPSEC in tunnel mode results in", qGu:"78. ટનલ મોડમાં IPSECના ઉપયોગથી શું થાય છે?", optionsEn:["(A) IP packet with same header","(B) IP packet with new header","(C) IP packet without header","(D) No changes in IP packet"], optionsGu:["(A) સમાન હેડરવાળું IP પેકેટ","(B) નવા હેડરવાળું IP પેકેટ","(C) હેડર વિનાનું IP પેકેટ","(D) IP પેકેટમાં કોઈ ફેરફાર નહીં"], answer:"(B) IP packet with new header"},
+      {qEn:"79. The subnet mask for a particular network is 255.255.31.0 which of the following pairs of IP addresses could belong to this network?", qGu:"79. એક નેટવર્ક માટે સબનેટ માસ્ક 255.255.31.0 છે. નીચેના કયા IP એડ્રેસની જોડી આ નેટવર્કમાં હોઈ શકે?", optionsEn:["(A) 172.57.88.62 and 172.56.87.23","(B) 10.35.28.2 and 10.35.29.4","(C) 191.203.31.87 and 191.234.31.88","(D) 128.8.129.43 and 128.8.161.55"], optionsGu:["(A) 172.57.88.62 અને 172.56.87.23","(B) 10.35.28.2 અને 10.35.29.4","(C) 191.203.31.87 અને 191.234.31.88","(D) 128.8.129.43 અને 128.8.161.55"], answer:"(D) 128.8.129.43 and 128.8.161.55"},
+      {qEn:"80. In networking, UTP stands for", qGu:"80. નેટવર્કિંગમાં, UTP નું પૂર્ણ નામ છે", optionsEn:["(A) Unshielded T- connector port","(B) Unshielded twisted pair","(C) Unshielded terminating pair","(D) Unshielded transmission process"], optionsGu:["(A) અનશિલ્ડેડ T- કનેક્ટર પોર્ટ","(B) અનશિલ્ડેડ ટ્વિસ્ટેડ પેર","(C) અનશિલ્ડેડ ટર્મિનેટિંગ પેર","(D) અનશિલ્ડેડ ટ્રાન્સમિશન પ્રોસેસ"], answer:"(B) Unshielded twisted pair"},
+      {qEn:"81. Which of the following is a MAC address?", qGu:"81. નીચેનામાંથી કયું MAC એડ્રેસ છે?", optionsEn:["(A) 192.166.200.50","(B) 00056A:01A01A5CCA7FF60","(C) 568, Airport Road","(D) 01:A5:BB:A7:FF:60"], optionsGu:["(A) 192.166.200.50","(B) 00056A:01A01A5CCA7FF60","(C) 568, Airport Road","(D) 01:A5:BB:A7:FF:60"], answer:"(D) 01:A5:BB:A7:FF:60"},
+      {qEn:"82. Physical topology of FDDI is?", qGu:"82. FDDIની ફિઝિકલ ટોપોલોજી છે?", optionsEn:["(A) Bus","(B) Ring","(C) Star","(D) None of the above"], optionsGu:["(A) બસ","(B) રિંગ","(C) સ્ટાર","(D) ઉપરોક્તમાંથી કોઈ નહીં"], answer:"(B) Ring"},
+      {qEn:"83. What is the primary purpose of a VLAN?", qGu:"83. VLANનો મુખ્ય હેતુ શું છે?", optionsEn:["(A) Demonstrating the proper layout for a network","(B) Simulating a network","(C) To create a virtual private network","(D) Segmenting a network inside a switch or device"], optionsGu:["(A) નેટવર્કનું યોગ્ય લેઆઉટ દર્શાવવું","(B) નેટવર્ક સિમ્યુલેટ કરવું","(C) વર્ચ્યુઅલ પ્રાઈવેટ નેટવર્ક બનાવવું","(D) સ્વિચ અથવા ડિવાઇસ અંદર નેટવર્કને સેગમેન્ટ કરવું"], answer:"(D) Segmenting a network inside a switch or device"},
+      {qEn:"84. SHA-1 is a", qGu:"84. SHA-1 એક ______ છે", optionsEn:["(A) Encryption algorithm","(B) Decryption algorithm","(C) Key exchange algorithm","(D) Message digest function."], optionsGu:["(A) એન્ક્રિપ્શન અલ્ગોરિધમ","(B) ડિક્રિપ્શન અલ્ગોરિધમ","(C) કી એક્સચેન્જ અલ્ગોરિધમ","(D) મેસેજ ડાયજેસ્ટ ફંક્શન"], answer:"(D) Message digest function."},
+      {qEn:"85. Advanced Encryption Standard (AES) is based on", qGu:"85. એડવાન્સ્ડ એન્ક્રિપ્શન સ્ટાન્ડર્ડ (AES) ______ પર આધારિત છે", optionsEn:["(A) Asymmetric key algorithm","(B) Symmetric key algorithm","(C) Public key algorithm","(D) Key exchange"], optionsGu:["(A) અસિમેટ્રિક કી અલ્ગોરિધમ","(B) સિમેટ્રિક કી અલ્ગોરિધમ","(C) પબ્લિક કી અલ્ગોરિધમ","(D) કી એક્સચેન્જ"], answer:"(B) Symmetric key algorithm"},
+      {qEn:"86. Which one of these is characteristic of RAID 5?", qGu:"86. નીચેનામાંથી કયું RAID 5ની વિશેષતા છે?", optionsEn:["(A) Dedicated parity","(B) Double parity","(C) Hamming code parity","(D) Distributed parity"], optionsGu:["(A) ડેડિકેટેડ પેરિટી","(B) ડબલ પેરિટી","(C) હેમિંગ કોડ પેરિટી","(D) ડિસ્ટ્રિબ્યુટેડ પેરિટી"], answer:"(D) Distributed parity"},
+      {qEn:"87. Which protocol suite designed by IETF to provide security for a packet at the Internet layer?", qGu:"87. IETF દ્વારા ડિઝાઇન કરાયેલ કયો પ્રોટોકોલ સ્યુટ ઇન્ટરનેટ લેયર પર પેકેટની સુરક્ષા આપે છે?", optionsEn:["(A) IP sec","(B) Net Sec","(C) Packet Sec","(D) SSL"], optionsGu:["(A) IP sec","(B) Net Sec","(C) Packet Sec","(D) SSL"], answer:"(A) IP sec"},
+      {qEn:"88. The default subnet mask for a class B network can be", qGu:"88. ક્લાસ B નેટવર્ક માટે ડિફોલ્ટ સબનેટ માસ્ક ______ હોઈ શકે છે", optionsEn:["(A) 255.255.255.0","(B) 255.0.0.0","(C) 255.255.192.0","(D) 255.255.0.0"], optionsGu:["(A) 255.255.255.0","(B) 255.0.0.0","(C) 255.255.192.0","(D) 255.255.0.0"], answer:"(D) 255.255.0.0"},
+      {qEn:"89. If there are n devices (nodes) in a network, what is the number of cable links required for a fully connected mesh and a star topology respectively", qGu:"89. જો નેટવર્કમાં n ડિવાઇસ (નોડ્સ) હોય, તો ફુલી કનેક્ટેડ મેશ અને સ્ટાર ટોપોલોજી માટે કેબલ લિંક્સની સંખ્યા કેટલી?", optionsEn:["(A) n(n-1)/2, n-1","(B) n, n-1","(C) n-1, n","(D) n-1, n(n-1)/2"], optionsGu:["(A) n(n-1)/2, n-1","(B) n, n-1","(C) n-1, n","(D) n-1, n(n-1)/2"], answer:"(A) n(n-1)/2, n-1"},
+      {qEn:"90. Which of the following protocol is used for transferring electronic mail messages from one machine to another?", qGu:"90. ઇલેક્ટ્રોનિક મેઇલ મેસેજ એક મશીનથી બીજા મશીનમાં ટ્રાન્સફર કરવા માટે કયો પ્રોટોકોલ વપરાય છે?", optionsEn:["(A) TELNET","(B) FTP","(C) SNMP","(D) SMTP"], optionsGu:["(A) TELNET","(B) FTP","(C) SNMP","(D) SMTP"], answer:"(D) SMTP"},
+      {qEn:"91. An Ethernet frame that is less than the IEEE 802.3 minimum length of 64 octets is called", qGu:"91. IEEE 802.3ની ન્યૂનતમ લંબાઈ 64 ઓક્ટેટ્સ કરતાં ઓછું હોય તેવા ઇથરનેટ ફ્રેમને કહેવામાં આવે છે", optionsEn:["(A) Short frame","(B) Small frame","(C) Mini frame","(D) Runt frame"], optionsGu:["(A) શોર્ટ ફ્રેમ","(B) સ્મોલ ફ્રેમ","(C) મિની ફ્રેમ","(D) રન્ટ ફ્રેમ"], answer:"(D) Runt frame"},
+      {qEn:"92. Match with the suitable one:", qGu:"92. યોગ્ય સાથે મેચ કરો:", optionsEn:["(A) A-2, B-3, C-4, D-1","(B) A-2, B-4, C-3, D-1","(C) A-3, B-4, C-1, D-2","(D) A-3, B-1, C-4, D-2"], optionsGu:["(A) A-2, B-3, C-4, D-1","(B) A-2, B-4, C-3, D-1","(C) A-3, B-4, C-1, D-2","(D) A-3, B-1, C-4, D-2"], answer:"(A) A-2, B-3, C-4, D-1"},
+      {qEn:"93. Optimal Asymmetric Encryption Padding is employed in RSA to counter", qGu:"93. RSAમાં Optimal Asymmetric Encryption Padding ______ના વિરોધમાં વપરાય છે", optionsEn:["(A) Known Cipher text Attack","(B) Chosen Cipher text attack","(C) Known Plaintext Attack","(D) Chosen Plaintext Attack"], optionsGu:["(A) Known Cipher text Attack","(B) Chosen Cipher text attack","(C) Known Plaintext Attack","(D) Chosen Plaintext Attack"], answer:"(B) Chosen Cipher text attack"},
+      {qEn:"94. In digital Signature Schemes, ............ is used for ............ whereas ............ is used for ............", qGu:"94. ડિજિટલ સિગ્નેચર સ્કીમમાં, ............ ______ માટે વપરાય છે જ્યારે ............ ______ માટે વપરાય છે", optionsEn:["(A) Private Key, Encryption, Public Key, Decryption","(B) Private Key, Decryption, Public Key, Encryption","(C) DES, Encryption, DES, Decryption","(D) None of the above is correct sequence of word"], optionsGu:["(A) પ્રાઈવેટ કી, એન્ક્રિપ્શન, પબ્લિક કી, ડિક્રિપ્શન","(B) પ્રાઈવેટ કી, ડિક્રિપ્શન, પબ્લિક કી, એન્ક્રિપ્શન","(C) DES, એન્ક્રિપ્શન, DES, ડિક્રિપ્શન","(D) ઉપરોક્તમાંથી કોઈ સાચું ક્રમ નથી"], answer:"(A) Private Key, Encryption, Public Key, Decryption"},
+      {qEn:"95. What is the correct ordering of attacks on the basis of difficulty level (High to low)", qGu:"95. હુમલાઓનો મુશ્કેલી સ્તરના આધારે સાચો ક્રમ (ઉચ્ચથી નીચું) કયો છે?", optionsEn:["(A) known plaintext, chosen plaintext, chosen cipher text, cipher text only","(B) known plaintext, chosen cipher text, chosen plaintext, cipher text only","(C) cipher text only, known plaintext, chosen plaintext, chosen cipher text.","(D) cipher text only, chosen plaintext, known plaintext, chosen cipher text,"], optionsGu:["(A) known plaintext, chosen plaintext, chosen cipher text, cipher text only","(B) known plaintext, chosen cipher text, chosen plaintext, cipher text only","(C) cipher text only, known plaintext, chosen plaintext, chosen cipher text.","(D) cipher text only, chosen plaintext, known plaintext, chosen cipher text,"], answer:"(C) cipher text only, known plaintext, chosen plaintext, chosen cipher text."},
+      {qEn:"96. Which security service is not provided by IPSec", qGu:"96. IPSec દ્વારા કઈ સુરક્ષા સેવા આપવામાં આવતી નથી?", optionsEn:["(A) Access control","(B) Connectionless integrity","(C) Use authentication","(D) Rejection of replayed packets"], optionsGu:["(A) એક્સેસ કંટ્રોલ","(B) કનેક્શનલેસ ઇન્ટિગ્રિટી","(C) યુઝર ઓથેન્ટિકેશન","(D) રીપ્લે પેકેટ્સનું રિજેક્શન"], answer:"(C) Use authentication"},
+      {qEn:"97. ............ is a method of attacking a challenge-response authentication system that uses the same protocol in both directions.", qGu:"97. ............ એ ચેલેન્જ-રિસ્પોન્સ ઓથેન્ટિકેશન સિસ્ટમ પર હુમલો કરવાની પદ્ધતિ છે જે બંને દિશામાં સમાન પ્રોટોકોલ વાપરે છે.", optionsEn:["(A) Replay attack","(B) Denial of Service Attack","(C) Masquerading","(D) Reflection Attack"], optionsGu:["(A) રીપ્લે અટેક","(B) ડિનાયલ ઓફ સર્વિસ અટેક","(C) માસ્કરેડિંગ","(D) રિફ્લેક્શન અટેક"], answer:"(D) Reflection Attack"},
+      {qEn:"98. Encryption is primarily used to provide security service.", qGu:"98. એન્ક્રિપ્શન મુખ્યત્વે ______ સુરક્ષા સેવા આપવા માટે વપરાય છે.", optionsEn:["(A) Confidentiality","(B) Access Control","(C) Non- repudiation","(D) User Authentication"], optionsGu:["(A) કોન્ફિડેન્શિયાલિટી","(B) એક્સેસ કંટ્રોલ","(C) નોન-રિપ્યુડિયેશન","(D) યુઝર ઓથેન્ટિકેશન"], answer:"(A) Confidentiality"},
+      {qEn:"99. An ATM cell has the payload field of", qGu:"99. ATM સેલનું પેલોડ ફિલ્ડ ______ બાઇટ્સનું હોય છે", optionsEn:["(A) 53 bytes","(B) 48 bytes","(C) 64 bytes","(D) 56 bytes"], optionsGu:["(A) 53 બાઇટ્સ","(B) 48 બાઇટ્સ","(C) 64 બાઇટ્સ","(D) 56 બાઇટ્સ"], answer:"(B) 48 bytes"},
+      {qEn:"100. Which is not a function of data link layer", qGu:"100. ડેટા લિંક લેયરનું કાર્ય નથી", optionsEn:["(A) Framing","(B) Flow Control","(C) Signal encoding","(D) Error control"], optionsGu:["(A) ફ્રેમિંગ","(B) ફ્લો કંટ્રોલ","(C) સિગ્નલ એન્કોડિંગ","(D) એરર કંટ્રોલ"], answer:"(C) Signal encoding"},
+      {qEn:"101. In Manchester Encoding, the data bit is represented by", qGu:"101. મેન્ચેસ્ટર એન્કોડિંગમાં, ડેટા બિટ ______ દ્વારા રજૂ થાય છે", optionsEn:["(A) 0 as high, 1 as low","(B) Both 0 and 1 as transition in the middle of bit period","(C) 0 as transition at the beginning of bit period, 1 as no transition","(D) Both 0 and 1 as No transition in the middle of bit period"], optionsGu:["(A) 0 હાઈ, 1 લો","(B) 0 અને 1 બંને બિટ પીરિયડના મધ્યમાં ટ્રાન્ઝિશન","(C) 0 બિટ પીરિયડની શરૂઆતમાં ટ્રાન્ઝિશન, 1માં કોઈ ટ્રાન્ઝિશન નહીં","(D) 0 અને 1 બંનેમાં મધ્યમાં કોઈ ટ્રાન્ઝિશન નહીં"], answer:"(B) Both 0 and 1 as transition in the middle of bit period"},
+      {qEn:"102. In TCP/IP, network layer and transport layer provides.........Services respectively", qGu:"102. TCP/IPમાં, નેટવર્ક લેયર અને ટ્રાન્સપોર્ટ લેયર અનુક્રમે ......... સેવાઓ આપે છે", optionsEn:["(A) Only connectionless, Both Connectionless and Connection Oriented","(B) Both connectionless and Connection Oriented, Only connectionless","(C) Connectionless, Connection Oriented","(D) Connection Oriented, Connectionless"], optionsGu:["(A) ફક્ત કનેક્શનલેસ, બંને કનેક્શનલેસ અને કનેક્શન ઓરિએન્ટેડ","(B) બંને કનેક્શનલેસ અને કનેક્શન ઓરિએન્ટેડ, ફક્ત કનેક્શનલેસ","(C) કનેક્શનલેસ, કનેક્શન ઓરિએન્ટેડ","(D) કનેક્શન ઓરિએન્ટેડ, કનેક્શનલેસ"], answer:"(A) Only connectionless, Both Connectionless and Connection Oriented"},
+      {qEn:"103. In.............., the error free frames received following an erroneous frame are buffered and only the oldest unacknowledged frame is retransmitted by the sender.", qGu:"103. ..............માં, ભૂલવાળા ફ્રેમ પછી મળેલા ભૂલ વિનાના ફ્રેમ્સ બફર કરવામાં આવે છે અને માત્ર સૌથી જૂનો અનએક્નોલેજ્ડ ફ્રેમ ફરી મોકલવામાં આવે છે.", optionsEn:["(A) Go Back N","(B) Selective Repeat","(C) One bit Sliding Window Protocol","(D) All the above"], optionsGu:["(A) ગો બેક N","(B) સિલેક્ટિવ રિપીટ","(C) વન બિટ સ્લાઇડિંગ વિન્ડો પ્રોટોકોલ","(D) બધા"], answer:"(B) Selective Repeat"},
+      {qEn:"104. A......... is used to interconnect two networks at data link layer", qGu:"104. .........નો ઉપયોગ બે નેટવર્કને ડેટા લિંક લેયર પર જોડવા માટે થાય છે", optionsEn:["(A) Hub","(B) Repeater","(C) Bridge","(D) Router"], optionsGu:["(A) હબ","(B) રિપીટર","(C) બ્રિજ","(D) રાઉટર"], answer:"(C) Bridge"},
+      {qEn:"105. In point-to-Point Protocol (PPP), network layer option are negotiated using", qGu:"105. પોઇન્ટ-ટુ-પોઇન્ટ પ્રોટોકોલ (PPP)માં, નેટવર્ક લેયર વિકલ્પો ______ વડે નેગોશિયેટ કરવામાં આવે છે", optionsEn:["(A) Link Control Protocol","(B) Dynamic Host Control Protocol","(C) Internet Protocol","(D) Network Control Protocol"], optionsGu:["(A) લિંક કંટ્રોલ પ્રોટોકોલ","(B) ડાયનેમિક હોસ્ટ કંટ્રોલ પ્રોટોકોલ","(C) ઇન્ટરનેટ પ્રોટોકોલ","(D) નેટવર્ક કંટ્રોલ પ્રોટોકોલ"], answer:"(D) Network Control Protocol"},
+      {qEn:"106. In.............., the sender starts transmitting the data as soon as it has data to send.", qGu:"106. ..............માં, સેન્ડર પાસે ડેટા હોય તે જ ક્ષણે ડેટા મોકલવાનું શરૂ કરી દે છે.", optionsEn:["(A) Pure ALOHA","(B) slotted ALOHA","(C) persistent CSMA","(D) Nopersistent CSMA"], optionsGu:["(A) પ્યોર અલોહા","(B) સ્લોટેડ અલોહા","(C) પર્સિસ્ટન્ટ CSMA","(D) નોન-પર્સિસ્ટન્ટ CSMA"], answer:"(A) Pure ALOHA"},
+      {qEn:"107. In 100 BaseFX, maximum distance between a station and a hub is limited to.......", qGu:"107. 100 BaseFXમાં, સ્ટેશન અને હબ વચ્ચેનું મહત્તમ અંતર ......... સુધી મર્યાદિત છે.", optionsEn:["(A) 100 mtrs.","(B) 1000 mtrs.","(C) 2000 mtrs.","(D) 10000 mtrs."], optionsGu:["(A) 100 મીટર","(B) 1000 મીટર","(C) 2000 મીટર","(D) 10000 મીટર"], answer:"(C) 2000 mtrs."},
+      {qEn:"108. .................... routing algorithm suffers from count-to-infinity problem", qGu:"108. .................... રાઉટિંગ અલ્ગોરિધમ કાઉન્ટ-ટુ-ઇન્ફિનિટી સમસ્યાથી પીડાય છે", optionsEn:["(A) Link State","(B) Flooding","(C) Distance Vector","(D) Reverse Path Forwarding"], optionsGu:["(A) લિંક સ્ટેટ","(B) ફ્લડિંગ","(C) ડિસ્ટન્સ વેક્ટર","(D) રિવર્સ પાથ ફોર્વર્ડિંગ"], answer:"(C) Distance Vector"},
+      {qEn:"109. In Link State Routing,..................is employed to distribute the link state packets.", qGu:"109. લિંક સ્ટેટ રાઉટિંગમાં, લિંક સ્ટેટ પેકેટ્સ વિતરિત કરવા માટે .................. વાપરવામાં આવે છે.", optionsEn:["(A) Broadcasting","(B) Hierarchical Routing","(C) Distance Vector Routing","(D) Flooding"], optionsGu:["(A) બ્રોડકાસ્ટિંગ","(B) હાયરાર્કિકલ રાઉટિંગ","(C) ડિસ્ટન્સ વેક્ટર રાઉટિંગ","(D) ફ્લડિંગ"], answer:"(D) Flooding"}
+    ,{num:122, qEn:"In a real-time video conference, data from the server is ____ to the client sites.", qGu:"રીયલ-ટાઈમ વીડિયો કોન્ફરન્સમાં સર્વરમાંથી ડેટા ક્લાયન્ટ સાઇટ્સને ____ હોય છે.", optionsEn:["(A) Unicast","(B) Multicast","(C) Broadcast","(D) None of the above"], optionsGu:["(A) યુનિકાસ્ટ","(B) મલ્ટિકાસ્ટ","(C) બ્રોડકાસ્ટ","(D) કોઈ નહીં"], answer:"(B) Multicast"},
+  {num:123, qEn:"Match the following pairs: A. RAID0 1. Parallel access B. RAID1 2. Striping C. RAID2 3. Use hamming code D. RAID3 4. Mirrored", qGu:"નીચેની જોડીઓ મેચ કરો: A. RAID0 1. પેરેલલ એક્સેસ B. RAID1 2. સ્ટ્રાઇપિંગ C. RAID2 3. હેમિંગ કોડ D. RAID3 4. મિરર્ડ", optionsEn:["(A) A-2 B-4 C-3 D-1","(B) A-1 B-2 C-3 D-4","(C) A-2 B-3 C-4 D-1","(D) A-3 B-2 C-1 D-4"], optionsGu:["(A) A-2 B-4 C-3 D-1","(B) A-1 B-2 C-3 D-4","(C) A-2 B-3 C-4 D-1","(D) A-3 B-2 C-1 D-4"], answer:"(A) A-2 B-4 C-3 D-1"},
+  {num:124, qEn:"Routers communicate with each other and forward the packets based on ______", qGu:"રાઉટર્સ એકબીજા સાથે વાતચીત કરે છે અને પેકેટ્સને ______ આધારે આગળ મોકલે છે", optionsEn:["(A) MAC","(B) IP Address","(C) Host name","(D) Neighbour table"], optionsGu:["(A) MAC","(B) IP એડ્રેસ","(C) હોસ્ટ નામ","(D) નેઇબર ટેબલ"], answer:"(B) IP Address"},
+  {num:125, qEn:"The DES algorithm has a key length of ______", qGu:"DES અલ્ગોરિધમની કી લંબાઈ ______ છે", optionsEn:["(A) 128 bits","(B) 32 bits","(C) 64 bits","(D) 16 bits"], optionsGu:["(A) 128 બિટ્સ","(B) 32 બિટ્સ","(C) 64 બિટ્સ","(D) 16 બિટ્સ"], answer:"(C) 64 bits"},
+  {num:126, qEn:"Identify the components of intrusion detection system", qGu:"ઇન્ટ્રુઝન ડિટેક્શન સિસ્ટમના ઘટકો ઓળખો", optionsEn:["(A) Analysis Engine","(B) Alert Database","(C) Both (A) and (B)","(D) None"], optionsGu:["(A) એનાલિસિસ એન્જિન","(B) એલર્ટ ડેટાબેઝ","(C) બંને","(D) કોઈ નહીં"], answer:"(C) Both (A) and (B)"},
+  {num:127, qEn:"What is the value of public key and private key, if P and Q in RSA encryption have value 7 and 7?", qGu:"RSAમાં P અને Qનું મૂલ્ય 7 અને 7 હોય તો પબ્લિક અને પ્રાઇવેટ કીનું મૂલ્ય શું છે?", optionsEn:["(A) 5 and 72","(B) 6 and 77","(C) 5 and 77","(D) None of these"], optionsGu:["(A) 5 અને 72","(B) 6 અને 77","(C) 5 અને 77","(D) કોઈ નહીં"], answer:"(D) None of these"},
+  {num:128, qEn:"The protocol used by TCP for connection establishment is", qGu:"TCP કનેક્શન સ્થાપિત કરવા માટે વાપરે છે", optionsEn:["(A) Three way handshake","(B) One way handshake","(C) Two way handshake","(D) None"], optionsGu:["(A) ત્રણ-તરફી હેન્ડશેક","(B) એક-તરફી","(C) બે-તરફી","(D) કોઈ નહીં"], answer:"(A) Three way handshake"},
+  {num:129, qEn:"ISDN is an example of ______", qGu:"ISDN ______ નું ઉદાહરણ છે", optionsEn:["(A) Circuit switched","(B) Packet switched","(C) Electric switch","(D) None"], optionsGu:["(A) સર્કિટ સ્વિચ્ડ","(B) પેકેટ સ્વિચ્ડ","(C) ઇલેક્ટ્રિક સ્વિચ","(D) કોઈ નહીં"], answer:"(A) Circuit switched"},
+  {num:130, qEn:"______ provides a basic electronic transport facility.", qGu:"______ મૂળભૂત ઇલેક્ટ્રોનિક ટ્રાન્સપોર્ટ સુવિધા આપે છે", optionsEn:["(A) TELENET","(B) SNMP","(C) SMTP","(D) UDP"], optionsGu:["(A) TELENET","(B) SNMP","(C) SMTP","(D) UDP"], answer:"(C) SMTP"},
+  {num:131, qEn:"Transport layer protocol deals with ______", qGu:"ટ્રાન્સપોર્ટ લેયર ______ સાથે કામ કરે છે", optionsEn:["(A) Application to application","(B) Process to process","(C) Node to Node","(D) None of above"], optionsGu:["(A) એપ્લિકેશન ટુ એપ્લિકેશન","(B) પ્રોસેસ ટુ પ્રોસેસ","(C) નોડ ટુ નોડ","(D) કોઈ નહીં"], answer:"(B) Process to process"},
+  {num:132, qEn:"Default gateway is used for handling the request for route which is not present in ______", qGu:"ડિફોલ્ટ ગેટવે ______ માં ન હોય તેવા રૂટ માટે વપરાય છે", optionsEn:["(A) Topology table","(B) Routing table","(C) Neighbour table","(D) Use for finding best path"], optionsGu:["(A) ટોપોલોજી ટેબલ","(B) રાઉટિંગ ટેબલ","(C) નેઇબર ટેબલ","(D) બેસ્ટ પાથ શોધવા માટે"], answer:"(B) Routing table"},
+  {num:133, qEn:"Cell Relay, also known as ______", qGu:"સેલ રિલેને ______ તરીકે પણ ઓળખવામાં આવે છે", optionsEn:["(A) ISDN","(B) X.25","(C) ATM","(D) Frame Relay"], optionsGu:["(A) ISDN","(B) X.25","(C) ATM","(D) ફ્રેમ રિલે"], answer:"(C) ATM"},
+  {num:134, qEn:"The secret key between members needs to be created as a ______ key when two members contact KDC.", qGu:"KDC સાથે સંપર્ક કરતી વખતે સભ્યો વચ્ચેની સિક્રેટ કી ______ કી તરીકે બનાવવી પડે છે", optionsEn:["(A) Public","(B) Session","(C) Complimentary","(D) None of these"], optionsGu:["(A) પબ્લિક","(B) સેશન","(C) કોમ્પ્લિમેન્ટરી","(D) કોઈ નહીં"], answer:"(B) Session"},
+  {num:135, qEn:"Data Encryption Standard (DES) encrypts data in block size of ______ bits each.", qGu:"DES ડેટાને ______ બિટ્સના બ્લોકમાં એન્ક્રિપ્ટ કરે છે", optionsEn:["(A) 64","(B) 128","(C) 32","(D) 56"], optionsGu:["(A) 64","(B) 128","(C) 32","(D) 56"], answer:"(A) 64"},
+  {num:143, qEn:"The DMA transfers are performed by a Control Circuit called as", qGu:"DMA ટ્રાન્સફર એક કંટ્રોલ સર્કિટ દ્વારા કરવામાં આવે છે જેને ______ કહેવામાં આવે છે", optionsEn:["(A) Device interface","(B) DMA controller","(C) Data controller","(D) Overlooker"], optionsGu:["(A) ડિવાઇસ ઇન્ટરફેસ","(B) DMA કંટ્રોલર","(C) ડેટા કંટ્રોલર","(D) ઓવરલુકર"], answer:"(B) DMA controller"},
+  {num:144, qEn:"Which statement is incorrect for OSI model?", qGu:"OSI મોડલ માટે કયું વિધાન ખોટું છે?", optionsEn:["(A) A layer should be created where a different abstraction is needed.","(B) Each layer perform a well-defined function.","(C) Function for each layer defines as per internationally standardized protocol.","(D) The layer boundaries should be chosen to maximize the information flow across the interface."], optionsGu:["(A) જ્યાં અલગ અબ્સ્ટ્રેક્શન જરૂરી હોય ત્યાં લેયર બનાવવી જોઈએ.","(B) દરેક લેયર સ્પષ્ટ કાર્ય કરે છે.","(C) દરેક લેયરનું કાર્ય આંતરરાષ્ટ્રીય પ્રમાણિત પ્રોટોકોલ મુજબ છે.","(D) લેયરની સીમાઓ ઇન્ફોર્મેશન ફ્લો વધારવા માટે પસંદ કરવી જોઈએ."], answer:"(D) The layer boundaries should be chosen to maximize the information flow across the interface."},
+  {num:145, qEn:"UDP socket is:", qGu:"UDP સોકેટ છે:", optionsEn:["(A) Connection oriented socket","(B) Connectionless socket","(C) Multicast socket","(D) Connection oriented and multicast socket"], optionsGu:["(A) કનેક્શન ઓરિએન્ટેડ","(B) કનેક્શનલેસ સોકેટ","(C) મલ્ટિકાસ્ટ સોકેટ","(D) કનેક્શન ઓરિએન્ટેડ અને મલ્ટિકાસ્ટ"], answer:"(B) Connectionless socket"},
+  {num:146, qEn:"How many host interfaces may be addressed in the subnet 123.224.00.00/12?", qGu:"સબનેટ 123.224.00.00/12માં કેટલા હોસ્ટ ઇન્ટરફેસને એડ્રેસ કરી શકાય?", optionsEn:["(A) 2048","(B) 2,097,150","(C) 1,000,192","(D) 2,097,152"], optionsGu:["(A) 2048","(B) 2,097,150","(C) 1,000,192","(D) 2,097,152"], answer:"(B) 2,097,150"},
+  {num:147, qEn:"______ is used to obtain the IP address of a host based on its physical address.", qGu:"______ ભૌતિક એડ્રેસ આધારે હોસ્ટનું IP એડ્રેસ મેળવવા માટે વપરાય છે.", optionsEn:["(A) RARP","(B) IPV6","(C) TFTP","(D) TELNET"], optionsGu:["(A) RARP","(B) IPV6","(C) TFTP","(D) TELNET"], answer:"(A) RARP"},
+  {num:148, qEn:"A code with a Hamming distance d can:", qGu:"હેમિંગ ડિસ્ટન્સ d વાળા કોડમાં:", optionsEn:["(A) detect d bit errors and correct (d-1) bit errors.","(B) detect (d-1) bit errors only with no error correction.","(C) detect (d-1) bit errors and correct (d-1)/2 bit errors.","(D) detect and correct all d bit errors."], optionsGu:["(A) d બિટ એરર ડિટેક્ટ અને (d-1) સુધારી શકે.","(B) માત્ર (d-1) ડિટેક્ટ, સુધારી નહીં.","(C) (d-1) ડિટેક્ટ અને (d-1)/2 સુધારી શકે.","(D) બધા d બિટ એરર ડિટેક્ટ અને સુધારી શકે."], answer:"(C) detect (d-1) bit errors and correct (d-1)/2 bit errors."},
+  {num:149, qEn:"In a stop and wait protocol used across a link of bandwidth of 1Mbps, data packets of 1000 bits are transmitted. The round trip time for a bit is 20ms. The link utilization is :", qGu:"1Mbps બેન્ડવિડ્થવાળી લિંક પર સ્ટોપ એન્ડ વેઇટ પ્રોટોકોલમાં 1000 બિટ્સના પેકેટ મોકલવામાં આવે છે. રાઉન્ડ ટ્રિપ ટાઇમ 20ms છે. લિંક યુટિલાઇઝેશન છે :", optionsEn:["(A) 0.5","(B) 0.05","(C) 0.005","(D) 5.0"], optionsGu:["(A) 0.5","(B) 0.05","(C) 0.005","(D) 5.0"], answer:"(B) 0.05"},
+  {num:150, qEn:"A cryptographic system that uses only symmetric key cryptography cannot provide digital signature because:", qGu:"માત્ર સિમેટ્રિક કી ક્રિપ્ટોગ્રાફી વાપરતી સિસ્ટમ ડિજિટલ સિગ્નેચર આપી શકતી નથી કારણ કે:", optionsEn:["(A) Symmetric key cryptography is computationally infeasible.","(B) Symmetric key cryptography involves key distribution.","(C) symmetric key cryptography is unreliable.","(D) Digital signature requires a pair of private-public keys."], optionsGu:["(A) સિમેટ્રિક કી ક્રિપ્ટોગ્રાફી કમ્પ્યુટેશનલી અસંભવ છે.","(B) સિમેટ્રિક કીમાં કી ડિસ્ટ્રિબ્યુશન જરૂરી છે.","(C) અવિશ્વસનીય છે.","(D) ડિજિટલ સિગ્નેચર માટે પ્રાઇવેટ-પબ્લિક કી જોડી જરૂરી છે."], answer:"(D) Digital signature requires a pair of private-public keys."},
+  {num:151, qEn:"If a message \"CONGRATS\" is encoded as\" AMLEPYRQ\", the encryption key is:", qGu:"જો સંદેશ \"CONGRATS\"ને \"AMLEPYRQ\" તરીકે એન્કોડ કરવામાં આવે તો એન્ક્રિપ્શન કી છે:", optionsEn:["(A) +3","(B) +2","(C) -3","(D) -2"], optionsGu:["(A) +3","(B) +2","(C) -3","(D) -2"], answer:"(D) -2"},
+  {num:152, qEn:"The gateway that stands between the mobile network and the Internet in GPRS is called as ______. ", qGu:"GPRSમાં મોબાઇલ નેટવર્ક અને ઇન્ટરનેટ વચ્ચેના ગેટવેને ______ કહેવામાં આવે છે.", optionsEn:["(A) CCSN","(B) SGGN","(C) SGSN","(D) GGSN"], optionsGu:["(A) CCSN","(B) SGGN","(C) SGSN","(D) GGSN"], answer:"(D) GGSN"},
+  {num:153, qEn:"Which of the following are not valid IPv4 addresses?", qGu:"નીચેનામાંથી કયું IPv4 એડ્રેસ અમાન્ય છે?", optionsEn:["(A) 192.10.14.3","(B) 200.172.287.33","(C) 65.92.11.00","(D) 10.34.110.77"], optionsGu:["(A) 192.10.14.3","(B) 200.172.287.33","(C) 65.92.11.00","(D) 10.34.110.77"], answer:"(B) 200.172.287.33"},
+  {num:154, qEn:"In which kind of communication, the destination address in each packet is the same for all duplicates?", qGu:"કયા પ્રકારના સંચારમાં દરેક પેકેટમાં ડેસ્ટિનેશન એડ્રેસ બધા ડુપ્લિકેટ માટે સમાન હોય છે?", optionsEn:["(A) Unicasting","(B) Multicasting","(C) Multiple unicasting","(D) Broadcasting"], optionsGu:["(A) યુનિકાસ્ટિંગ","(B) મલ્ટિકાસ્ટિંગ","(C) મલ્ટિપલ યુનિકાસ્ટિંગ","(D) બ્રોડકાસ્ટિંગ"], answer:"(B) Multicasting"},
+  {num:155, qEn:"In IPv4, using the classful addressing scheme, the whole address space is divided into how many classes:", qGu:"IPv4માં ક્લાસફુલ એડ્રેસિંગમાં આખી એડ્રેસ સ્પેસ કેટલા ક્લાસમાં વહેંચાય છે?", optionsEn:["(A) 8","(B) 16","(C) 24","(D) 5"], optionsGu:["(A) 8","(B) 16","(C) 24","(D) 5"], answer:"(D) 5"},
+  {num:156, qEn:"The block size in 56-bit DES and 128-bit DES are respectively:", qGu:"56-બિટ DES અને 128-બિટ DESમાં બ્લોક સાઇઝ અનુક્રમે છે:", optionsEn:["(A) 64 and 64 bits","(B) 64 and 128 bits","(C) 128 and 128 bits","(D) 128 and 256 bits"], optionsGu:["(A) 64 અને 64 બિટ્સ","(B) 64 અને 128 બિટ્સ","(C) 128 અને 128 બિટ્સ","(D) 128 અને 256 બિટ્સ"], answer:"(A) 64 and 64 bits"},
+  {num:157, qEn:"A router must have at least ____ NICs.", qGu:"રાઉટરમાં ઓછામાં ઓછા ____ NIC હોવા જોઈએ.", optionsEn:["(A) 3","(B) 4","(C) 2","(D) 5"], optionsGu:["(A) 3","(B) 4","(C) 2","(D) 5"], answer:"(C) 2"},
+  {num:158, qEn:"If a IP address starts with a bit sequence of 11110, it is a class ______ address.", qGu:"જો IP એડ્રેસ 11110થી શરૂ થાય તો તે ______ ક્લાસનું એડ્રેસ છે.", optionsEn:["(A) B","(B) C","(C) D","(D) E"], optionsGu:["(A) B","(B) C","(C) D","(D) E"], answer:"(D) E"},
+  {num:159, qEn:"The slave ready signal allows the duration of a bus transfer to change from one device to another. If the addressed device does not respond at all, the master waits for some predefined maximum number of clock cycles, then ______ the operation.", qGu:"સ્લેવ રેડી સિગ્નલ બસ ટ્રાન્સફરની અવધિને એક ડિવાઇસથી બીજામાં બદલવા દે છે. જો સરનામાવાળું ડિવાઇસ જવાબ ન આપે તો માસ્ટર ક્લોક સાયકલ્સની મહત્તમ સંખ્યા પછી ______ કરે છે.", optionsEn:["(A) Loop","(B) Hold","(C) Suspend","(D) Abort"], optionsGu:["(A) લૂપ","(B) હોલ્ડ","(C) સસ્પેન્ડ","(D) એબોર્ટ"], answer:"(D) Abort"},
+  {num:160, qEn:"Which of the following statements about 'Bridge' is not correct?", qGu:"'બ્રિજ' વિશેનું કયું વિધાન ખોટું છે?", optionsEn:["(A) It acts as an address filter.","(B) It is used to connect two LANs using similar LAN protocols.","(C) It does not modify the contents of the packets and does not add anything to the packets.","(D) It operates at layer-3 (Network layer) of the OSI model."], optionsGu:["(A) તે એડ્રેસ ફિલ્ટર તરીકે કામ કરે છે.","(B) તે સમાન LAN પ્રોટોકોલ વાપરીને બે LANને જોડે છે.","(C) તે પેકેટની સામગ્રી બદલતું નથી.","(D) તે OSI મોડલના લેયર-3 (નેટવર્ક લેયર) પર કામ કરે છે."], answer:"(D) It operates at layer-3 (Network layer) of the OSI model."},
+  {num:161, qEn:"Which one of the following is not a consumable resource?", qGu:"નીચેનામાંથી કયું વપરાઈ જતું રિસોર્સ નથી?", optionsEn:["(A) Interrupts","(B) Signals","(C) I/O devices","(D) Messages"], optionsGu:["(A) ઇન્ટરપ્ટ્સ","(B) સિગ્નલ્સ","(C) I/O ડિવાઇસ","(D) મેસેજ"], answer:"(C) I/O devices"},
+  {num:162, qEn:"TCP Checksum is a ________ bit field in TCP header used for error detection.", qGu:"TCP હેડરમાં TCP ચેકસમ ______ બિટ ફિલ્ડ છે જે એરર ડિટેક્શન માટે વપરાય છે.", optionsEn:["(A) 16","(B) 8","(C) 64","(D) 32"], optionsGu:["(A) 16","(B) 8","(C) 64","(D) 32"], answer:"(A) 16"},
+  {num:163, qEn:"Which of the following OSI layers is between Data link layer and Transport layer?", qGu:"OSI મોડલમાં ડેટા લિંક લેયર અને ટ્રાન્સપોર્ટ લેયર વચ્ચે કયો લેયર છે?", optionsEn:["(A) Network layer","(B) Session layer","(C) Presentation layer","(D) Physical layer"], optionsGu:["(A) નેટવર્ક લેયર","(B) સેશન લેયર","(C) પ્રેઝન્ટેશન લેયર","(D) ફિઝિકલ લેયર"], answer:"(A) Network layer"},
+  {num:164, qEn:"Which of the following OSI layers is responsible for reliable transmission of data segments between points on a network, including segmentation, acknowledgment and multiplexing", qGu:"OSIના કયા લેયરની જવાબદારી નેટવર્ક પર ડેટા સેગમેન્ટનું વિશ્વસનીય ટ્રાન્સમિશન છે (સેગ્મેન્ટેશન, એક્નોલેજમેન્ટ અને મલ્ટિપ્લેક્સિંગ સહિત)?", optionsEn:["(A) Network layer","(B) Session layer","(C) Data link layer","(D) Transport layer"], optionsGu:["(A) નેટવર્ક લેયર","(B) સેશન લેયર","(C) ડેટા લિંક લેયર","(D) ટ્રાન્સપોર્ટ લેયર"], answer:"(D) Transport layer"},
+  {num:165, qEn:"Which of the following protocols uses port number 25?", qGu:"નીચેના કયા પ્રોટોકોલ પોર્ટ નંબર 25 વાપરે છે?", optionsEn:["(A) HTTP","(B) POP3","(C) FTP","(D) SMTP"], optionsGu:["(A) HTTP","(B) POP3","(C) FTP","(D) SMTP"], answer:"(D) SMTP"},
+  {num:166, qEn:"Which of the following is not true about IPv6 addressing?", qGu:"IPv6 એડ્રેસિંગ વિશે કયું વિધાન ખોટું છે?", optionsEn:["(A) It uses 127.0.0.1 as loopback address.","(B) It supports globally unique unicast addresses.","(C) It uses :: 1 as loopback address.","(D) It uses :: as unspecified address."], optionsGu:["(A) તે 127.0.0.1ને લૂપબેક તરીકે વાપરે છે.","(B) તે ગ્લોબલી યુનિક યુનિકાસ્ટ એડ્રેસ સપોર્ટ કરે છે.","(C) તે ::1ને લૂપબેક તરીકે વાપરે છે.","(D) તે ::ને અનસ્પેસિફાઇડ તરીકે વાપરે છે."], answer:"(A) It uses 127.0.0.1 as loopback address."},
+  {num:167, qEn:"What is the bandwidth of the memory, if access time and settling time of a main memory are 45 ns and 5ns, respectively?", qGu:"મુખ્ય મેમરીનો એક્સેસ ટાઇમ 45 ns અને સેટલિંગ ટાઇમ 5 ns હોય તો મેમરીની બેન્ડવિડ્થ શું છે?", optionsEn:["(A) 20 Hz","(B) 50 MHz","(C) 20 KHz","(D) 20 MHz"], optionsGu:["(A) 20 Hz","(B) 50 MHz","(C) 20 KHz","(D) 20 MHz"], answer:"(D) 20 MHz"},
+  {num:168, qEn:"Which of the following is NOT true about circuit-switched networks?", qGu:"સર્કિટ-સ્વિચ્ડ નેટવર્ક વિશે કયું વિધાન ખોટું છે?", optionsEn:["(A) Circuit switching takes place at the physical layer","(B) Data transferred between the two stations are not packetised","(C) There is no addressing involved during data transfer","(D) The resources are not required to be reserved during the setup phase"], optionsGu:["(A) સર્કિટ સ્વિચિંગ ફિઝિકલ લેયર પર થાય છે","(B) ડેટા પેકેટાઇઝ્ડ નથી","(C) ડેટા ટ્રાન્સફર દરમિયાન એડ્રેસિંગની જરૂર નથી","(D) સેટઅપ ફેઝમાં રિસોર્સ રિઝર્વ કરવાની જરૂર નથી"], answer:"(D) The resources are not required to be reserved during the setup phase"},
+  {num:169, qEn:"A packet has arrived with an M bit value of 0. Which of the following statements is true?", qGu:"એક પેકેટ M બિટ વેલ્યુ 0 સાથે આવ્યું છે. કયું વિધાન સાચું છે?", optionsEn:["(A) This is the first fragment","(B) This is the last fragment","(C) This is the middle fragment","(D) This is a fragmented packet"], optionsGu:["(A) આ પ્રથમ ફ્રેગમેન્ટ છે","(B) આ છેલ્લું ફ્રેગમેન્ટ છે","(C) આ મધ્ય ફ્રેગમેન્ટ છે","(D) આ ફ્રેગમેન્ટેડ પેકેટ છે"], answer:"(B) This is the last fragment"},
+  {num:170, qEn:"In IPv4 and IPv6, which of the following hop limit (time to live) value pair is correct?", qGu:"IPv4 અને IPv6માં હોપ લિમિટ (TTL)ની સાચી જોડી કઈ છે?", optionsEn:["(A) 8 bits, 8 bits","(B) 12 bits, 8 bits","(C) 8 bits, 12 bits","(D) 6 bits, 8 bits"], optionsGu:["(A) 8 બિટ્સ, 8 બિટ્સ","(B) 12 બિટ્સ, 8 બિટ્સ","(C) 8 બિટ્સ, 12 બિટ્સ","(D) 6 બિટ્સ, 8 બિટ્સ"], answer:"(A) 8 bits, 8 bits"},
+  {num:171, qEn:"Match the following: Protocol Default type of service P. SNMP Q. TELNET R. FTP (data) S. BOOTP", qGu:"નીચેની મેચ કરો: પ્રોટોકોલ ડિફોલ્ટ સર્વિસ ટાઇપ", optionsEn:["(A) P-4, Q-2, R-3, S-1","(B) P-4, Q-3, R-2, S-1","(C) P-2, Q-4, R-3, S-1","(D) P-3, Q-4, R-2, S-1"], optionsGu:["(A) P-4, Q-2, R-3, S-1","(B) P-4, Q-3, R-2, S-1","(C) P-2, Q-4, R-3, S-1","(D) P-3, Q-4, R-2, S-1"], answer:"(B) P-4, Q-3, R-2, S-1"},
+  {num:172, qEn:"The Wireless Application Protocol (WAP) is :", qGu:"વાયરલેસ એપ્લિકેશન પ્રોટોકોલ (WAP) છે :", optionsEn:["(A) A product of W3C","(B) A data link layer of the OSI model","(C) Aims to ensure Interoperability among service providers","(D) Incurs high overheads of protocol stack"], optionsGu:["(A) W3Cનું પ્રોડક્ટ","(B) OSI મોડલનું ડેટા લિંક લેયર","(C) સર્વિસ પ્રોવાઇડર વચ્ચે ઇન્ટરઓપરેબિલિટી સુનિશ્ચિત કરે છે","(D) પ્રોટોકોલ સ્ટેકનો વધુ ઓવરહેડ"], answer:"(C) Aims to ensure Interoperability among service providers"},
+  {num:173, qEn:"Which one of the following is an error reporting protocol?", qGu:"નીચેનામાંથી કયું એરર રિપોર્ટિંગ પ્રોટોકોલ છે?", optionsEn:["(A) ARP","(B) TCP","(C) ICMP","(D) UDP"], optionsGu:["(A) ARP","(B) TCP","(C) ICMP","(D) UDP"], answer:"(C) ICMP"},
+  {num:174, qEn:"The total power of an AM-modulated carrier wave is 1160 W while that of each side-band is 80W. The modulation index is", qGu:"AM-મોડ્યુલેટેડ કેરિયર વેવની કુલ પાવર 1160 W છે અને દરેક સાઇડ-બેન્ડની 80W છે. મોડ્યુલેશન ઇન્ડેક્સ છે", optionsEn:["(A) 0.08","(B) 0.2","(C) 0.4","(D) 0.81"], optionsGu:["(A) 0.08","(B) 0.2","(C) 0.4","(D) 0.81"], answer:"(C) 0.4"},
+  {num:175, qEn:"The intermediate frequency IF in standard AM receiver is :", qGu:"સ્ટાન્ડર્ડ AM રિસીવરમાં ઇન્ટરમીડિયેટ ફ્રિક્વન્સી IF છે :", optionsEn:["(A) 455 Hz","(B) 455 kHz","(C) 4.55 MHz","(D) 45.5 MHz"], optionsGu:["(A) 455 Hz","(B) 455 kHz","(C) 4.55 MHz","(D) 45.5 MHz"], answer:"(B) 455 kHz"},
+  {num:176, qEn:"If a host broadcasts a frame that includes a source and destination hardware address, and its purpose is to assign IP addresses to itself, which protocol at the Network layer does the host use?", qGu:"જો હોસ્ટ એક ફ્રેમ બ્રોડકાસ્ટ કરે જેમાં સોર્સ અને ડેસ્ટિનેશન હાર્ડવેર એડ્રેસ હોય અને તેનો હેતુ પોતાને IP એડ્રેસ આપવાનો હોય તો નેટવર્ક લેયર પર કયો પ્રોટોકોલ વાપરે છે?", optionsEn:["(A) RARP","(B) ARPA","(C) ICMP","(D) TCP"], optionsGu:["(A) RARP","(B) ARPA","(C) ICMP","(D) TCP"], answer:"(A) RARP"},
+  {num:177, qEn:"What range of address can be used in the first octet of a class B network address?", qGu:"ક્લાસ B નેટવર્ક એડ્રેસના પ્રથમ ઓક્ટેટમાં કયી રેન્જ વાપરી શકાય?", optionsEn:["(A) 1 - 126","(B) 1 - 127","(C) 128 - 190","(D) 128 - 191"], optionsGu:["(A) 1 - 126","(B) 1 - 127","(C) 128 - 190","(D) 128 - 191"], answer:"(D) 128 - 191"},
+  {num:178, qEn:"In a LAN network every system is identified by (Non-hardware-level identification)", qGu:"LAN નેટવર્કમાં દરેક સિસ્ટમને (નોન-હાર્ડવેર લેવલ) કેવી રીતે ઓળખવામાં આવે છે?", optionsEn:["(A) Name","(B) MAC Address","(C) IP Address","(D) Serial number given by manufacturer"], optionsGu:["(A) નામ","(B) MAC એડ્રેસ","(C) IP એડ્રેસ","(D) મેન્યુફેક્ચરર દ્વારા આપેલ સીરિયલ નંબર"], answer:"(C) IP Address"},
+  {num:179, qEn:"Maximum data rate of a channel for a noiseless 3-kHz binary channel is", qGu:"નોઇસલેસ 3-kHz બાઇનરી ચેનલ માટે મહત્તમ ડેટા રેટ છે", optionsEn:["(A) 3000 bps","(B) 6000 bps","(C) 9000 bps","(D) 15000 bps"], optionsGu:["(A) 3000 bps","(B) 6000 bps","(C) 9000 bps","(D) 15000 bps"], answer:"(B) 6000 bps"},
+  {num:180, qEn:"Which of the following can be used for digital fingerprint of a file?", qGu:"ફાઇલના ડિજિટલ ફિંગરપ્રિન્ટ માટે નીચેનામાંથી કયું વાપરી શકાય?", optionsEn:["(A) Netstart","(B) Cryptcat","(C) Md5sum","(D) All of these"], optionsGu:["(A) Netstart","(B) Cryptcat","(C) Md5sum","(D) બધા"], answer:"(C) Md5sum"},
+  {num:181, qEn:"A process that is based on IPC mechanism which executes on different systems and can communicate with other processes using message based communication, is called", qGu:"IPC મિકેનિઝમ આધારિત પ્રોસેસ જે અલગ સિસ્ટમ પર ચાલે અને મેસેજ આધારિત સંચારથી અન્ય પ્રોસેસ સાથે વાતચીત કરી શકે તેને કહેવામાં આવે છે", optionsEn:["(A) Remote Machine Invocation","(B) Inter Process Communication","(C) Remote Procedure Call","(D) Local Procedure Call"], optionsGu:["(A) રિમોટ મશીન ઇન્વોકેશન","(B) ઇન્ટર પ્રોસેસ કોમ્યુનિકેશન","(C) રિમોટ પ્રોસીજર કોલ","(D) લોકલ પ્રોસીજર કોલ"], answer:"(C) Remote Procedure Call"},
+  {num:182, qEn:"What is the broadcast address of the subnet address 172.16.99.99, 255.255.192.0", qGu:"સબનેટ 172.16.99.99, 255.255.192.0નું બ્રોડકાસ્ટ એડ્રેસ શું છે?", optionsEn:["(A) 172.16.99.255","(B) 172.16.64.127","(C) 172.16.127.255","(D) 172.16.255.255"], optionsGu:["(A) 172.16.99.255","(B) 172.16.64.127","(C) 172.16.127.255","(D) 172.16.255.255"], answer:"(C) 172.16.127.255"},
+  {num:183, qEn:"What mask would you assign to the network ID of 172.16.0.0? If more than 300 hosts with each subnet fewer than 500", qGu:"172.16.0.0 નેટવર્ક ID માટે કયું માસ્ક આપશો? જો 300થી વધુ હોસ્ટ અને દરેક સબનેટમાં 500થી ઓછા હોસ્ટ હોય", optionsEn:["(A) 255.255.255.0","(B) 255.255.0.0","(C) 255.255.252.0","(D) 255.255.254.0"], optionsGu:["(A) 255.255.255.0","(B) 255.255.0.0","(C) 255.255.252.0","(D) 255.255.254.0"], answer:"(A) 255.255.255.0"},
+  {num:184, qEn:"Which device creates big collision domain and one large broadcast domain", qGu:"કયું ડિવાઇસ મોટું કોલિઝન ડોમેન અને એક મોટું બ્રોડકાસ્ટ ડોમેન બનાવે છે?", optionsEn:["(A) Switch","(B) Bridge","(C) Router","(D) Hub"], optionsGu:["(A) સ્વિચ","(B) બ્રિજ","(C) રાઉટર","(D) હબ"], answer:"(D) Hub"},
+  {num:185, qEn:"How many bits are in Header Checksum of IPv4 datagram format", qGu:"IPv4 ડેટાગ્રામ ફોર્મેટમાં હેડર ચેકસમમાં કેટલા બિટ્સ છે?", optionsEn:["(A) 16","(B) 2","(C) 4","(D) 8"], optionsGu:["(A) 16","(B) 2","(C) 4","(D) 8"], answer:"(A) 16"},
+  {num:186, qEn:"Which attack involves change in DNS entries so that users are directed to invalid site", qGu:"કયા અટેકમાં DNS એન્ટ્રી બદલીને યુઝરને અમાન્ય સાઇટ પર મોકલવામાં આવે છે?", optionsEn:["(A) Phishing","(B) Masquerade","(C) Worm","(D) Pharming"], optionsGu:["(A) ફિશિંગ","(B) માસ્કરેડ","(C) વોર્મ","(D) ફાર્મિંગ"], answer:"(D) Pharming"},
+  {num:187, qEn:"Match the following: (i) SMTP P. Application Layer (ii) BGP Q. Transport Layer (iii) TCP R. Data Link Layer (iv) PPP S. Network Layer", qGu:"મેચ કરો: (i) SMTP P. એપ્લિકેશન લેયર (ii) BGP Q. ટ્રાન્સપોર્ટ લેયર (iii) TCP R. ડેટા લિંક લેયર (iv) PPP S. નેટવર્ક લેયર", optionsEn:["(A) (i)-P, (ii)-S, (iii)-R (iv)-Q","(B) (i)-P, (ii)-R, (iii)-Q (iv)-S","(C) (i)-Q, (ii)-R, (iii)-S (iv)-P","(D) (i)-P, (ii)-R, (iii)-S (iv)-Q"], optionsGu:["(A) (i)-P, (ii)-S, (iii)-R (iv)-Q","(B) (i)-P, (ii)-R, (iii)-Q (iv)-S","(C) (i)-Q, (ii)-R, (iii)-S (iv)-P","(D) (i)-P, (ii)-R, (iii)-S (iv)-Q"], answer:"(D) (i)-P, (ii)-R, (iii)-S (iv)-Q"},
+  {num:188, qEn:"The encryption and compression are done by which layer", qGu:"એન્ક્રિપ્શન અને કોમ્પ્રેશન કયા લેયર દ્વારા કરવામાં આવે છે?", optionsEn:["(A) Session Layer","(B) Application layer","(C) Transport Layer","(D) Presentation Layer"], optionsGu:["(A) સેશન લેયર","(B) એપ્લિકેશન લેયર","(C) ટ્રાન્સપોર્ટ લેયર","(D) પ્રેઝન્ટેશન લેયર"], answer:"(D) Presentation Layer"},
+  {num:189, qEn:"To which IEEE family does WiMAX belong", qGu:"WiMAX કયા IEEE ફેમિલીનો ભાગ છે?", optionsEn:["(A) 802.14","(B) 802.13","(C) 802.16","(D) 802.11"], optionsGu:["(A) 802.14","(B) 802.13","(C) 802.16","(D) 802.11"], answer:"(C) 802.16"},
+  {num:190, qEn:"Find the check bit in the message 111101 using Hamming code.", qGu:"મેસેજ 111101માં હેમિંગ કોડ વાપરીને ચેક બિટ શોધો.", optionsEn:["(A) 1101","(B) 0101","(C) 1001","(D) 0001"], optionsGu:["(A) 1101","(B) 0101","(C) 1001","(D) 0001"], answer:"(D) 0001"},
+  {num:191, qEn:"The scripting technologies not used at server site", qGu:"સર્વર સાઇટ પર વપરાતી ન હોય તેવી સ્ક્રિપ્ટિંગ ટેક્નોલોજી", optionsEn:["(A) JSP","(B) ASP","(C) HTML","(D) PHP"], optionsGu:["(A) JSP","(B) ASP","(C) HTML","(D) PHP"], answer:"(C) HTML"},
+  {num:192, qEn:"Fibre distribution data interface (FDDI) does not support which of the following", qGu:"FDDI નીચેનામાંથી કયું સપોર્ટ કરતું નથી?", optionsEn:["(A) data encoding/decoding","(B) transmission media","(C) fault tolerant transmission","(D) media access control"], optionsGu:["(A) ડેટા એન્કોડિંગ/ડિકોડિંગ","(B) ટ્રાન્સમિશન મીડિયા","(C) ફોલ્ટ ટોલરન્ટ ટ્રાન્સમિશન","(D) મીડિયા એક્સેસ કંટ્રોલ"], answer:"(B) transmission media"},
+  {num:193, qEn:"Which of the following is true for the amount of information travelling through a single channel at any one point of time.", qGu:"એક જ સમયે એક ચેનલમાંથી મુસાફરી કરતી માહિતીની માત્રા માટે કયું સાચું છે?", optionsEn:["(A) bps","(B) Data channel","(C) Bandwidth","(D) Baud"], optionsGu:["(A) bps","(B) ડેટા ચેનલ","(C) બેન્ડવિડ્થ","(D) બોડ"], answer:"(C) Bandwidth"},
+  {num:194, qEn:"In the TCP/IP Protocol suite which one of the following is NOT part of the IP header?", qGu:"TCP/IP પ્રોટોકોલ સ્યુટમાં IP હેડરનો ભાગ નથી તે કયું છે?", optionsEn:["(A) Fragment Offset","(B) Source IP address","(C) Destination IP address","(D) Destination port number"], optionsGu:["(A) ફ્રેગમેન્ટ ઓફસેટ","(B) સોર્સ IP એડ્રેસ","(C) ડેસ્ટિનેશન IP એડ્રેસ","(D) ડેસ્ટિનેશન પોર્ટ નંબર"], answer:"(D) Destination port number"},
+  {num:195, qEn:"In selective repeat, the size of the sender and receiver window should be at most (if m is the size of sequence numbers field in bits):", qGu:"સિલેક્ટિવ રિપીટમાં સેન્ડર અને રિસીવર વિન્ડોનું સાઇઝ મહત્તમ કેટલું હોવું જોઈએ (જો m સિક્વન્સ નંબર ફિલ્ડનું સાઇઝ હોય)?", optionsEn:["(A) 2m","(B) 2m-1","(C) 2²m","(D) 2²m-1"], optionsGu:["(A) 2m","(B) 2m-1","(C) 2²m","(D) 2²m-1"], answer:"(B) 2m-1"},
+  {num:196, qEn:"If network part of Class B address would have used 21 bits instead of 16 bits. How many class B networks would have been possible?", qGu:"જો ક્લાસ B એડ્રેસના નેટવર્ક ભાગમાં 16 બિટ્સના બદલે 21 બિટ્સ વાપરવામાં આવે તો કેટલા ક્લાસ B નેટવર્ક શક્ય હોય?", optionsEn:["(A) 2²¹","(B) 2¹⁶","(C) 2¹⁹","(D) 2²³"], optionsGu:["(A) 2²¹","(B) 2¹⁶","(C) 2¹⁹","(D) 2²³"], answer:"(C) 2¹⁹"},
+  {num:197, qEn:"In the slow start phase of the TCP congestion control algorithm, the size of the congestion window", qGu:"TCP કોંગેસ્ચન કંટ્રોલ અલ્ગોરિધમના સ્લો સ્ટાર્ટ ફેઝમાં કોંગેસ્ચન વિન્ડોનું સાઇઝ", optionsEn:["(A) does not increase","(B) increases linearly","(C) increases quadratically","(D) increases exponentially"], optionsGu:["(A) વધતું નથી","(B) લીનિયર વધે છે","(C) ક્વાડ્રેટિક વધે છે","(D) એક્સપોનેન્શિયલ વધે છે"], answer:"(D) increases exponentially"},
+  {num:198, qEn:"The amount of uncertainty in a system of symbol is called:", qGu:"સિમ્બોલ સિસ્ટમમાં અનિશ્ચિતતાની માત્રાને કહેવામાં આવે છે:", optionsEn:["(A) Bandwidth","(B) Entropy","(C) Loss","(D) Quantum"], optionsGu:["(A) બેન્ડવિડ્થ","(B) એન્ટ્રોપી","(C) લોસ","(D) ક્વોન્ટમ"], answer:"(B) Entropy"},
+  {num:199, qEn:"Poll/select line discipline requires.............. to identify the packet recipient?", qGu:"પોલ/સિલેક્ટ લાઇન ડિસિપ્લિનને પેકેટ રિસીપિયન્ટને ઓળખવા માટે ...... જરૂરી છે?", optionsEn:["(A) Timer","(B) Buffer","(C) Address","(D) Dedicated line"], optionsGu:["(A) ટાઇમર","(B) બફર","(C) એડ્રેસ","(D) ડેડિકેટેડ લાઇન"], answer:"(C) Address"},
+  {num:200, qEn:"What is the destination address of a frame containing an ARP request?", qGu:"ARP રિક્વેસ્ટ ધરાવતા ફ્રેમનું ડેસ્ટિનેશન એડ્રેસ શું છે?", optionsEn:["(A) A broadcast IP address.","(B) A broadcast MAC address.","(C) The default gateway IP address.","(D) The default gateway MAC address."], optionsGu:["(A) બ્રોડકાસ્ટ IP એડ્રેસ.","(B) બ્રોડકાસ્ટ MAC એડ્રેસ.","(C) ડિફોલ્ટ ગેટવે IP.","(D) ડિફોલ્ટ ગેટવે MAC."], answer:"(B) A broadcast MAC address."},
+  {num:201, qEn:"What is the number of separate protocol layers at the serial interface gateway specified by the X.25 standard?", qGu:"X.25 સ્ટાન્ડર્ડ દ્વારા સ્પેસિફાઇ કરાયેલ સીરિયલ ઇન્ટરફેસ ગેટવેમાં અલગ પ્રોટોકોલ લેયર્સની સંખ્યા કેટલી છે?", optionsEn:["(A) 4","(B) 2","(C) 6","(D) 3"], optionsGu:["(A) 4","(B) 2","(C) 6","(D) 3"], answer:"(D) 3"},
+  {num:202, qEn:"In OSI network architecture, the routing is performed by:", qGu:"OSI નેટવર્ક આર્કિટેક્ચરમાં રાઉટિંગ કયા લેયર દ્વારા કરવામાં આવે છે?", optionsEn:["(A) network layer","(B) data link layer","(C) transport layer","(D) session layer"], optionsGu:["(A) નેટવર્ક લેયર","(B) ડેટા લિંક લેયર","(C) ટ્રાન્સપોર્ટ લેયર","(D) સેશન લેયર"], answer:"(A) network layer"},
+  {num:203, qEn:"TCP-IP Model does not consist of following layers:", qGu:"TCP-IP મોડલમાં નીચેના લેયર નથી:", optionsEn:["(A) Application layer","(B) Physical layer","(C) Session layer","(D) Data link layer"], optionsGu:["(A) એપ્લિકેશન લેયર","(B) ફિઝિકલ લેયર","(C) સેશન લેયર","(D) ડેટા લિંક લેયર"], answer:"(C) Session layer"},
+  {num:204, qEn:"BGP Routing Protocol is used following algorithm during it's execution:", qGu:"BGP રાઉટિંગ પ્રોટોકોલ તેના એક્ઝિક્યુશન દરમિયાન નીચેના અલ્ગોરિધમ વાપરે છે:", optionsEn:["(A) Bellman Ford Algorithm","(B) Insertion Sort Algorithm","(C) Dijkstra Algorithm","(D) Kruskal Algorithm"], optionsGu:["(A) બેલમેન ફોર્ડ","(B) ઇન્સર્શન સોર્ટ","(C) ડાઇજ્કસ્ટ્રા","(D) ક્રુસ્કલ"], answer:"(C) Dijkstra Algorithm"},
+  {num:205, qEn:"Which of the following statements is correct with respect to fiber optic cables?", qGu:"ફાઇબર ઓપ્ટિક કેબલ વિશે કયું વિધાન સાચું છે?", optionsEn:["(A) They are not suitable for short distance connections.","(B) In multimode fibres, the transmitted light beam is 'bounced' off the cladding as it travels down the core.","(C) Data transmitted over fibre is susceptible for electromagnetic interferences.","(D) Single mode fibres have not a higher bandwidth than multimode fibres."], optionsGu:["(A) તેઓ ટૂંકા અંતર માટે યોગ્ય નથી.","(B) મલ્ટિમોડ ફાઇબરમાં લાઇટ બીમ ક્લેડિંગ પરથી બાઉન્સ થાય છે.","(C) ફાઇબર પર મોકલેલો ડેટા ઇલેક્ટ્રોમેગ્નેટિક ઇન્ટરફેરન્સ માટે સંવેદનશીલ છે.","(D) સિંગલ મોડ ફાઇબરની બેન્ડવિડ્થ મલ્ટિમોડ કરતા વધારે નથી."], answer:"(B) In multimode fibres, the transmitted light beam is 'bounced' off the cladding as it travels down the core."},
+  {num:206, qEn:"Which of the following is correct regarding Token Ring networks?", qGu:"ટોકન રિંગ નેટવર્ક વિશે કયું વિધાન સાચું છે?", optionsEn:["(A) Whenever a network node wishes to send a frame, it has to wait for the free token to arrive.","(B) The IEEE 802.6 specifies the token ring MAC protocol.","(C) After initialisation of a token ring network, a token can be transmitted in both directions of the network","(D) A token ring with a shielded twisted pair transmission medium can have a minimum data rate of 16 Mbps."], optionsGu:["(A) નેટવર્ક નોડ ફ્રેમ મોકલવા માંગે ત્યારે ફ્રી ટોકનની રાહ જોવી પડે છે.","(B) IEEE 802.6 ટોકન રિંગ MAC પ્રોટોકોલ સ્પેસિફાઇ કરે છે.","(C) ઇનિશિયલાઇઝેશન પછી ટોકન બંને દિશામાં મોકલી શકાય.","(D) શિલ્ડેડ ટ્વિસ્ટેડ પેર સાથેનું ટોકન રિંગ ન્યૂનતમ 16 Mbps ડેટા રેટ ધરાવી શકે છે."], answer:"(A) Whenever a network node wishes to send a frame, it has to wait for the free token to arrive."}
+,{num:211, qEn:"On a full duplex data link, the most widely used error recovery technique is:", qGu:"ફુલ ડુપ્લેક્સ ડેટા લિંક પર સૌથી વધુ વપરાતી એરર રિકવરી ટેક્નિક છે:", optionsEn:["(A) Backward Error Correction (BEC)","(B) Forward Error Correction (FEC)","(C) Automatic Repeat Request (ARQ)","(D) Huffman error correction technique"], optionsGu:["(A) બેકવર્ડ એરર કરેક્શન","(B) ફોરવર્ડ એરર કરેક્શન","(C) ઓટોમેટિક રિપીટ રિક્વેસ્ટ (ARQ)","(D) હફમેન એરર કરેક્શન"], answer:"(C) Automatic Repeat Request (ARQ)"},
+  {num:212, qEn:"Which of the following statements is correct with regard to Asymmetric Digital Subscriber line (ADSL) technology?", qGu:"એસિમેટ્રિક ડિજિટલ સબસ્ક્રાઇબર લાઇન (ADSL) વિશે કયું વિધાન સાચું છે?", optionsEn:["(A) ADSL has two different data rates...","(B) ADSL is a 64 kbps leased line.","(C) ADSL needs special cabling infrastructure.","(D) The same domestic telephone connection can not be shared..."], optionsGu:["(A) ADSLમાં ઇનકમિંગ અને આઉટગોઇંગ માટે અલગ ડેટા રેટ છે","(B) ADSL 64 kbps લીઝ્ડ લાઇન છે","(C) ADSLને વિશેષ કેબલિંગ જરૂરી છે","(D) સામાન્ય ટેલિફોન અને ADSL એકસાથે વાપરી શકાતા નથી"], answer:"(A) ADSL has two different data rates..."},
+  {num:213, qEn:"Any electronic device on a network is called a:", qGu:"નેટવર્ક પરના કોઈપણ ઇલેક્ટ્રોનિક ડિવાઇસને કહેવામાં આવે છે:", optionsEn:["(A) Node","(B) Hub","(C) Router","(D) Cable"], optionsGu:["(A) નોડ","(B) હબ","(C) રાઉટર","(D) કેબલ"], answer:"(A) Node"},
+  {num:214, qEn:"Which piece of equipment installs in a PC and allows the PC to connect to a network?", qGu:"PCમાં કયું ઉપકરણ ઇન્સ્ટોલ કરવાથી PC નેટવર્ક સાથે જોડાય છે?", optionsEn:["(A) Hub","(B) Access Router","(C) Graphic Accelerator Card","(D) Network Interface Card"], optionsGu:["(A) હબ","(B) એક્સેસ રાઉટર","(C) ગ્રાફિક એક્સેલરેટર કાર્ડ","(D) નેટવર્ક ઇન્ટરફેસ કાર્ડ"], answer:"(D) Network Interface Card"},
+  {num:215, qEn:"What is called when two bits from two different communicating computers are on a shared-medium at the same time?", qGu:"બે અલગ કમ્પ્યુટર્સના બે બિટ્સ એકસાથે શેર્ડ મીડિયમ પર હોય તો તેને શું કહેવામાં આવે છે?", optionsEn:["(A) Latency","(B) Dispersion","(C) Collision","(D) Obstruction"], optionsGu:["(A) લેટન્સી","(B) ડિસ્પર્શન","(C) કોલિઝન","(D) ઓબ્સ્ટ્રક્શન"], answer:"(C) Collision"},
+  {num:216, qEn:"The network area within which data packets originate and collide is called a ........ ?", qGu:"ડેટા પેકેટ્સ ઉત્પન્ન થાય અને અથડાય તે વિસ્તારને શું કહેવામાં આવે છે?", optionsEn:["(A) Network segment","(B) Collision segment","(C) Network domain","(D) Collision domain"], optionsGu:["(A) નેટવર્ક સેગમેન્ટ","(B) કોલિઝન સેગમેન્ટ","(C) નેટવર્ક ડોમેન","(D) કોલિઝન ડોમેન"], answer:"(D) Collision domain"},
+  {num:217, qEn:"What is another name for a rollover cable?", qGu:"રોલઓવર કેબલને બીજું નામ શું છે?", optionsEn:["(A) An inverted cable","(B) A console cable","(C) A cross connect cable","(D) A patch cable"], optionsGu:["(A) ઇન્વર્ટેડ કેબલ","(B) કોન્સોલ કેબલ","(C) ક્રોસ કનેક્ટ કેબલ","(D) પેચ કેબલ"], answer:"(B) A console cable"},
+  {num:218, qEn:"Which best describes collision in Ethernet network?", qGu:"ઇથરનેટ નેટવર્કમાં કોલિઝનને શ્રેષ્ઠ રીતે કેવી રીતે વર્ણવી શકાય?", optionsEn:["(A) The result of having non OSI compliant protocols...","(B) The effect when two nodes have the same MAC address","(C) The result of two nodes transmitting at the same time","(D) The effects of having too many repeaters..."], optionsGu:["(A) નોન OSI પ્રોટોકોલનું પરિણામ","(B) બે નોડનું સમાન MAC એડ્રેસ","(C) બે નોડ એકસાથે ટ્રાન્સમિટ કરે","(D) વધુ રિપીટર્સની અસર"], answer:"(C) The result of two nodes transmitting at the same time"},
+  {num:219, qEn:"The default port number for the HTTP Protocol is :", qGu:"HTTP પ્રોટોકોલનો ડિફોલ્ટ પોર્ટ નંબર છે :", optionsEn:["(A) 440","(B) 80","(C) 90","(D) 21"], optionsGu:["(A) 440","(B) 80","(C) 90","(D) 21"], answer:"(B) 80"},
+  {num:220, qEn:"Layer 3 switch recognizes :", qGu:"લેયર 3 સ્વિચ ઓળખે છે :", optionsEn:["(A) MAC address","(B) IP address","(C) Both MAC address & IP address","(D) None"], optionsGu:["(A) MAC એડ્રેસ","(B) IP એડ્રેસ","(C) બંને","(D) કોઈ નહીં"], answer:"(C) Both MAC address & IP address"},
+  {num:221, qEn:"a frame is a ........ .", qGu:"ફ્રેમ એ ........ છે.", optionsEn:["(A) layer 2 PDU","(B) layer 3 PDU","(C) an encapsulated packet","(D) both layer 2 PDU and an encapsulated packet"], optionsGu:["(A) લેયર 2 PDU","(B) લેયર 3 PDU","(C) એન્કેપ્સ્યુલેટેડ પેકેટ","(D) બંને"], answer:"(D) both layer 2 PDU and an encapsulated packet"},
+  {num:222, qEn:"Which of the following describe Token-Ring?", qGu:"Token-Ring વિશે કયું વિધાન સાચું છે?", optionsEn:["(A) Data transfer rates of 4 mbps or 16 mbps","(B) can physically use a star topology","(C) can only be implemented with fiber","(D) both data transfer rates ... and star topology"], optionsGu:["(A) 4 અથવા 16 Mbps","(B) સ્ટાર ટોપોલોજી વાપરી શકાય","(C) માત્ર ફાઇબર સાથે","(D) બંને A અને B"], answer:"(D) both data transfer rates ... and star topology"},
+  {num:223, qEn:"How does a token ring topology differ from an Ethernet topology?", qGu:"ટોકન રિંગ અને ઇથરનેટ ટોપોલોજીમાં શું તફાવત છે?", optionsEn:["(A) token ring networks do not face problems with collisions","(B) token ring is deterministic","(C) neither","(D) both"], optionsGu:["(A) ટોકન રિંગમાં કોલિઝનની સમસ્યા નથી","(B) ટોકન રિંગ ડિટર્મિનિસ્ટિક છે","(C) કોઈ નહીં","(D) બંને"], answer:"(D) both"},
+  {num:224, qEn:"One of the primary reasons FDDI is extremely reliable is because ........ ?", qGu:"FDDI અત્યંત વિશ્વસનીય હોવાનું મુખ્ય કારણ છે?", optionsEn:["(A) of its dual ring design","(B) it is a CSMA/CD network","(C) stations are guaranteed their turn","(D) both dual ring and CSMA/CD"], optionsGu:["(A) ડ્યુઅલ રિંગ ડિઝાઇન","(B) CSMA/CD નેટવર્ક","(C) સ્ટેશનને ટ્રાન્સમિટ કરવાની ગેરંટી","(D) બંને"], answer:"(D) both dual ring and CSMA/CD"},
+  {num:225, qEn:"If you have to connect a FDDI between buildings, which mode of fiber would you use:", qGu:"બિલ્ડિંગ વચ્ચે FDDI કનેક્ટ કરવા માટે કયા મોડની ફાઇબર વાપરશો?", optionsEn:["(A) inter mode","(B) intra mode","(C) multi mode","(D) single mode"], optionsGu:["(A) ઇન્ટર મોડ","(B) ઇન્ટ્રા મોડ","(C) મલ્ટિ મોડ","(D) સિંગલ મોડ"], answer:"(A) inter mode"},
+  {num:226, qEn:"Which of the following is an accurate description of an Ethernet variety?", qGu:"ઇથરનેટ વેરાયટીનું સાચું વર્ણન કયું છે?", optionsEn:["(A) 10 Base-T uses cat 5 cable...","(B) 100 Base-Fx is multi-mode fiber...","(C) both are correct","(D) none"], optionsGu:["(A) 10 Base-T cat 5 કેબલ વાપરે છે","(B) 100 Base-Fx મલ્ટિ-મોડ ફાઇબર છે","(C) બંને સાચા છે","(D) કોઈ નહીં"], answer:"(C) both are correct"},
+  {num:227, qEn:"Where should the main distribution facility (MDF) be located if a LAN with an extended star typology is used in a multi-story building?", qGu:"મલ્ટી-સ્ટોરી બિલ્ડિંગમાં વિસ્તૃત સ્ટાર ટોપોલોજીવાળા LANમાં MDF ક્યાં હોવી જોઈએ?", optionsEn:["(A) on the first floor","(B) next to the POP","(C) on one of the middle floors","(D) in the basement"], optionsGu:["(A) પ્રથમ માળે","(B) POPની બાજુમાં","(C) મધ્યમ માળે","(D) બેઝમેન્ટમાં"], answer:"(B) next to the POP"},
+  {num:228, qEn:"What type of cabling provides interconnections between wiring closets, wiring closets and POP and between building that are part of the same LAN?", qGu:"વાયરિંગ ક્લોઝેટ, POP અને એક જ LANના બિલ્ડિંગ વચ્ચે જોડાણ માટે કયા પ્રકારની કેબલિંગ વપરાય છે?", optionsEn:["(A) token ring cabling","(B) backbone cabling","(C) coaxial cabling","(D) horizontal cabling"], optionsGu:["(A) ટોકન રિંગ","(B) બેકબોન કેબલિંગ","(C) કોક્સિયલ","(D) હોરિઝોન્ટલ"], answer:"(B) backbone cabling"},
+  {num:229, qEn:"What is the full form of MIME?", qGu:"MIMEનું પૂર્ણ સ્વરૂપ શું છે?", optionsEn:["(A) Multipurpose Internet Mail Extension","(B) Multimedia Intranet Mail Extension","(C) Multipurpose Intranet Mail Extension","(D) Multimedia Internet Mail Extension"], optionsGu:["(A) મલ્ટિપર્પસ ઇન્ટરનેટ મેઇલ એક્સ્ટેન્શન","(B) મલ્ટિમીડિયા ઇન્ટ્રાનેટ મેઇલ એક્સ્ટેન્શન","(C) મલ્ટિપર્પસ ઇન્ટ્રાનેટ મેઇલ એક્સ્ટેન્શન","(D) મલ્ટિમીડિયા ઇન્ટરનેટ મેઇલ એક્સ્ટેન્શન"], answer:"(A) Multipurpose Internet Mail Extension"},
+  {num:230, qEn:"802.11i is implemented at which layer of the OSI model?", qGu:"802.11i OSI મોડલના કયા લેયર પર અમલમાં મૂકાય છે?", optionsEn:["(A) Layer 1","(B) Layer 2","(C) Layer 3","(D) Layer 7"], optionsGu:["(A) લેયર 1","(B) લેયર 2","(C) લેયર 3","(D) લેયર 7"], answer:"(B) Layer 2"},
+  {num:231, qEn:"What is the one-hand rule?", qGu:"એક-હાથનો નિયમ શું છે?", optionsEn:["(A) only touch devices with one hand...","(B) when setting up the network only use one bare hand...","(C) both statements","(D) none"], optionsGu:["(A) માત્ર એક હાથથી ડિવાઇસ સ્પર્શ કરો","(B) નેટવર્ક સેટઅપ વખતે એક હાથ ખુલ્લો રાખો","(C) બંને","(D) કોઈ નહીં"], answer:"(C) both statements"},
+  {num:232, qEn:"Nat Borenstein discovered which internet mailing extension?", qGu:"Nat Borensteinએ કયા ઇન્ટરનેટ મેઇલિંગ એક્સ્ટેન્શનની શોધ કરી?", optionsEn:["(A) SMTP","(B) MIME","(C) DNS","(D) PPP"], optionsGu:["(A) SMTP","(B) MIME","(C) DNS","(D) PPP"], answer:"(B) MIME"},
+  {num:233, qEn:"What is the maximum distance backbone cabling if a single-mode, fiber optic cable is used...", qGu:"સિંગલ-મોડ ફાઇબર ઓપ્ટિક કેબલ વાપરીને બેકબોન કેબલિંગનું મહત્તમ અંતર કેટલું છે?", optionsEn:["(A) 500 meters","(B) 1000 meters","(C) 2500 meters","(D) 3000 meters"], optionsGu:["(A) 500 મીટર","(B) 1000 મીટર","(C) 2500 મીટર","(D) 3000 મીટર"], answer:"(B) 1000 meters"},
+  {num:234, qEn:"Which address is an example of a broadcast address for a class B network?", qGu:"ક્લાસ B નેટવર્ક માટે બ્રોડકાસ્ટ એડ્રેસનું ઉદાહરણ કયું છે?", optionsEn:["(A) 123.255.255.255","(B) 123.14.255.255","(C) 123.13.0.0","(D) 123.1.1.1"], optionsGu:["(A) 123.255.255.255","(B) 123.14.255.255","(C) 123.13.0.0","(D) 123.1.1.1"], answer:"(A) 123.255.255.255"},
+  {num:235, qEn:"How many host addresses are available to a class C network?", qGu:"ક્લાસ C નેટવર્કમાં કેટલા હોસ્ટ એડ્રેસ ઉપલબ્ધ છે?", optionsEn:["(A) 254","(B) 255","(C) 256","(D) none of the options"], optionsGu:["(A) 254","(B) 255","(C) 256","(D) કોઈ નહીં"], answer:"(D) none of the options"},
+  {num:236, qEn:"How many subnets can a class C network use?", qGu:"ક્લાસ C નેટવર્ક કેટલા સબનેટ વાપરી શકે છે?", optionsEn:["(A) 245","(B) 26","(C) 256","(D) none"], optionsGu:["(A) 245","(B) 26","(C) 256","(D) કોઈ નહીં"], answer:"(C) 256"},
+  {num:237, qEn:"How many bits can be borrowed to create a subnet for a class C network?", qGu:"ક્લાસ C નેટવર્ક માટે સબનેટ બનાવવા કેટલા બિટ્સ ઉછીના લઈ શકાય?", optionsEn:["(A) 2","(B) 4","(C) 6","(D) 8"], optionsGu:["(A) 2","(B) 4","(C) 6","(D) 8"], answer:"(C) 6"},
+  {num:238, qEn:"For what purpose does the router “AND” the subnet mask to the destination address?", qGu:"રાઉટર ડેસ્ટિનેશન એડ્રેસ સાથે સબનેટ માસ્કનું “AND” કરવાનો હેતુ શું છે?", optionsEn:["(A) to derive the host numbers...","(B) to derive subnet mask...","(C) to derive which network and subnet...","(D) none"], optionsGu:["(A) હોસ્ટ નંબર મેળવવા","(B) સબનેટ માસ્ક સરખાવવા","(C) કયા નેટવર્ક અને સબનેટ પર પેકેટ મોકલવું","(D) કોઈ નહીં"], answer:"(C) to derive which network and subnet..."},
+  {num:252, qEn:"What is the correct order of encapsulation?", qGu:"એન્કેપ્સ્યુલેશનનો સાચો ક્રમ કયો છે?", optionsEn:["(A) Data, segment, packet, frame, bits","(B) Data, frame, packet, segment, bits","(C) Bits, data, packet, frame","(D) Bits, frame, data, packet"], optionsGu:["(A) ડેટા, સેગમેન્ટ, પેકેટ, ફ્રેમ, બિટ્સ","(B) ડેટા, ફ્રેમ, પેકેટ, સેગમેન્ટ, બિટ્સ","(C) બિટ્સ, ડેટા, પેકેટ, ફ્રેમ","(D) બિટ્સ, ફ્રેમ, ડેટા, પેકેટ"], answer:"(A) Data, segment, packet, frame, bits"},
+  {num:253, qEn:"Which of the following statements is correct for the use of packet switching?", qGu:"પેકેટ સ્વિચિંગના ઉપયોગ માટે કયું વિધાન સાચું છે?", optionsEn:["(A) subdivision of information into packets...","(B) employment of additional intelligence...","(C) wide bandwidth circuits...","(D) All of the options"], optionsGu:["(A) માહિતીને પેકેટમાં વહેંચવી","(B) નેટવર્કમાં વધારાની બુદ્ધિ","(C) વાઇડ બેન્ડવિડ્થ સર્કિટ","(D) બધા"], answer:"(D) All of the options"},
+  {num:254, qEn:"DNS can obtain the ............ of host if its domain name is known and vice versa.", qGu:"DNS ડોમેન નામ જાણીતું હોય તો હોસ્ટનું ............ મેળવી શકે છે અને વિરુદ્ધ પણ.", optionsEn:["(A) Station address","(B) IP address","(C) Port address","(D) Checksum"], optionsGu:["(A) સ્ટેશન એડ્રેસ","(B) IP એડ્રેસ","(C) પોર્ટ એડ્રેસ","(D) ચેકસમ"], answer:"(B) IP address"},
+  {num:255, qEn:"CSMA stands for:", qGu:"CSMAનો અર્થ છે:", optionsEn:["(A) Carrier Sense Multiple Access","(B) Carrier Switch Multiple Access","(C) Carrier Switch Medium Access","(D) Control Sense Multiple Access"], optionsGu:["(A) કેરિયર સેન્સ મલ્ટિપલ એક્સેસ","(B) કેરિયર સ્વિચ મલ્ટિપલ એક્સેસ","(C) કેરિયર સ્વિચ મીડિયમ એક્સેસ","(D) કંટ્રોલ સેન્સ મલ્ટિપલ એક્સેસ"], answer:"(A) Carrier Sense Multiple Access"},
+  {num:256, qEn:"Avalanche photodiode receivers can detect hits of transmitted data by receiving:", qGu:"એવલાંચ ફોટોડાયોડ રિસીવર્સ ટ્રાન્સમિટેડ ડેટાના હિટ્સને કેટલા ફોટોન્સથી ડિટેક્ટ કરી શકે છે?", optionsEn:["(A) 100 photons","(B) 200 photons","(C) 300 photons","(D) 400 photons"], optionsGu:["(A) 100 ફોટોન","(B) 200 ફોટોન","(C) 300 ફોટોન","(D) 400 ફોટોન"], answer:"(B) 200 photons"},
+  {num:257, qEn:"When you ping the loopback address, a packet is sent where?", qGu:"લૂપબેક એડ્રેસને પિંગ કરતી વખતે પેકેટ ક્યાં મોકલવામાં આવે છે?", optionsEn:["(A) On the network","(B) Down through the layers of the IP architecture and then up the layers again","(C) Across the wire","(D) through the loopback dongle"], optionsGu:["(A) નેટવર્ક પર","(B) IP આર્કિટેક્ચરના લેયર્સમાં નીચે અને પછી ઉપર","(C) વાયર પર","(D) લૂપબેક ડોંગલ દ્વારા"], answer:"(B) Down through the layers of the IP architecture and then up the layers again"},
+  {num:258, qEn:"Which of the following TCP/IP protocol is used for transferring electronic mail messages from one machine to another?", qGu:"ઇલેક્ટ્રોનિક મેઇલ મેસેજ મોકલવા માટે કયો TCP/IP પ્રોટોકોલ વપરાય છે?", optionsEn:["(A) FTP","(B) SNMP","(C) SMTP / RPC","(D) none"], optionsGu:["(A) FTP","(B) SNMP","(C) SMTP / RPC","(D) કોઈ નહીં"], answer:"(C) SMTP / RPC"},
+  {num:259, qEn:"Which of the following device is used to connect two systems, especially if the systems use different protocols?", qGu:"બે સિસ્ટમને જોડવા માટે, ખાસ કરીને જો અલગ પ્રોટોકોલ વાપરતી હોય તો કયું ડિવાઇસ વપરાય છે?", optionsEn:["(A) Hub","(B) bridge","(C) gateway","(D) repeater"], optionsGu:["(A) હબ","(B) બ્રિજ","(C) ગેટવે","(D) રિપીટર"], answer:"(C) gateway"},
+  {num:260, qEn:"Which of the following TCP/IP protocol allows an application program on one machine to send a datagram to an application program on another machine?", qGu:"એક મશીન પરના એપ્લિકેશન પ્રોગ્રામને બીજા મશીન પરના એપ્લિકેશનને ડેટાગ્રામ મોકલવા દે છે?", optionsEn:["(A) UDP","(B) VMTP","(C) X.25","(D) SMTP"], optionsGu:["(A) UDP","(B) VMTP","(C) X.25","(D) SMTP"], answer:"(A) UDP"},
+  {num:261, qEn:"A remote batch-processing operation in which data is solely input to a central computer would require a:", qGu:"રિમોટ બેચ-પ્રોસેસિંગમાં ડેટા માત્ર સેન્ટ્રલ કમ્પ્યુટરમાં ઇનપુટ થાય તો કયું જરૂરી છે?", optionsEn:["(A) telegraph line","(B) simplex lines","(C) mixedband channel","(D) All of the options"], optionsGu:["(A) ટેલિગ્રાફ લાઇન","(B) સિમ્પ્લેક્સ લાઇન","(C) મિક્સ્ડબેન્ડ ચેનલ","(D) બધા"], answer:"(B) simplex lines"},
+  {num:262, qEn:"What part of 192.168.10.51 is the Network ID, assuming a default subnet mask?", qGu:"192.168.10.51માં નેટવર્ક ID કયો ભાગ છે (ડિફોલ્ટ સબનેટ માસ્ક સાથે)?", optionsEn:["(A) 192","(B) 192.168.10","(C) 0.0.0.5","(D) 51"], optionsGu:["(A) 192","(B) 192.168.10","(C) 0.0.0.5","(D) 51"], answer:"(B) 192.168.10"},
+  {num:263, qEn:"Which of the transport layer protocols is connectionless?", qGu:"ટ્રાન્સપોર્ટ લેયરમાં કયો પ્રોટોકોલ કનેક્શનલેસ છે?", optionsEn:["(A) UDP","(B) TCP","(C) FTP","(D) SMTP"], optionsGu:["(A) UDP","(B) TCP","(C) FTP","(D) SMTP"], answer:"(A) UDP"},
+  {num:264, qEn:"What is the default subnet mask for a class C network?", qGu:"ક્લાસ C નેટવર્ક માટે ડિફોલ્ટ સબનેટ માસ્ક શું છે?", optionsEn:["(A) 127.0.0.1","(B) 255.0.0.0","(C) 255.255.0.0","(D) 255.255.255.0"], optionsGu:["(A) 127.0.0.1","(B) 255.0.0.0","(C) 255.255.0.0","(D) 255.255.255.0"], answer:"(D) 255.255.255.0"},
+  {num:265, qEn:"Which layers of the OSI determines the interface of the system with the user?", qGu:"OSI મોડલમાં કયો લેયર સિસ્ટમ અને યુઝર વચ્ચેનું ઇન્ટરફેસ નક્કી કરે છે?", optionsEn:["(A) Network","(B) Application","(C) Data link","(D) Session"], optionsGu:["(A) નેટવર્ક","(B) એપ્લિકેશન","(C) ડેટા લિંક","(D) સેશન"], answer:"(B) Application"},
+  {num:266, qEn:"The default port number for the HTTPS Protocol is:", qGu:"HTTPS પ્રોટોકોલનો ડિફોલ્ટ પોર્ટ નંબર છે:", optionsEn:["(A) 99","(B) 80","(C) 443","(D) 400"], optionsGu:["(A) 99","(B) 80","(C) 443","(D) 400"], answer:"(C) 443"},
+  {num:267, qEn:"The slowest transmission speeds are those of:", qGu:"સૌથી ધીમી ટ્રાન્સમિશન સ્પીડ કયા માધ્યમમાં છે?", optionsEn:["(A) twisted-pair wire","(B) coaxial cable","(C) fiber-optic cable","(D) Copper cable"], optionsGu:["(A) ટ્વિસ્ટેડ-પેર વાયર","(B) કોક્સિયલ કેબલ","(C) ફાઇબર-ઓપ્ટિક કેબલ","(D) કોપર કેબલ"], answer:"(A) twisted-pair wire"},
+  {num:268, qEn:"A noiseless 3 KHz Channel transmits bits with binary level signals. What is the maximum data rate?", qGu:"નોઇસલેસ 3 KHz ચેનલ બાઇનરી સિગ્નલ સાથે બિટ્સ ટ્રાન્સમિટ કરે છે. મહત્તમ ડેટા રેટ કેટલો છે?", optionsEn:["(A) 3 Kbps","(B) 6 Kbps","(C) 12 Kbps","(D) 24 Kbps"], optionsGu:["(A) 3 Kbps","(B) 6 Kbps","(C) 12 Kbps","(D) 24 Kbps"], answer:"(B) 6 Kbps"},
+  {num:269, qEn:"The standard suit of protocols used by the Internet, Intranets, extranets and some other networks.", qGu:"ઇન્ટરનેટ, ઇન્ટ્રાનેટ, એક્સ્ટ્રાનેટ અને અન્ય નેટવર્કમાં વપરાતા પ્રોટોકોલ્સનો સ્ટાન્ડર્ડ સ્યુટ છે.", optionsEn:["(A) TCP/IP","(B) Protocol","(C) Open system","(D) Internet work processor"], optionsGu:["(A) TCP/IP","(B) પ્રોટોકોલ","(C) ઓપન સિસ્ટમ","(D) ઇન્ટરનેટ વર્ક પ્રોસેસર"], answer:"(A) TCP/IP"},
+  {num:270, qEn:"Carrier is:", qGu:"કેરિયર એ છે:", optionsEn:["(A) One or device more conductors...","(B) a continuous frequency capable of being modulated...","(C) the condition when two or more sections attempt to use the same channel...","(D) that provides a data stations attached to the network"], optionsGu:["(A) કન્ડક્ટર્સનું જૂથ","(B) મોડ્યુલેટ કરી શકાય તેવી સતત ફ્રિક્વન્સી","(C) બે અથવા વધુ સેક્શન એકસાથે ચેનલ વાપરે","(D) નેટવર્ક સાથે જોડાયેલા ડેટા સ્ટેશન"], answer:"(B) a continuous frequency capable of being modulated..."},
+  {num:271, qEn:"What can greatly reduce TCP/IP configuration problems?", qGu:"TCP/IP કોન્ફિગ્યુરેશન સમસ્યાઓને ઘણી હદે ઘટાડી શકે છે?", optionsEn:["(A) WINS Server","(B) WINS Proxy","(C) DHCP Server","(D) PDC"], optionsGu:["(A) WINS સર્વર","(B) WINS પ્રોક્સી","(C) DHCP સર્વર","(D) PDC"], answer:"(C) DHCP Server"},
+  {num:272, qEn:"Which of the following is used for modulation and demodulation?", qGu:"મોડ્યુલેશન અને ડિમોડ્યુલેશન માટે કયું વપરાય છે?", optionsEn:["(A) Modem","(B) Protocols","(C) Gateway","(D) Multiplexer"], optionsGu:["(A) મોડેમ","(B) પ્રોટોકોલ","(C) ગેટવે","(D) મલ્ટિપ્લેક્સર"], answer:"(A) Modem"},
+  {num:273, qEn:"Frames from one LAN can be transmitted to another LAN via the device:", qGu:"એક LANના ફ્રેમને બીજા LANમાં કયા ડિવાઇસ દ્વારા મોકલી શકાય છે?", optionsEn:["(A) Router","(B) Bridge","(C) Repeater","(D) Switch"], optionsGu:["(A) રાઉટર","(B) બ્રિજ","(C) રિપીટર","(D) સ્વિચ"], answer:"(B) Bridge"},
+  {num:274, qEn:"What terminates VPNs at a primary location?", qGu:"પ્રાથમિક સ્થળે VPNને કયું ટર્મિનેટ કરે છે?", optionsEn:["(A) Router","(B) ASA","(C) Head-end device","(D) Software client"], optionsGu:["(A) રાઉટર","(B) ASA","(C) હેડ-એન્ડ ડિવાઇસ","(D) સોફ્ટવેર ક્લાયન્ટ"], answer:"(C) Head-end device"},
+  {num:275, qEn:"What wizard in SDM can be used to assist in choosing a VPN?", qGu:"SDMમાં VPN પસંદ કરવામાં મદદ કરવા કયા વિઝાર્ડ વપરાય છે?", optionsEn:["(A) VPN Design Guide","(B) IPSec Wizard","(C) VPN Recommendation Guide","(D) IPSec Guide"], optionsGu:["(A) VPN ડિઝાઇન ગાઇડ","(B) IPSec વિઝાર્ડ","(C) VPN રેકમેન્ડેશન ગાઇડ","(D) IPSec ગાઇડ"], answer:"(A) VPN Design Guide"},
+  {num:276, qEn:"The network layer concerns with:", qGu:"નેટવર્ક લેયર કયા સાથે સંબંધિત છે?", optionsEn:["(A) bits","(B) frames","(C) packets","(D) none"], optionsGu:["(A) બિટ્સ","(B) ફ્રેમ","(C) પેકેટ","(D) કોઈ નહીં"], answer:"(C) packets"},
+  {num:277, qEn:"Which of the following is not a disadvantage of wireless LAN?", qGu:"વાયરલેસ LANની કઈ અસુવિધા નથી?", optionsEn:["(A) Slower data transmission","(B) higher error rate","(C) interference of transmissions from different computers","(D) All of the options"], optionsGu:["(A) ધીમી ડેટા ટ્રાન્સમિશન","(B) વધુ એરર રેટ","(C) અલગ કમ્પ્યુટર્સના ટ્રાન્સમિશનમાં ઇન્ટરફેરન્સ","(D) બધી"], answer:"(D) All of the options"},
+  {num:278, qEn:"The internet control Message Protocol (ICMP):", qGu:"ઇન્ટરનેટ કંટ્રોલ મેસેજ પ્રોટોકોલ (ICMP):", optionsEn:["(A) Allows gateways to send error control messages...","(B) provides communication between the internet Protocol Software...","(C) reports error conditions to the original source...","(D) All of the options"], optionsGu:["(A) ગેટવેને એરર મેસેજ મોકલવા દે છે","(B) ઇન્ટરનેટ પ્રોટોકોલ સોફ્ટવેર વચ્ચે સંચાર","(C) એરર કન્ડિશન રિપોર્ટ કરે છે","(D) બધા"], answer:"(D) All of the options"},
+  {num:279, qEn:"Our company has a LAN in its downtown office and has now set up a LAN in the manufacturing plant... what type of device(s) are needed to connect them?", qGu:"કંપનીના ડાઉનટાઉન ઓફિસ અને સબર્બ્સમાં બનેલા લેનને જોડવા માટે કયા ડિવાઇસ જરૂરી છે?", optionsEn:["(A) modem","(B) Cable","(C) Hub","(D) Router"], optionsGu:["(A) મોડેમ","(B) કેબલ","(C) હબ","(D) રાઉટર"], answer:"(D) Router"},
+  {num:280, qEn:"Which one of the following is not a function of network layer?", qGu:"નેટવર્ક લેયરનું કાર્ય નથી તે કયું છે?", optionsEn:["(A) routing","(B) inter-networking","(C) congestion control","(D) none of the options"], optionsGu:["(A) રાઉટિંગ","(B) ઇન્ટર-નેટવર્કિંગ","(C) કોંગેસ્ચન કંટ્રોલ","(D) કોઈ નહીં"], answer:"(D) none of the options"},
+  {num:281, qEn:"The term 'duplex' refers to... In full duplex data transmission, both the sender and the receiver:", qGu:"'ડુપ્લેક્સ' શબ્દનો અર્થ છે... ફુલ ડુપ્લેક્સમાં સેન્ડર અને રિસીવર:", optionsEn:["(A) cannot talk at once","(B) can receive and send data simultaneously","(C) can send or receive data one at a time","(D) can do one way data transmission only"], optionsGu:["(A) એકસાથે વાત ન કરી શકે","(B) એકસાથે મોકલી અને મેળવી શકે","(C) એક સમયે માત્ર એક દિશા","(D) માત્ર એક તરફી"], answer:"(B) can receive and send data simultaneously"},
+  {num:282, qEn:"RIP stands for:", qGu:"RIPનો અર્થ છે:", optionsEn:["(A) Routing Information Protocol","(B) Route Internet Protocol","(C) Router Information Protocol","(D) Route Intranet Protocol"], optionsGu:["(A) રાઉટિંગ ઇન્ફોર્મેશન પ્રોટોકોલ","(B) રૂટ ઇન્ટરનેટ પ્રોટોકોલ","(C) રાઉટર ઇન્ફોર્મેશન પ્રોટોકોલ","(D) રૂટ ઇન્ટ્રાનેટ પ્રોટોકોલ"], answer:"(A) Routing Information Protocol"},
+  {num:283, qEn:"BGP Stands for:", qGu:"BGPનો અર્થ છે:", optionsEn:["(A) Bridged Gateway Protocol","(B) Border Gateway Protocol","(C) Bridge Gateway Protocol","(D) Border Gone Protocol"], optionsGu:["(A) બ્રિજ્ડ ગેટવે પ્રોટોકોલ","(B) બોર્ડર ગેટવે પ્રોટોકોલ","(C) બ્રિજ ગેટવે પ્રોટોકોલ","(D) બોર્ડર ગોન પ્રોટોકોલ"], answer:"(B) Border Gateway Protocol"},
+  {num:284, qEn:"IEEE 802.11 stands for:", qGu:"IEEE 802.11નો અર્થ છે:", optionsEn:["(A) Wireless LAN","(B) Wired LAN","(C) Bluetooth technology","(D) Wi-MAX"], optionsGu:["(A) વાયરલેસ LAN","(B) વાયર્ડ LAN","(C) બ્લુટૂથ ટેક્નોલોજી","(D) Wi-MAX"], answer:"(A) Wireless LAN"},
+  {num:285, qEn:"RS-232 is a standard that applies to?", qGu:"RS-232 સ્ટાન્ડર્ડ કયા માટે લાગુ પડે છે?", optionsEn:["(A) Parallel port","(B) Serial port","(C) Game port","(D) All of above"], optionsGu:["(A) પેરેલલ પોર્ટ","(B) સીરિયલ પોર્ટ","(C) ગેમ પોર્ટ","(D) બધા"], answer:"(B) Serial port"},
+  {num:286, qEn:"DNS servers translates web addresses or host name to:", qGu:"DNS સર્વર વેબ એડ્રેસ અથવા હોસ્ટ નામને ક્યાં અનુવાદિત કરે છે?", optionsEn:["(A) MAC address","(B) FTP address","(C) IP address","(D) Host Name"], optionsGu:["(A) MAC એડ્રેસ","(B) FTP એડ્રેસ","(C) IP એડ્રેસ","(D) હોસ્ટ નામ"], answer:"(C) IP address"},
+  {num:287, qEn:"To host a web site which of following is required?", qGu:"વેબસાઇટ હોસ્ટ કરવા માટે કયું જરૂરી છે?", optionsEn:["(A) Web Server","(B) Exchange Server","(C) Mail Server","(D) Database Server"], optionsGu:["(A) વેબ સર્વર","(B) એક્સચેન્જ સર્વર","(C) મેઇલ સર્વર","(D) ડેટાબેઝ સર્વર"], answer:"(A) Web Server"},
+  {num:288, qEn:"Optical fiber is one of the most attractive physical layer media to use for high speed networks because:", qGu:"ઉચ્ચ સ્પીડ નેટવર્ક માટે ઓપ્ટિકલ ફાઇબર સૌથી આકર્ષક મીડિયા છે કારણ કે:", optionsEn:["(A) It offers immense transmission bandwidth","(B) it has extremely low error rates","(C) it can cover relatively large geographic distances...","(D) All of the above"], optionsGu:["(A) અત્યંત વધુ ટ્રાન્સમિશન બેન્ડવિડ્થ","(B) અત્યંત ઓછા એરર રેટ","(C) મોટા અંતર સુધી રિપીટર વગર","(D) બધા"], answer:"(D) All of the above"},
+  {num:289, qEn:"ICANN is:", qGu:"ICANN એ છે:", optionsEn:["(A) Name of corporation for assigning names & number to different domains","(B) Organization for setting up rules to operate Internet","(C) Organization to provide security to services","(D) For making network administration more manageable"], optionsGu:["(A) ડોમેન નામ અને નંબર આપવા માટેની કોર્પોરેશન","(B) ઇન્ટરનેટ ચલાવવાના નિયમો બનાવવી","(C) સુરક્ષા પૂરી પાડવી","(D) નેટવર્ક એડમિનિસ્ટ્રેશન સરળ બનાવવું"], answer:"(A) Name of corporation for assigning names & number to different domains"},
+  {num:290, qEn:"Find the class IP address : 129.6.8.4", qGu:"IP એડ્રેસ 129.6.8.4 કયા ક્લાસનું છે?", optionsEn:["(A) Class A","(B) Class B","(C) Class C","(D) Class D"], optionsGu:["(A) ક્લાસ A","(B) ક્લાસ B","(C) ક્લાસ C","(D) ક્લાસ D"], answer:"(B) Class B"},
+  {num:291, qEn:"IPv6 address is ______ bits long.", qGu:"IPv6 એડ્રેસ ______ બિટ્સ લાંબું છે.", optionsEn:["(A) 16","(B) 32","(C) 64","(D) 128"], optionsGu:["(A) 16","(B) 32","(C) 64","(D) 128"], answer:"(D) 128"},
+  {num:292, qEn:"How many bits internet address is assigned to each host on a TCP/IP internet which is used in all communication with the host?", qGu:"TCP/IP ઇન્ટરનેટમાં દરેક હોસ્ટને કેટલા બિટ્સનું ઇન્ટરનેટ એડ્રેસ આપવામાં આવે છે?", optionsEn:["(A) 16 bits","(B) 32 bits","(C) 48 bits","(D) 64 bits"], optionsGu:["(A) 16 બિટ્સ","(B) 32 બિટ્સ","(C) 48 બિટ્સ","(D) 64 બિટ્સ"], answer:"(B) 32 bits"},
+  {num:293, qEn:"Which of the following is used to close the active tab in Google Chrome?", qGu:"Google Chromeમાં એક્ટિવ ટેબ બંધ કરવા માટે કયો કી વપરાય છે?", optionsEn:["(A) Shift + W","(B) Ctrl + T","(C) Alt + W","(D) Ctrl + W"], optionsGu:["(A) Shift + W","(B) Ctrl + T","(C) Alt + W","(D) Ctrl + W"], answer:"(D) Ctrl + W"},
+  {num:294, qEn:"Which of the following is the correct way to configure the outlook e-mail client on a PC?", qGu:"Outlook ઇમેઇલ ક્લાયન્ટને PC પર કોન્ફિગર કરવાની સાચી રીત કઈ છે?", optionsEn:["(A) Actions -> account Settings","(B) Tools -> Account Settings","(C) View -> Account Settings","(D) Edit -> Account Settings"], optionsGu:["(A) Actions -> account Settings","(B) Tools -> Account Settings","(C) View -> Account Settings","(D) Edit -> Account Settings"], answer:"(B) Tools -> Account Settings"},
+  {num:295, qEn:"Which of the following statements regarding sending a new email is incorrect?", qGu:"નવો ઇમેઇલ મોકલવા વિશે કયું વિધાન ખોટું છે?", optionsEn:["(A) The subject of the message is entered in the field.","(B) Full form of CC is Carbon Copy...","(C) The email address of the sender is automatically stored in the 'To' field.","(D) The full form of BCC is Blind Carbon Copy..."], optionsGu:["(A) સબ્જેક્ટ ફિલ્ડમાં લખવામાં આવે છે.","(B) CCનું પૂર્ણ સ્વરૂપ Carbon Copy છે.","(C) સેન્ડરનું ઇમેઇલ એડ્રેસ આપોઆપ 'To'માં આવે છે.","(D) BCCનું પૂર્ણ સ્વરૂપ Blind Carbon Copy છે."], answer:"(C) The email address of the sender is automatically stored in the 'To' field."},
+  {num:296, qEn:"Which of the following statement(s) is/are true about instant messaging using smileys?", qGu:"ઇન્સ્ટન્ટ મેસેજિંગમાં સ્માઇલી વાપરવા વિશે કયું વિધાન સાચું છે?", optionsEn:["(i) Instant messaging smileys can be sent with text messages.","(ii) Smiley is a pictorial representation of emotion."], optionsGu:["(i) સ્માઇલી ટેક્સ્ટ મેસેજ સાથે મોકલી શકાય છે.","(ii) સ્માઇલી ભાવનાનું ચિત્રાત્મક પ્રતિનિધિત્વ છે."], answer:"(B) Both (i) and (ii)"},
+  {num:303, qEn:"Which of the following part of the URL format specifies the sequence of directories leading to the target?", qGu:"URL ફોર્મેટમાં કયો ભાગ ટાર્ગેટ સુધીની ડિરેક્ટરીનો ક્રમ દર્શાવે છે?", optionsEn:["(A) Server","(B) resource","(C) path","(D) Scheme"], optionsGu:["(A) સર્વર","(B) રિસોર્સ","(C) પાથ","(D) સ્કીમ"], answer:"(C) path"},
+  {num:304, qEn:"Which of the following is called a pointer to some bit of data on the web...", qGu:"વેબ પરના ડેટાના કોઈ ભાગ તરફના પોઇન્ટરને શું કહેવામાં આવે છે?", optionsEn:["(A) Firewall","(B) World Wide Web","(C) Network protocol","(D) Uniform Resource Locator"], optionsGu:["(A) ફાયરવોલ","(B) વર્લ્ડ વાઇડ વેબ","(C) નેટવર્ક પ્રોટોકોલ","(D) યુનિફોર્મ રિસોર્સ લોકેટર"], answer:"(D) Uniform Resource Locator"},
+  {num:305, qEn:"What is a document of the internet written and constructed using HTML and translated by web browser knows as?", qGu:"HTMLમાં લખાયેલ અને વેબ બ્રાઉઝર દ્વારા અનુવાદિત ઇન્ટરનેટના દસ્તાવેજને શું કહેવામાં આવે છે?", optionsEn:["(A) Web server","(B) Internet","(C) Domain","(D) Web page"], optionsGu:["(A) વેબ સર્વર","(B) ઇન્ટરનેટ","(C) ડોમેન","(D) વેબ પેજ"], answer:"(D) Web page"},
+  {num:306, qEn:"When the Web Server responds with an HTTP response message to the Web Client that response message has which of the following sections?", qGu:"વેબ સર્વર વેબ ક્લાયન્ટને HTTP રિસ્પોન્સ મેસેજ મોકલે છે ત્યારે તેમાં કયા સેક્શન હોય છે?", optionsEn:["(A) Status Line","(B) GET Method","(C) Request Line","(D) Accept Field"], optionsGu:["(A) સ્ટેટસ લાઇન","(B) GET મેથડ","(C) રિક્વેસ્ટ લાઇન","(D) એક્સેપ્ટ ફિલ્ડ"], answer:"(A) Status Line"},
+  {num:307, qEn:"URN stands for ______.", qGu:"URNનો અર્થ છે ______.", optionsEn:["(A) Uniform Resource Network","(B) Uniform Resource Name","(C) Unique Resource Name","(D) Unique Resource Network"], optionsGu:["(A) યુનિફોર્મ રિસોર્સ નેટવર્ક","(B) યુનિફોર્મ રિસોર્સ નેમ","(C) યુનિક રિસોર્સ નેમ","(D) યુનિક રિસોર્સ નેટવર્ક"], answer:"(B) Uniform Resource Name"},
+  {num:308, qEn:"Who gives information about the location of the document in the internet.", qGu:"ઇન્ટરનેટમાં દસ્તાવેજનું સ્થાન કોણ આપે છે?", optionsEn:["(A) UML","(B) UDL","(C) URL","(D) UHL"], optionsGu:["(A) UML","(B) UDL","(C) URL","(D) UHL"], answer:"(C) URL"},
+  {num:309, qEn:"Which of the following is the addressing scheme used by the www browser to locate websites on the Internet?", qGu:"www બ્રાઉઝર વેબસાઇટ્સને શોધવા માટે કયી એડ્રેસિંગ સ્કીમ વાપરે છે?", optionsEn:["(A) HTTP","(B) URL","(C) TCP","(D) DNS"], optionsGu:["(A) HTTP","(B) URL","(C) TCP","(D) DNS"], answer:"(B) URL"},
+  {num:310, qEn:"URL", qGu:"URL", optionsEn:["(A) Unique Resource Label","(B) Uniform Resource Locator","(C) Unique Reference Label","(D) Uniform Reference Locator"], optionsGu:["(A) યુનિક રિસોર્સ લેબલ","(B) યુનિફોર્મ રિસોર્સ લોકેટર","(C) યુનિક રેફરન્સ લેબલ","(D) યુનિફોર્મ રેફરન્સ લોકેટર"], answer:"(B) Uniform Resource Locator"},
+  {num:311, qEn:"Which of the following is not search engine?", qGu:"નીચેનામાંથી કયું સર્ચ એન્જિન નથી?", optionsEn:["(A) Google","(B) Yahoo","(C) Twitter","(D) AltaVista"], optionsGu:["(A) Google","(B) Yahoo","(C) Twitter","(D) AltaVista"], answer:"(C) Twitter"},
+  {num:312, qEn:"Which of the following statements is/are INCORRECT with respect to viewing the contents of an HTML file?", qGu:"HTML ફાઇલની સામગ્રી જોવા સંબંધિત કયું વિધાન ખોટું છે?", optionsEn:["A. The output of an HTML file is viewed using Internet Explorer...","B. HTML headings are defined with the <h1> to <h6> tags...","(A) Neither A nor B","(B) Only B","(C) Only A","(D) Both A and B"], optionsGu:["A. HTML ફાઇલ Internet Explorer વગેરેમાં જોવામાં આવે છે.","B. HTML હેડિંગ <h1> થી <h6> સુધી વ્યાખ્યાયિત થાય છે.","(A) કોઈ નહીં","(B) માત્ર B","(C) માત્ર A","(D) બંને"], answer:"(A) Neither A nor B"}
+];
+
+
+let currentMode = 'practice';
+let questionLangs = new Array(mcqs.length).fill('en');
+let lastScrollTop = 0;
+
+function renderMCQs() {
+  const container = document.getElementById('mcqContainer');
+  container.innerHTML = '';
+
+  mcqs.forEach((mcq, index) => {
+    const qLang = questionLangs[index];
+    const qText = qLang === 'en' ? mcq.qEn : mcq.qGu;
+    const opts = qLang === 'en' ? mcq.optionsEn : mcq.optionsGu;
+
+    let optionsHTML = opts.map(opt => 
+      `<div class="option" onclick="handleClick(this, ${index})">${opt}</div>`
+    ).join('');
+
+    container.innerHTML += `
+      <div class="mcq-card" id="q${index+1}">
+        <div class="question-num">Question ${index + 1}</div>
+        
+        <div class="lang-toggle">
+          <button onclick="changeQuestionLang(${index}, 'en')" class="${qLang==='en'?'active':''}">English</button>
+          <button onclick="changeQuestionLang(${index}, 'gu')" class="${qLang==='gu'?'active':''}">Gujarati</button>
+        </div>
+
+        <div class="question">${qText}</div>
+        <div class="options">${optionsHTML}</div>
+        <div class="answer"><strong>Correct Answer: </strong>${mcq.answer}</div>
+      </div>`;
+  });
+}
+
+function changeQuestionLang(index, lang) {
+  questionLangs[index] = lang;
+  renderMCQs();
+}
+
+function handleClick(el, qIndex) {
+  const card = el.closest('.mcq-card');
+  const options = card.querySelectorAll('.option');
+  const correct = mcqs[qIndex].answer;
+
+  if (currentMode === 'practice') {
+    options.forEach(opt => {
+      if (opt.textContent.trim() === correct) opt.classList.add('correct');
+      else if (opt === el) opt.classList.add('wrong');
+    });
+    card.querySelector('.answer').style.display = 'block';
+  } else {
+    options.forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+}
+
+function setGlobalLang(lang) {
+  questionLangs.fill(lang);
+  document.getElementById('globalGu').classList.toggle('active', lang==='gu');
+  document.getElementById('globalEn').classList.toggle('active', lang==='en');
+  renderMCQs();
+}
+
+function goToQuestion() {
+  const input = document.getElementById('gotoInput');
+  let num = parseInt(input.value);
+  if (num >= 1 && num <= mcqs.length) {
+    const element = document.getElementById('q' + num);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+  input.value = '';   // clear after jump
+}
+
+function filterMCQs() {
+  // You can enhance search if needed
+  renderMCQs();
+}
+
+function submitTest() {
+  // Add your scoring logic here (same as previous)
+  alert("Test Submitted! Score calculation can be added.");
+}
+
+// Header hide/show on scroll
+window.addEventListener('scroll', () => {
+  const header = document.getElementById('header');
+  const st = window.pageYOffset || document.documentElement.scrollTop;
+  if (st > lastScrollTop && st > 150) {
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+  lastScrollTop = st <= 0 ? 0 : st;
+});
+
+window.onload = () => {
+  renderMCQs();
+};
+</script>
+</body>
+</html>

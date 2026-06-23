@@ -1,0 +1,443 @@
+# Microprocessor & Microcontroller — સંપૂર્ણ રિવિઝન નોટ્સ
+### (Wireless PSI Exam માટે ટોપિક-વાઈઝ ડીપ રિવિઝન)
+
+---
+
+## 📘 ટોપિક 1: Microprocessor Architecture & Microprocessor System
+
+### Microprocessor શું છે?
+- Microprocessor એ એક **Single IC Chip** છે જેમાં **ALU (Arithmetic Logic Unit)**, **Control Unit** અને **Registers** હોય છે.
+- તે Memory અને I/O devices સાથે જોડાઈને **Microprocessor System (Computer System)** બનાવે છે.
+- તેને "Brain of Computer System" કહેવાય છે.
+
+### Microprocessor ના મુખ્ય Block Diagram Parts
+| Block | કાર્ય |
+|---|---|
+| ALU | Arithmetic (+, −) અને Logical (AND, OR, NOT) operations કરે |
+| Register Array | Accumulator, B, C, D, E, H, L — temporary data store |
+| Instruction Register & Decoder | Instruction ને decode કરી control unit ને મોકલે |
+| Control Unit | બધા operations ને control/synchronize કરે, timing signals generate કરે |
+| Program Counter (PC) | next instruction નું address રાખે છે (16-bit) |
+| Stack Pointer (SP) | Stack memory નું top address રાખે છે (16-bit) |
+
+### System Bus (3 પ્રકાર) — **ખૂબ જ Important**
+1. **Address Bus** — Unidirectional, માત્ર address મોકલે (CPU → Memory/IO)
+2. **Data Bus** — Bidirectional, actual data ટ્રાન્સફર કરે
+3. **Control Bus** — Control signals (RD, WR, ALE, IO/M વગેરે) મોકલે
+
+> 📌 **Exam Tip:** Address bus width = memory capacity નક્કી કરે. 
+> n-bit address bus → 2ⁿ memory locations.
+> 8085: 16-bit address bus → 2¹⁶ = **64 KB** memory addressable.
+
+### Microprocessor System ના Components
+- **CPU** (Microprocessor)
+- **Memory** (RAM + ROM)
+- **I/O Devices** (Input/Output)
+- આ ત્રણેય **System Bus** દ્વારા જોડાયેલા હોય છે.
+
+### Architecture ના પ્રકાર
+| Von Neumann Architecture | Harvard Architecture |
+|---|---|
+| Single memory data + instruction માટે | Data અને Instruction માટે અલગ memory |
+| Single bus | Separate bus (faster) |
+| 8085, 8086 માં વપરાય | 8051 Microcontroller માં વપરાય |
+
+### CISC vs RISC (Important Comparison)
+| CISC | RISC |
+|---|---|
+| Complex Instruction Set | Reduced Instruction Set |
+| વધારે instructions, variable length | ઓછા instructions, fixed length |
+| Multi-cycle execution | Single cycle execution (mostly) |
+| દા.ત. 8085, 8086, Pentium | દા.ત. ARM, MIPS |
+
+> 📌 **સંભવિત MCQ Points:**
+> - Microprocessor = Programmable device
+> - Data bus bidirectional, Address bus unidirectional
+> - Control bus → ALE, RD, WR, READY, HOLD વગેરે signals carry કરે
+
+---
+
+## 📘 ટોપિક 2: 8085 Instruction and Timing
+
+### 8085 Microprocessor — Basic Facts (Highly Important)
+- 8085 એ **Intel** કંપનીનો **8-bit** microprocessor છે.
+- **40-pin DIP** package
+- **16-bit Address Bus** → 64 KB memory
+- **8-bit Data Bus**
+- Clock Speed: **3 MHz** (8085A), 5 MHz, 6 MHz versions પણ
+- Single **+5V** power supply
+- Internal architecture: **Von Neumann**
+
+### Instruction Cycle, Machine Cycle, T-State (બહુ Important Concept)
+- **Instruction Cycle** = એક instruction ને fetch + execute કરવાનો સંપૂર્ણ સમય
+- **Machine Cycle** = CPU અને Memory/IO વચ્ચે એક data transfer operation નો સમય
+- **T-State (Clock Period)** = સૌથી નાનું time unit, એક clock pulse નો સમય
+- 1 Instruction Cycle = 1 અથવા વધુ Machine Cycles
+- 1 Machine Cycle = 3 થી 6 T-States
+
+### Machine Cycle ના પ્રકાર (8 પ્રકાર) — **Exam માં વારંવાર પુછાય**
+| Machine Cycle | T-States | Control Signal |
+|---|---|---|
+| Opcode Fetch | 4T | ALE, RD |
+| Memory Read | 3T | ALE, RD |
+| Memory Write | 3T | ALE, WR |
+| I/O Read | 3T | ALE, IO/M=1, RD |
+| I/O Write | 3T | ALE, IO/M=1, WR |
+| Interrupt Acknowledge | 12T (RST) / વધુ | INTA |
+| Bus Idle | 2T/3T | — |
+| Halt | — | HLT instruction |
+
+### Important Control & Timing Signals
+- **ALE (Address Latch Enable)** – T1 state માં high, lower address byte ને latch કરવા
+- **RD (Read), WR (Write)** – active LOW signals
+- **IO/M** – High = I/O operation, Low = Memory operation
+- **S0, S1 (Status signals)** – ચાલુ machine cycle નો પ્રકાર દર્શાવે
+
+| S1 | S0 | Operation |
+|---|---|---|
+| 0 | 0 | Halt |
+| 0 | 1 | Memory Write |
+| 1 | 0 | Memory Read |
+| 1 | 1 | Opcode Fetch |
+
+- **READY** – Memory/IO device ready છે કે નહિ તે દર્શાવે (wait states માટે)
+- **HOLD / HLDA** – Bus ને બીજા device ને આપવા માટે (DMA જેવા)
+- **RESET IN / RESET OUT**
+- **TRAP, RST7.5, RST6.5, RST5.5, INTR** – Interrupt pins
+
+### Interrupts of 8085 — **ખૂબ Important**
+| Interrupt | Type | Vector Address | Priority |
+|---|---|---|---|
+| TRAP | Non-maskable | 0024H | Highest |
+| RST 7.5 | Maskable | 003CH | 2nd |
+| RST 6.5 | Maskable | 0034H | 3rd |
+| RST 5.5 | Maskable | 002CH | 4th |
+| INTR | Maskable | (External via INTA) | Lowest |
+
+> 📌 **Exam Tip:** TRAP is **edge & level triggered both**, non-maskable, used for power failure detection.
+
+---
+
+## 📘 ટોપિક 3: 8085 Instruction Set
+
+### Instruction Format
+- **Opcode** (Operation Code) + **Operand** (Data/Address)
+- Instruction Length: 1 byte, 2 byte અથવા 3 byte
+
+### Addressing Modes (5 પ્રકાર) — **Repeated Exam Question**
+| Mode | ઉદાહરણ | વર્ણન |
+|---|---|---|
+| Immediate | MVI A, 05H | Data સીધું instruction માં |
+| Register | MOV A, B | Register થી Register |
+| Direct | LDA 2000H | Direct memory address |
+| Indirect (Register Indirect) | MOV A, M | HL pair address use કરે |
+| Implicit/Implied | CMA, RLC | Operand fixed (Accumulator) |
+
+### Instruction Classification (5 Groups) — **Very Important**
+1. **Data Transfer Instructions:** MOV, MVI, LDA, STA, LXI, LHLD, SHLD, LDAX, STAX, XCHG
+2. **Arithmetic Instructions:** ADD, ADC, SUB, SBB, INR, DCR, INX, DCX, DAD, DAA
+3. **Logical Instructions:** ANA, ORA, XRA, CMA, CMP, RLC, RRC, RAL, RAR
+4. **Branching Instructions:** JMP, JNZ, JZ, JC, JNC, CALL, RET, RST, PCHL
+5. **Machine Control Instructions:** HLT, NOP, RIM, SIM, EI, DI
+
+### Flags Register (5 Flags) — **MCQ માટે ખૂબ Important**
+| Flag | નામ | Position |
+|---|---|---|
+| S | Sign | D7 |
+| Z | Zero | D6 |
+| AC | Auxiliary Carry | D4 |
+| P | Parity | D2 |
+| CY | Carry | D0 |
+
+> 📌 8085 Flag Register માં **5 flags + 3 unused bits = 8 bits**
+
+### Important Numerical Facts
+- 8085 Instruction Set માં કુલ **246 Opcodes** (74 basic instructions)
+- Register pairs: BC, DE, HL (16-bit)
+- Accumulator (A) = 8-bit, બધી Arithmetic/Logic operation માટે વપરાય
+
+> 📌 **Common Confusions:**
+> - DAD = 16-bit addition (register pair), ADD = 8-bit addition
+> - CALL/RET vs JMP — CALL stack પર return address save કરે, JMP નહીં
+> - RST n = Software interrupt instruction (8 types: RST 0 to RST 7)
+
+---
+
+## 📘 ટોપિક 4: Programming Techniques (8085)
+
+### મુખ્ય Programming Concepts
+- **Looping** – Counter use કરી repeat operations (DCR/INR + JNZ)
+- **Counting & Time Delay** – Register માં count load કરી loop દ્વારા delay generate
+- **Stack** – LIFO (Last In First Out) memory, SP register દ્વારા control
+  - PUSH – Stack માં data store (SP decrement)
+  - POP – Stack માંથી data retrieve (SP increment)
+- **Subroutine** – CALL વડે subroutine માં જાય, RET વડે પાછું મુખ્ય program માં આવે
+- **Look-up Table** – Code conversion માટે (દા.ત. 7-segment display code)
+
+### Time Delay Calculation (Important Numerical Type Question)
+- Time Delay = (T-states per loop) × (T-state period) × (Loop count)
+- T-state period = 1/Clock Frequency
+
+### Code Conversion Programs (Common Programs)
+- BCD to Binary, Binary to BCD
+- ASCII to BCD conversion
+- Block data transfer (memory to memory)
+- Sorting (Ascending/Descending) program logic
+- Largest/Smallest number find કરવાનો program
+
+> 📌 **Exam Tip:** Multi-byte addition/subtraction માટે Carry flag નો ઉપયોગ થાય (ADC/SBB instructions).
+
+---
+
+## 📘 ટોપિક 5: Advance Microprocessor
+
+### 8086 Microprocessor — **Important Upgrade from 8085**
+- **16-bit** Microprocessor (Intel)
+- **20-bit Address Bus** → 1 MB memory addressable
+- Internally divided in **2 Units:**
+  - **BIU (Bus Interface Unit)** – Instruction fetch, address calculation, bus control
+  - **EU (Execution Unit)** – Instruction decode & execute
+- **Pipelining** Concept (Fetch and Execute simultaneously) – Speed વધારે
+- Segment Registers: CS, DS, SS, ES (16-bit each)
+- General Registers: AX, BX, CX, DX (16-bit, 8-bit access પણ શક્ય – AH/AL વગેરે)
+
+### Microprocessor Evolution Timeline — **Important for MCQ**
+| Processor | Bit | Year | વિશેષતા |
+|---|---|---|---|
+| 8085 | 8-bit | 1976 | Basic processor |
+| 8086 | 16-bit | 1978 | Segmented memory, Pipelining |
+| 80286 | 16-bit | 1982 | Protected mode |
+| 80386 | 32-bit | 1985 | Multitasking, Virtual memory |
+| 80486 | 32-bit | 1989 | Built-in cache, FPU |
+| Pentium | 32-bit | 1993 | Superscalar, Dual pipeline |
+| Pentium Pro/II/III/IV | 32-bit | — | Higher clock speed, MMX |
+| Core 2 Duo/i3/i5/i7 | 64-bit | — | Multi-core architecture |
+
+> 📌 **Multi-core, Hyper-threading, Superscalar architecture** — Advance Microprocessor concepts.
+
+---
+
+## 📘 ટોપિક 6: Main Memory System
+
+### Memory ના પ્રકાર (Classification) — **Very Important Diagram-Based Topic**
+
+**1. RAM (Random Access Memory) — Volatile**
+| SRAM | DRAM |
+|---|---|
+| Static, Flip-flop based | Dynamic, Capacitor based |
+| Refresh ની જરૂર નથી | Refresh ની જરૂર (periodically) |
+| Fast, Costly | Slow, Cheap |
+| Cache memory માં વપરાય | Main memory માં વપરાય |
+
+**2. ROM (Read Only Memory) — Non-Volatile**
+| પ્રકાર | વર્ણન |
+|---|---|
+| MROM (Mask ROM) | Manufacturing time programmed, ફેરફાર શક્ય નથી |
+| PROM | એક વખત user દ્વારા program કરી શકાય |
+| EPROM | UV Light દ્વારા Erase કરી શકાય, ફરી program શકાય |
+| EEPROM | Electrically Erasable, byte-by-byte erase |
+| Flash Memory | Block-wise erase, ઝડપી, Pen drive/SSD માં વપરાય |
+
+### Memory Hierarchy (Important Diagram)
+```
+Registers (Fastest, Costly, Least Capacity)
+   ↓
+Cache Memory
+   ↓
+Main Memory (RAM)
+   ↓
+Secondary Storage (HDD/SSD) (Slowest, Cheap, Highest Capacity)
+```
+
+### Cache Memory
+- CPU અને Main Memory વચ્ચે speed gap ઘટાડવા વપરાય
+- Levels: L1 (CPU સાથે), L2, L3
+- Locality of Reference Principle પર કાર્ય કરે
+
+### Virtual Memory
+- Secondary storage ને RAM જેવો ઉપયોગ — જ્યારે RAM ઓછી હોય
+- Paging/Segmentation technique વપરાય
+
+### Memory Interfacing & Address Decoding
+- Memory Map – કયા address range પર કયું memory chip mapped છે
+- Address Decoding Techniques: **Linear Decoding**, **Decoder-based (74138 IC)**
+
+> 📌 **Numerical Tip:** Memory chip size = (Number of address lines) → 2ⁿ locations × data bus width.
+
+---
+
+## 📘 ટોપિક 7: Evolution of Microcontrollers & Introduction to Microcontrollers
+
+### Microprocessor vs Microcontroller (Repeated Exam Question)
+| Microprocessor | Microcontroller |
+|---|---|
+| CPU only, externally Memory/IO જોડવા પડે | CPU + RAM + ROM + IO બધું single chip માં |
+| General purpose | Specific/Dedicated application માટે |
+| દા.ત. 8085, 8086 | દા.ત. 8051, PIC, AVR |
+| Cost વધારે (external components) | Cost ઓછી, compact |
+| Power consumption વધારે | Power consumption ઓછું |
+
+### Microcontroller નો Evolution
+- 4-bit → 8-bit (8048, 8051) → 16-bit (8096) → 32-bit (ARM Based)
+- Intel 8051 Family → સૌથી વધારે પ્રખ્યાત 8-bit microcontroller
+
+### 8051 Microcontroller — **Architecture (ખૂબ Important)**
+- **8-bit** Microcontroller (Intel, MCS-51 family)
+- **Harvard Architecture**
+- **40-pin DIP** package
+- **4 KB ROM** (on-chip program memory)
+- **128 Bytes RAM** (on-chip data memory)
+- **4 I/O Ports** (P0, P1, P2, P3) — દરેક 8-bit
+- **2 Timers/Counters** (Timer 0, Timer 1 – 16-bit)
+- **1 Serial Port** (UART – full duplex)
+- **5 Interrupts** (2 External, 2 Timer, 1 Serial)
+- **2 (16-bit) Registers:** Program Counter (PC), Data Pointer (DPTR)
+- Oscillator/Clock: External crystal (Common: 11.0592 MHz)
+
+### 8051 Pin Diagram Important Points
+- **Port 0** – Address/Data bus (Multiplexed), External memory access માટે
+- **Port 1** – General purpose I/O only
+- **Port 2** – Higher Address byte (External memory) + I/O
+- **Port 3** – Special functions: RXD, TXD, INT0, INT1, T0, T1, WR, RD
+- **EA pin** – External Access (Low = external memory use)
+- **ALE pin** – Address Latch Enable
+- **PSEN** – Program Store Enable (External ROM access માટે)
+- **RST pin** – Reset
+
+### 8051 Memory Organization
+- **Internal RAM (128 Bytes):**
+  - 00H–1FH: Register Banks (4 banks × 8 registers)
+  - 20H–2FH: Bit-Addressable area
+  - 30H–7FH: General purpose RAM
+- **SFR (Special Function Registers):** 80H–FFH (દા.ત. ACC, B, PSW, SP, DPTR, Port Latches)
+- External Memory: Program Memory (64KB max) અને Data Memory (64KB max) અલગ-અલગ
+
+> 📌 **Exam Tip:** 8051 માં Program memory અને Data memory ના address space **અલગ** હોય (Harvard) — તેથી MOVC (code) અને MOVX (external data) જેવા જુદા instruction વપરાય.
+
+---
+
+## 📘 ટોપિક 8: Introduction to Assembly Language Programming (8051)
+
+### Addressing Modes of 8051 (5 પ્રકાર)
+1. **Immediate** – MOV A, #25H
+2. **Register** – MOV A, R0
+3. **Direct** – MOV A, 30H
+4. **Register Indirect** – MOV A, @R0
+5. **Indexed** – MOVC A, @A+DPTR (Look-up table માટે)
+
+### Basic Instruction Groups
+- **Data Transfer:** MOV, MOVX, MOVC
+- **Arithmetic:** ADD, ADDC, SUBB, INC, DEC, MUL, DIV
+- **Logical:** ANL, ORL, XRL, CPL, RL, RR
+- **Branching:** JMP, JZ, JNZ, CJNE, DJNZ, CALL, RET
+- **Bit Manipulation:** SETB, CLR, CPL (bit-level operations – 8051 ની ખાસિયત)
+
+### Simple Programs (Common Exam Programs)
+- Two number Addition/Subtraction
+- Block data transfer
+- Delay generation program (loop based)
+- LED blinking logic (Port pin control)
+
+> 📌 **Important Point:** 8051 એ **Bit-addressable** instructions ધરાવે છે (SETB, CLR) — જે 8085 માં નથી.
+
+---
+
+## 📘 ટોપિક 9: Advance Programming Techniques (8051)
+
+### Timer/Counter Programming
+- Timer 0 & Timer 1 – 16-bit (TH+TL registers)
+- **TMOD register** – Mode પસંદ કરવા (Mode 0,1,2,3)
+- **TCON register** – Timer Start/Stop Control
+- Modes: Mode 1 (16-bit Timer), Mode 2 (8-bit Auto-reload) સૌથી વધારે વપરાય
+
+### Serial Communication Programming
+- UART (Universal Asynchronous Receiver Transmitter)
+- **SBUF** register – Data Send/Receive Buffer
+- **SCON** register – Serial Control
+- Baud Rate – Timer 1 દ્વારા generate થાય
+- Modes: Mode 0 (Synchronous), Mode 1 (8-bit UART, variable baud – most common)
+
+### Interrupt Programming
+- 5 Interrupts: INT0, INT1, Timer0, Timer1, Serial
+- **IE register (Interrupt Enable)** – કયા interrupt enable/disable
+- **IP register (Interrupt Priority)**
+- Interrupt Vector Addresses fixed (દા.ત. External INT0 = 0003H)
+
+> 📌 **Wireless Exam માટે ખાસ Important:** Serial Communication (UART) Topic ઊંડાણથી revise કરવો — Wireless equipment માં data transmission/baud rate ના concept directly applicable છે.
+
+---
+
+## 📘 ટોપિક 10: External Peripheral Devices
+
+### 8255 PPI (Programmable Peripheral Interface) — **Important**
+- 8-bit Parallel I/O device
+- 3 Ports: **Port A, Port B, Port C** (દરેક 8-bit)
+- 2 Operating Modes: **Mode 0 (Simple I/O)**, **Mode 1 (Handshaking)**, **Mode 2 (Bidirectional, Port A only)**
+- **Control Word Register (CWR)** – Port ને Input/Output mode set કરવા
+
+### 8253/8254 PIT (Programmable Interval Timer)
+- 3 Independent 16-bit Counters
+- 6 Operating Modes (Mode 0 to Mode 5)
+- Timing/Delay generate કરવા, Square wave generate કરવા વપરાય
+
+### 8259 PIC (Programmable Interrupt Controller)
+- Multiple interrupt requests ને manage કરે (8 interrupt lines, cascade કરી 64 સુધી expand)
+- Priority resolve કરે, single INTR microprocessor ને મોકલે
+
+### 8251 USART (Serial Communication IC)
+- Synchronous + Asynchronous Serial Data Transfer
+- Parallel to Serial અને Serial to Parallel conversion
+
+### ADC/DAC Interfacing
+- **ADC (Analog to Digital Converter)** – Sensor data ને digital માં convert (દા.ત. ADC 0808/0809)
+- **DAC (Digital to Analog Converter)** – Digital signal ને analog માં convert (દા.ત. DAC 0808)
+- Successive Approximation, Flash type ADC common types
+
+> 📌 **Exam Tip:** Wireless communication systems માં ADC/DAC interfacing concept (signal ↔ digital conversion) મહત્વનો છે.
+
+---
+
+## 📘 ટોપિક 11: Advanced RISC Machines (ARM)
+
+### ARM Processor — **Modern & Important Topic**
+- **ARM = Advanced RISC Machine**
+- **RISC Architecture** based – Reduced instructions, fixed-length, single-cycle execution
+- **Load-Store Architecture** – માત્ર LOAD/STORE instructions memory access કરે, બાકી registers વચ્ચે operations
+- **32-bit / 64-bit** Processor (Modern ARM Cortex – 64-bit)
+- Mobile phones, Embedded systems, IoT devices માં વ્યાપક ઉપયોગ
+
+### ARM ની વિશેષતાઓ
+- **Pipelining** (3-stage, 5-stage pipeline – speed વધારે)
+- **Large Register Set** (16 General Purpose Registers – R0 to R15)
+- **Thumb Instruction Set** – 16-bit compressed instructions (Code size ઘટાડવા)
+- **Low Power Consumption** – Mobile/Embedded device માટે Ideal
+- **Multiple Processor Modes:** User, FIQ, IRQ, Supervisor, Abort, Undefined
+
+### ARM Architecture Versions (Awareness Level)
+- ARMv1 to ARMv8 (Cortex-A, Cortex-M, Cortex-R series)
+- Cortex-M – Microcontroller applications
+- Cortex-A – Application processors (Smartphones)
+- Cortex-R – Real-time applications
+
+> 📌 **RISC vs CISC ફરી revise કરો** – ARM (RISC) vs 8086/Pentium (CISC) comparison MCQ માં વારંવાર પુછાય છે.
+
+---
+
+## 🎯 Quick Revision Summary Table (Last Minute Check)
+
+| Processor | Bit | Address Bus | Architecture | વિશેષતા |
+|---|---|---|---|---|
+| 8085 | 8-bit | 16-bit | Von Neumann | 40-pin, 3MHz |
+| 8086 | 16-bit | 20-bit | Von Neumann | Pipelining, Segments |
+| 8051 | 8-bit | 16-bit | Harvard | 4KB ROM, 128B RAM |
+| ARM | 32/64-bit | — | RISC, Load-Store | Low power, Pipelined |
+
+### છેલ્લે યાદ રાખવા જેવા Numbers
+- 8085 → 40 pins, 16-bit address, 8-bit data, 5 flags, 246 opcodes
+- 8051 → 40 pins, 4KB ROM, 128B RAM, 4 ports, 2 timers, 5 interrupts
+- 8086 → 20-bit address bus, 1MB memory, BIU+EU
+- 8255 → 3 ports (A,B,C), 3 modes
+- ARM → 16 registers (R0–R15), RISC, Load-Store architecture
+
+---
+*Revision Notes તૈયાર — Wireless PSI Exam Microprocessor & Microcontroller Chapter*

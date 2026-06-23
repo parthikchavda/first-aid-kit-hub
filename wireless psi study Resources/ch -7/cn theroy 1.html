@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <title>Computer Networks - Detailed Guide (All 300 MCQ Concepts)</title>
+    <style>
+        body {font-family: Arial, sans-serif; margin:20px; background:#f9f9f9; line-height:1.6;}
+        h1 {color:#0066cc; text-align:center;}
+        h2 {color:#cc0066; border-bottom:3px solid #0066cc; padding-bottom:8px;}
+        .section {margin:30px 0; padding:20px; background:white; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+        .english {background:#e6f0ff; padding:18px; border-left:8px solid #0066cc;}
+        .gujarati {background:#ffe6f0; padding:18px; border-left:8px solid #cc0066; font-size:1.05em;}
+        .term {font-weight:bold; color:#d63384;}
+        .example {background:#fff3cd; padding:15px; border-left:5px solid #ffc107; margin:15px 0;}
+        .how {background:#e6ffe6; padding:12px;}
+    </style>
+</head>
+<body>
+
+<h1>Computer Networks - All Concepts Detailed Explanation</h1>
+<p style="text-align:center;"><strong>English + Gujarati | Full Form | How it Works | Examples</strong><br>
+For Wireless PSI/ASI - All ~300 MCQs Covered</p>
+
+<div class="section">
+<h2>1. Network Models (OSI & TCP/IP)</h2>
+<div class="english">
+<strong>Full Form:</strong> OSI = Open Systems Interconnection<br>
+<strong>How it Works (Step-by-Step):</strong> 7 layers divide tasks. Sender adds headers (encapsulation) from top to bottom. Receiver removes headers (decapsulation) from bottom to top. Each layer provides service to the layer above.<br>
+Layers (bottom to top):<br>
+1. Physical: Bits over cables/signals.<br>
+2. Data Link: Frames, MAC address, error detection.<br>
+3. Network: Packets, IP routing.<br>
+4. Transport: Segments, TCP/UDP reliability.<br>
+5. Session: Dialog control.<br>
+6. Presentation: Encryption, compression.<br>
+7. Application: User apps (HTTP, email).<br>
+<strong>Example:</strong> When you open a website, data starts at Application layer and becomes electrical signals at Physical layer.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ:</strong> OSI = Open Systems Interconnection (ખુલ્લી પ્રણાલીઓનું જોડાણ)<br>
+<strong>કેવી રીતે કામ કરે છે:</strong> 7 લેયર કામ વહેંચે છે. મોકલનાર હેડર ઉમેરે છે, મેળવનાર કાઢે છે.<br>
+<strong>ઉદાહરણ:</strong> વેબસાઈટ ખોલવી: એપ્લિકેશન લેયરથી શરૂ થાય છે, ફિઝિકલ લેયરમાં સિગ્નલ બને છે.
+</div>
+</div>
+
+<div class="section">
+<h2>2. Types of Networks (LAN, MAN, WAN, WLAN, CAN, PAN, VPN)</h2>
+<div class="english">
+<strong>Full Forms:</strong><br>
+LAN = Local Area Network (small area like office)<br>
+MAN = Metropolitan Area Network (city level)<br>
+WAN = Wide Area Network (country/world - Internet)<br>
+WLAN = Wireless Local Area Network (WiFi LAN)<br>
+CAN = Campus Area Network (school/university campus)<br>
+PAN = Personal Area Network (Bluetooth, 10 meters)<br>
+VPN = Virtual Private Network (secure tunnel over internet)<br>
+<strong>How it Works:</strong> LAN uses switches for local sharing. WAN uses routers for long distance. VPN encrypts data for privacy.<br>
+<strong>Example:</strong> Home WiFi = WLAN. Connecting two offices in different cities securely = VPN.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ:</strong><br>
+LAN = Local Area Network (ઓફિસ જેવો નાનો વિસ્તાર)<br>
+WAN = Wide Area Network (ઇન્ટરનેટ)<br>
+WLAN = Wireless Local Area Network (વાઈફાઈ)<br>
+VPN = Virtual Private Network (સુરક્ષિત ટનલ)<br>
+<strong>કેવી રીતે કામ કરે છે:</strong> LAN નજીકના ઉપકરણો જોડે છે. VPN ઇન્ટરનેટ પર સુરક્ષિત જોડાણ બનાવે છે.<br>
+<strong>ઉદાહરણ:</strong> ઘરનું વાઈફાઈ = WLAN. બે ઓફિસ વચ્ચે સુરક્ષિત કનેક્શન = VPN.
+</div>
+</div>
+
+<div class="section">
+<h2>3. WiFi & Mobile Generations (1G to 5G)</h2>
+<div class="english">
+<strong>Full Form:</strong> WiFi = Wireless Fidelity (IEEE 802.11)<br>
+1G = First Generation (analog voice only)<br>
+2G = Second Generation (digital voice + SMS)<br>
+3G = Third Generation (mobile internet)<br>
+4G = Fourth Generation (high-speed broadband, LTE)<br>
+5G = Fifth Generation (ultra-fast, low latency, IoT support)<br>
+<strong>How it Works:</strong> Radio waves carry data. Each generation improves speed, capacity and features.<br>
+<strong>Example:</strong> 2G for calling/SMS. 4G/5G for video streaming and online gaming without lag.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ:</strong> WiFi = Wireless Fidelity<br>
+4G = Fourth Generation (ઉચ્ચ ઝડપી ડેટા)<br>
+5G = Fifth Generation (ખૂબ ઝડપી, ઓછો વિલંબ, IoT)<br>
+<strong>કેવી રીતે કામ કરે છે:</strong> રેડિયો વેવ ડેટા મોકલે છે. દરેક જનરેશન ઝડપ વધારે છે.<br>
+<strong>ઉદાહરણ:</strong> 2G = કોલ/SMS. 5G = વીડિયો સ્ટ્રીમિંગ વગર અટક્યે.
+</div>
+</div>
+
+<div class="section">
+<h2>4. Network Devices (Hub, Switch, Router, Bridge, Modem, NIC)</h2>
+<div class="english">
+<strong>Full Forms:</strong><br>
+NIC = Network Interface Card (connects computer to network)<br>
+Hub = Repeats signal to all ports (Layer 1)<br>
+Switch = Learns MAC addresses, sends only to destination (Layer 2)<br>
+Router = Forwards packets using IP address (Layer 3)<br>
+Bridge = Connects two LANs, filters traffic (Layer 2)<br>
+Modem = Modulator Demodulator (digital ↔ analog for ISP)<br>
+<strong>How it Works:</strong> Hub broadcasts (creates collision domain). Switch filters. Router routes between networks.<br>
+<strong>Example:</strong> Home router = Switch + Router + Modem combined.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ:</strong> NIC = Network Interface Card<br>
+Router = IP વાપરીને પેકેટ મોકલે છે (લેયર 3)<br>
+Modem = ડિજિટલને એનલોગમાં બદલે છે<br>
+<strong>ઉદાહરણ:</strong> ઘરનું રાઉટર = સ્વિચ + રાઉટર + મોડેમ.
+</div>
+</div>
+
+<div class="section">
+<h2>5. IP Addressing (IPv4, IPv6, Classes, Host, Subnetting)</h2>
+<div class="english">
+<strong>Full Forms:</strong><br>
+IP = Internet Protocol<br>
+IPv4 = Internet Protocol version 4 (32-bit, e.g. 192.168.1.1)<br>
+IPv6 = Internet Protocol version 6 (128-bit, more addresses)<br>
+Host = Any device with IP address on network<br>
+Classes: A (large networks), B (medium), C (small), D (multicast), E (experimental)<br>
+<strong>How it Works:</strong> Unique address identifies device. Subnet mask divides network & host part. Router uses AND operation.<br>
+<strong>Example:</strong> 192.168.10.51 (Class C) → Network 192.168.10.0, 254 usable hosts.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ:</strong> IPv4 = Internet Protocol version 4 (32 બિટ)<br>
+IPv6 = Internet Protocol version 6 (128 બિટ)<br>
+Host = નેટવર્ક પરનું ઉપકરણ<br>
+<strong>કેવી રીતે કામ કરે છે:</strong> દરેક ડિવાઈસને અનન્ય IP. સબનેટ માસ્ક નેટવર્ક અને હોસ્ટ અલગ કરે છે.<br>
+<strong>ઉદાહરણ:</strong> 192.168.10.51 (Class C) → 254 હોસ્ટ વાપરી શકાય.
+</div>
+</div>
+
+<div class="section">
+<h2>6. All Important Protocols & Ports</h2>
+<div class="english">
+<strong>Full Forms & Use:</strong><br>
+TCP = Transmission Control Protocol (reliable, 3-way handshake, port for connection)<br>
+UDP = User Datagram Protocol (fast, no guarantee)<br>
+HTTP = HyperText Transfer Protocol (web browsing, port 80)<br>
+HTTPS = HTTP Secure (encrypted web, port 443)<br>
+FTP = File Transfer Protocol (file upload/download)<br>
+SMTP = Simple Mail Transfer Protocol (send email, port 25)<br>
+DNS = Domain Name System (www.google.com → IP address, port 53)<br>
+ARP = Address Resolution Protocol (IP → MAC address)<br>
+ICMP = Internet Control Message Protocol (ping, error messages)<br>
+RIP = Routing Information Protocol (distance vector routing)<br>
+BGP = Border Gateway Protocol (internet backbone routing)<br>
+X.25 = Old packet-switched WAN protocol<br>
+<strong>How it Works:</strong> Protocols are rules. Ports identify which application (like door numbers).<br>
+<strong>Example:</strong> Typing google.com → DNS resolves name, HTTP fetches page.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ અને વાપર:</strong><br>
+TCP = Transmission Control Protocol (વિશ્વસનીય, 3-way handshake)<br>
+HTTP = HyperText Transfer Protocol (વેબ, પોર્ટ 80)<br>
+SMTP = Simple Mail Transfer Protocol (ઈમેઈલ મોકલવા, પોર્ટ 25)<br>
+DNS = Domain Name System (નામને IPમાં બદલે)<br>
+<strong>ઉદાહરણ:</strong> google.com લખવું → DNS IP શોધે, HTTP પેજ લાવે.
+</div>
+</div>
+
+<div class="section">
+<h2>7. Network Cables & Transmission Media</h2>
+<div class="english">
+<strong>Types & Full Forms:</strong><br>
+UTP = Unshielded Twisted Pair (common LAN cable)<br>
+STP = Shielded Twisted Pair (less interference)<br>
+Coaxial Cable = Used for TV/cable internet<br>
+Fiber Optic Cable = Uses light for high speed<br>
+<strong>How it Works:</strong> Twisted pair carries electrical signals. Fiber uses light (no EMI interference).<br>
+<strong>Example:</strong> Ethernet cable in office = UTP. High-speed broadband = Fiber Optic.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ:</strong> UTP = Unshielded Twisted Pair (સામાન્ય LAN કેબલ)<br>
+Fiber Optic = પ્રકાશ વાપરીને ઉચ્ચ ઝડપે ડેટા મોકલે.<br>
+<strong>ઉદાહરણ:</strong> ઓફિસમાં ઈથરનેટ કેબલ = UTP. હાઈ-સ્પીડ ઇન્ટરનેટ = Fiber.
+</div>
+</div>
+
+<div class="section">
+<h2>8. Network Security, VPN & High Speed Data Transfer</h2>
+<div class="english">
+<strong>Full Forms:</strong><br>
+VPN = Virtual Private Network<br>
+DES = Data Encryption Standard (old symmetric)<br>
+AES = Advanced Encryption Standard (current symmetric standard)<br>
+RSA = Rivest-Shamir-Adleman (asymmetric for signatures)<br>
+<strong>How it Works:</strong> Encryption scrambles data. VPN creates encrypted tunnel. High speed uses fiber + 5G + efficient protocols.<br>
+<strong>Example:</strong> Using public WiFi safely = VPN. Bank transaction = RSA + AES.
+</div>
+<div class="gujarati">
+<strong>પૂર્ણ નામ:</strong> VPN = Virtual Private Network (સુરક્ષિત ટનલ)<br>
+AES = Advanced Encryption Standard (ડેટા એન્ક્રિપ્ટ કરે)<br>
+<strong>ઉદાહરણ:</strong> પબ્લિક વાઈફાઈ પર સુરક્ષિત વાપર = VPN. બેંક ટ્રાન્ઝેક્શન = RSA + AES.
+</div>
+</div>
+
+<div class="section">
+<h2>9. Email Protocols & High Speed Transfer</h2>
+<div class="english">
+SMTP (send email), POP3/IMAP (receive). High speed transfer uses fiber, 5G, TCP optimization.<br>
+<strong>Example:</strong> Gmail sending = SMTP. Receiving = IMAP.
+</div>
+<div class="gujarati">
+SMTP = ઈમેઈલ મોકલવા માટે. હાઈ સ્પીડ = Fiber + 5G.
+</div>
+</div>
+
+<div class="section">
+<h2>10. Other Terms (Modem, X.25, RIP, BGP, CAN, etc.)</h2>
+<div class="english">
+Modem = Modulator Demodulator (connects to ISP)<br>
+X.25 = Old reliable packet switching for WAN<br>
+RIP/BGP = Routing protocols to find best path<br>
+CAN = Campus Area Network<br>
+All work together for smooth communication.
+</div>
+<div class="gujarati">
+Modem = ડિજિટલ અને એનલોગ વચ્ચે બદલે છે. X.25 = જૂનું પેકેટ સ્વિચિંગ.
+</div>
+</div>
+
+<p style="text-align:center; color:#0066cc; font-size:1.2em;">
+<strong>અભ્યાસની ટિપ:</strong> દરેક વિભાગ વાંચો → Full Form યાદ કરો → How it Works સમજો → Example વાંચો. આ તમારા તમામ MCQ કવર કરે છે. રોજ રિવાઈઝ કરો!
+</p>
+
+</body>
+</html>
