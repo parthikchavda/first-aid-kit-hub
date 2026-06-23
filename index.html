@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First Aid Kit Hub</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="app is-collapsed">
+
+    <header class="header">
+      <button class="header__toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="header__mark" aria-hidden="true"></div>
+      <div class="header__titles">
+        <div class="header__title" id="headerTitle">First Aid Kit Hub</div>
+        <div class="header__subtitle" id="headerSubtitle">Guides &amp; reference sheets</div>
+      </div>
+      <div class="header__status">
+        <button class="header__refresh" id="refreshBtn" aria-label="Refresh list" title="Refresh list">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="body-row">
+      <aside class="sidebar">
+        <div class="sidebar__search-wrap">
+          <div class="sidebar__search">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="text" id="searchInput" placeholder="Search files…">
+            <button class="sidebar__search-clear" id="searchClear" aria-label="Clear search">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="sidebar__tree" id="tree"></div>
+        <div class="sidebar__footer">
+          <span class="sidebar__footer-count" id="footerCount">0 items</span>
+        </div>
+      </aside>
+
+      <div class="backdrop" id="backdrop"></div>
+
+      <main class="content" id="content"></main>
+    </div>
+
+    <button class="focus-toggle" id="focusToggle" aria-label="Focus mode" title="Focus mode — hide header & sidebar"></button>
+
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
