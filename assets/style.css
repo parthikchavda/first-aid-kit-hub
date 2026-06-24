@@ -422,3 +422,43 @@ button {
 
   .header__subtitle { display: none; }
 }
+
+/* ============================================================
+   New Tab Button — visible on mobile, on hover on desktop
+   ============================================================ */
+
+.node-file {
+  position: relative;
+}
+
+.node-file__newtab {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-soft);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  padding: 0;
+  margin-left: 2px;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.node-file__newtab:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft-border);
+  color: var(--accent);
+}
+.node-file__newtab svg { stroke: currentColor; display: block; }
+
+/* Show on hover (desktop) */
+@media (hover: hover) {
+  .node-file:hover .node-file__newtab { display: flex; }
+}
+
+/* Always show on mobile/touch */
+@media (hover: none), (max-width: 768px) {
+  .node-file__newtab { display: flex; }
+}
