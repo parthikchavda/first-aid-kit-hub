@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>નેટવર્ક સિક્યુરિટી — સંપૂર્ણ થિયરી ગાઈડ</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050a12;
+            --surface: #0d1521;
+            --card: #111d2e;
+            --card2: #0e1a2a;
+            --border: #1e3050;
+            --border2: #243a58;
+            --accent: #00e5ff;
+            --accent2: #7c3aed;
+            --accent3: #f59e0b;
+            --accent4: #10b981;
+            --accent5: #ef4444;
+            --text: #d4e2f0;
+            --muted: #6b8aad;
+            --white: #ffffff;
+            --glow: rgba(0, 229, 255, 0.15);
+            --glow2: rgba(124, 58, 237, 0.12);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent2);
+            border-radius: 3px;
+        }
+        .site-header {
+            background: linear-gradient(135deg, #050f1e 0%, #0a0622 50%, #040e1c 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 24px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .site-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0, 229, 255, 0.08), transparent), radial-gradient(ellipse 40% 40% at 10% 100%, rgba(124, 58, 237, 0.06), transparent);
+            pointer-events: none;
+        }
+        .header-badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: var(--accent);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 18px;
+            background: rgba(0, 229, 255, 0.05);
+        }
+        .site-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(28px, 6vw, 52px);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .site-header h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-sub {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 15px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .header-desc {
+            font-size: 13px;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .hstat {
+            text-align: center;
+        }
+        .hstat-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .hstat-label {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: rgba(5, 10, 18, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .nav-inner::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-btn {
+            flex-shrink: 0;
+            padding: 14px 18px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+        .nav-btn:hover,
+        .nav-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 16px 80px;
+        }
+        .section {
+            margin-bottom: 80px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .section-icon.blue {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+        .section-icon.purple {
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+        }
+        .section-icon.amber {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .section-icon.green {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .section-icon.red {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .section-icon.teal {
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.2);
+        }
+        .section-title-wrap {}
+        .section-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: 800;
+            color: var(--white);
+        }
+        .section-title-gu {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 14px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+        .topic-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .topic-card:hover {
+            border-color: var(--border2);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.04);
+        }
+        .topic-card.highlight-blue {
+            border-left: 3px solid var(--accent);
+        }
+        .topic-card.highlight-purple {
+            border-left: 3px solid var(--accent2);
+        }
+        .topic-card.highlight-amber {
+            border-left: 3px solid var(--accent3);
+        }
+        .topic-card.highlight-green {
+            border-left: 3px solid var(--accent4);
+        }
+        .topic-card.highlight-red {
+            border-left: 3px solid var(--accent5);
+        }
+        .topic-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .topic-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+        .topic-title-gu {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+        .topic-body {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .topic-body p {
+            margin-bottom: 10px;
+        }
+        .topic-body p:last-child {
+            margin-bottom: 0;
+        }
+        .def-box {
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-size: 14px;
+        }
+        .def-box strong {
+            color: var(--accent);
+            font-family: 'Syne', sans-serif;
+        }
+        .example-box {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 14px 0;
+        }
+        .example-box .ex-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--accent3);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .example-box p {
+            font-size: 14px;
+            color: var(--text);
+        }
+        .attack-box {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 14px 0;
+        }
+        .attack-box .atk-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--accent5);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .fullform {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent2);
+            margin: 4px 4px 4px 0;
+            display: inline-block;
+        }
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+        .badge.blue {
+            background: rgba(0, 229, 255, 0.08);
+            border-color: rgba(0, 229, 255, 0.3);
+            color: var(--accent);
+        }
+        .badge.purple {
+            background: rgba(124, 58, 237, 0.08);
+            border-color: rgba(124, 58, 237, 0.3);
+            color: #a78bfa;
+        }
+        .badge.amber {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: var(--accent3);
+        }
+        .badge.green {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--accent4);
+        }
+        .badge.red {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: var(--accent5);
+        }
+        .theory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 13px;
+        }
+        .theory-table th {
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--accent);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            padding: 10px 14px;
+            text-align: left;
+            border: 1px solid var(--border);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        .theory-table td {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            vertical-align: top;
+        }
+        .theory-table tr:nth-child(even) td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 14px 0;
+        }
+        @media(max-width:640px) {
+            .grid2 {
+                grid-template-columns: 1fr;
+            }
+        }
+        .compare-card {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .compare-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .compare-title.c-blue {
+            color: var(--accent);
+        }
+        .compare-title.c-purple {
+            color: #a78bfa;
+        }
+        .formula-box {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 12px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--accent4);
+        }
+        .formula-box span {
+            color: var(--white);
+        }
+        .mcq-ref {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2px 8px;
+            margin-left: 8px;
+        }
+        .step-list {
+            margin: 10px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+        .step-list li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .step-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 28px 0;
+        }
+        .scroll-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent2), var(--accent));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            z-index: 999;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(124, 58, 237, 0.5);
+        }
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            z-index: 999;
+            width: 0%;
+            transition: width 0.1s;
+        }
+        .key-point {
+            background: rgba(124, 58, 237, 0.08);
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+        .key-point::before {
+            content: '⚡ KEY POINT — મુખ્ય મુદ્દો: ';
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--accent2);
+            display: block;
+            margin-bottom: 4px;
+        }
+        .gu {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .atk-type {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 6px;
+        }
+        .atk-type.passive {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .atk-type.active {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .lang-pair {
+            font-size: 13px;
+            color: var(--muted);
+            font-family: 'Tiro Devanagari Hindi', serif;
+        }
+        .lang-pair .en {
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="header-badge">NETWORK SECURITY — સંપૂર્ણ થિયરી</div>
+        <h1>નેટવર્ક <span>સિક્યુરિટી</span><br>થિયરી ગાઈડ</h1>
+        <p class="header-sub">Network Security — Complete Theory Guide</p>
+        <p class="header-desc">165 MCQ વિષયોને આવરી લેતી સંપૂર્ણ થિયરી — સુરક્ષા સિદ્ધાંતો, સિસ્ટમ સુરક્ષા, મોડ્યુલર અંકગણિત, સિમેટ્રિક અને અસિમેટ્રિક એન્ક્રિપ્શન, OS સુરક્ષા</p>
+        <div class="header-stats">
+            <div class="hstat"><div class="hstat-num">૬</div><div class="hstat-label">એકમો (Units)</div></div>
+            <div class="hstat"><div class="hstat-num">૧૬૫</div><div class="hstat-label">MCQ વિષયો</div></div>
+            <div class="hstat"><div class="hstat-num">૫૦+</div><div class="hstat-label">ખ્યાલો (Concepts)</div></div>
+            <div class="hstat"><div class="hstat-num">૨૦+</div><div class="hstat-label">ફૂલ ફોર્મ</div></div>
+        </div>
+    </header>
+
+    <!-- NAV -->
+    <nav class="top-nav">
+        <div class="nav-inner">
+            <button class="nav-btn active" onclick="scrollToSection('sec1')">🔐 સુરક્ષા સિદ્ધાંતો</button>
+            <button class="nav-btn" onclick="scrollToSection('sec2')">⚔️ સિસ્ટમ સુરક્ષા</button>
+            <button class="nav-btn" onclick="scrollToSection('sec3')">🔢 મોડ્યુલર અંકગણિત</button>
+            <button class="nav-btn" onclick="scrollToSection('sec4')">🔑 સિમેટ્રિક એન્ક્રિપ્શન</button>
+            <button class="nav-btn" onclick="scrollToSection('sec5')">🗝️ અસિમેટ્રિક / PKI</button>
+            <button class="nav-btn" onclick="scrollToSection('sec6')">💻 OS સુરક્ષા</button>
+        </div>
+    </nav>
+
+    <main class="main">
+
+        <!-- ===== SECTION 1: SECURITY PRINCIPLES ===== -->
+        <section class="section" id="sec1">
+            <div class="section-header">
+                <div class="section-icon blue">🔐</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">એકમ ૦૧ · Q૧–Q૪૩</div>
+                    <div class="section-title">સુરક્ષા સિદ્ધાંતો</div>
+                    <div class="section-title-gu">Security Principles</div>
+                </div>
+            </div>
+
+            <!-- CIA TRIAD -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">મૂળ ખ્યાલ · CIA TRIAD</div>
+                <div class="topic-title">CIA ત્રિકોણ — માહિતી સુરક્ષાના ત્રણ સ્તંભ</div>
+                <div class="topic-title-gu">CIA Triad — The Three Pillars of Information Security</div>
+                <div class="topic-body">
+                    <p><strong style="color:var(--accent)">CIA Triad</strong> એ માહિતી સુરક્ષાનું પાયાનું મોડેલ છે. દરેક સુરક્ષા નિર્ણય આ ત્રણ સિદ્ધાંતો સામે મૂલ્યાંકન કરવામાં આવે છે.</p>
+                    <div class="badge-list">
+                        <span class="badge blue">C — ગોપનીયતા (Confidentiality)</span>
+                        <span class="badge blue">I — અખંડિતતા (Integrity)</span>
+                        <span class="badge blue">A — ઉપલબ્ધતા (Availability)</span>
+                    </div>
+                    <table class="theory-table">
+                        <tr>
+                            <th>સિદ્ધાંત (Principle)</th>
+                            <th>ગુજરાતી</th>
+                            <th>વ્યાખ્યા (Definition)</th>
+                            <th>ક્યારે ઉલ્લંઘન થાય?</th>
+                            <th>MCQ પ્રશ્નો</th>
+                        </tr>
+                        <tr>
+                            <td><strong style="color:var(--accent)">ગોપનીયતા</strong><br><span class="lang-pair en">Confidentiality</span></td>
+                            <td class="gu">ગોપનીયતા</td>
+                            <td>માહિતી ફક્ત અધિકૃત વપરાશકર્તાઓ માટે જ સુલભ છે. અનધિકૃત પ્રકાશન અટકાવે છે.</td>
+                            <td>અનધિકૃત વ્યક્તિ તમારો ઈમેલ વાંચે, ડેટા હેકરને લીક થાય</td>
+                            <td>Q1, Q15, Q18, Q23, Q26, Q31, Q34, Q37</td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color:var(--accent3)">અખંડિતતા</strong><br><span class="lang-pair en">Integrity</span></td>
+                            <td class="gu">અખંડિતતા</td>
+                            <td>ડેટામાં શોધી શકાય તેવા સંશોધન વિના ફેરફાર થતો નથી. ડેટાની ચોકસાઈ અને વિશ્વસનીયતા સુનિશ્ચિત કરે છે.</td>
+                            <td>અનધિકૃત વપરાશકર્તા સંગ્રહિત ડેટામાં ફેરફાર કરે, ટ્રાન્સફર દરમિયાન ફાઈલ ચેડાં થાય</td>
+                            <td>Q2, Q9, Q13, Q20, Q22, Q27, Q30, Q38, Q40</td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color:var(--accent4)">ઉપલબ્ધતા</strong><br><span class="lang-pair en">Availability</span></td>
+                            <td class="gu">ઉપલબ્ધતા</td>
+                            <td>અધિકૃત વપરાશકર્તાઓ જ્યારે પણ જરૂર પડે ત્યારે માહિતી અને સિસ્ટમો ઍક્સેસ કરી શકે છે.</td>
+                            <td>DoS હુમલો સર્વર ક્રેશ કરે, અપગ્રેડ દરમિયાન સિસ્ટમ ડાઉન થાય</td>
+                            <td>Q6, Q12, Q17, Q21, Q25, Q28, Q36, Q39, Q42</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CONFIDENTIALITY DETAILS -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">ખ્યાલ ૧</div>
+                <div class="topic-title">ગોપનીયતા (Confidentiality) <span class="mcq-ref">Q1, Q15, Q18, Q23, Q26, Q31, Q34, Q37</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>વ્યાખ્યા (Definition):</strong> ગોપનીયતા એ સુનિશ્ચિત કરે છે કે સંવેદનશીલ અથવા ખાનગી માહિતી ફક્ત તે જ લોકો માટે સુલભ છે જેઓ તેને જોવા માટે અધિકૃત છે. અનધિકૃત પક્ષોને ડેટા વાંચતા અથવા ઍક્સેસ કરતા અટકાવવામાં આવે છે.
+                    </div>
+                    <p><strong>કેવી રીતે પ્રાપ્ત થાય છે (How achieved):</strong></p>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>ડેટાનું એન્ક્રિપ્શન (વાંચી શકાય તેવા ડેટાને અવાંચનીય સ્વરૂપમાં રૂપાંતરિત કરવું)</li>
+                        <li><span class="step-num">૨</span>ઍક્સેસ નિયંત્રણ પદ્ધતિઓ (પાસવર્ડ, બાયોમેટ્રિક્સ)</li>
+                        <li><span class="step-num">૩</span>ડેટા વર્ગીકરણ (ડેટાને જાહેર/ખાનગી/ગુપ્ત તરીકે લેબલ કરવું)</li>
+                        <li><span class="step-num">૪</span>સુરક્ષિત સંદેશાવ્યવહાર ચેનલો (HTTPS, VPN)</li>
+                    </ul>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>તમારું ઑનલાઇન બેંકિંગ પાસવર્ડ અને એકાઉન્ટ ડેટા ગોપનીય છે — ફક્ત તમે અને બેંક જ તેને ઍક્સેસ કરી શકો છો. જો કોઈ હેકર તમારી પરવાનગી વિના તમારું બેંક બેલેન્સ વાંચે છે → <strong>ગોપનીયતાનું ઉલ્લંઘન થાય છે</strong>.</p>
+                    </div>
+                    <div class="key-point">ગોપનીયતા ≠ ગુપ્ત. તેનો અર્થ એ છે કે યોગ્ય લોકો તેને ઍક્સેસ કરી શકે છે, અને ખોટા લોકો ન કરી શકે.</div>
+                </div>
+            </div>
+
+            <!-- INTEGRITY DETAILS -->
+            <div class="topic-card highlight-amber">
+                <div class="topic-label">ખ્યાલ ૨</div>
+                <div class="topic-title">અખંડિતતા (Integrity) <span class="mcq-ref">Q2, Q9, Q13, Q20, Q22, Q27, Q30, Q38, Q40</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>વ્યાખ્યા (Definition):</strong> અખંડિતતા એ સુનિશ્ચિત કરે છે કે ડેટા સચોટ, સંપૂર્ણ અને અપરિવર્તિત રહે, સિવાય કે અધિકૃત પ્રક્રિયા દ્વારા ફેરફાર કરવામાં આવે. કોઈપણ અનધિકૃત ફેરફાર શોધી શકાય તેવો હોવો જોઈએ.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>તમે ઑનલાઇન ₹૧૦૦૦ની ચુકવણી મોકલો છો. ટ્રાન્સમિશન દરમિયાન, એક હુમલાખોર તેને ₹૧૦,૦૦૦માં બદલી દે છે. → <strong>અખંડિતતાનું ઉલ્લંઘન થાય છે</strong>.<br><br>એક વિદ્યાર્થીના પરીક્ષા ગુણ ડેટાબેઝમાં હેકર દ્વારા બદલવામાં આવે છે → <strong>અખંડિતતાનું ઉલ્લંઘન</strong>.</p>
+                    </div>
+                    <p><strong>અખંડિતતા સુનિશ્ચિત કરવાની પદ્ધતિઓ (Mechanisms):</strong></p>
+                    <div class="badge-list">
+                        <span class="badge amber">હેશ ફંક્શન્સ (MD5, SHA)</span>
+                        <span class="badge amber">ડિજિટલ સિગ્નેચર</span>
+                        <span class="badge amber">ચેકસમ</span>
+                        <span class="badge amber">Message Authentication Codes (MAC)</span>
+                    </div>
+                    <div class="key-point">જો અનધિકૃત વ્યક્તિ સંગ્રહિત ડેટામાં ફેરફાર કરે છે → પ્રાથમિક ઉલ્લંઘન અખંડિતતા છે (Q2 ans = D).</div>
+                </div>
+            </div>
+
+            <!-- AVAILABILITY DETAILS -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">ખ્યાલ ૩</div>
+                <div class="topic-title">ઉપલબ્ધતા (Availability) <span class="mcq-ref">Q6, Q12, Q17, Q21, Q25, Q28, Q36, Q39, Q42</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>વ્યાખ્યા (Definition):</strong> ઉપલબ્ધતા એ સુનિશ્ચિત કરે છે કે માહિતી સિસ્ટમો અને ડેટા અધિકૃત વપરાશકર્તાઓ માટે જ્યારે પણ જરૂર હોય ત્યારે ઍક્સેસિબલ અને વાપરી શકાય તેવા હોય. સિસ્ટમો ખામીઓ, હુમલાઓ અથવા અપગ્રેડ દરમિયાન પણ વિશ્વસનીય રીતે કાર્ય કરતી રહેવી જોઈએ.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>હોસ્પિટલની દર્દી રેકોર્ડ સિસ્ટમ DoS હુમલાને કારણે ડાઉન થઈ જાય છે. ડોકટરો કટોકટી દરમિયાન દર્દીના ડેટાને ઍક્સેસ કરી શકતા નથી. → <strong>ઉપલબ્ધતાનું ઉલ્લંઘન</strong>.<br><br>સિસ્ટમ ક્રેશ થવાથી ડેટાની ઍક્સેસ અટકી જાય છે = ઉપલબ્ધતાનું ઉત્તમ ઉલ્લંઘન (Q12 ans = D).</p>
+                    </div>
+                    <p><strong>ઉપલબ્ધતા કેવી રીતે જાળવવી (How to maintain):</strong></p>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>રિડન્ડન્ટ સિસ્ટમો (બેકઅપ સર્વર્સ)</li>
+                        <li><span class="step-num">૨</span>ફેઇલઓવર પદ્ધતિઓ</li>
+                        <li><span class="step-num">૩</span>નિયમિત સિસ્ટમ જાળવણી અને અપડેટ્સ</li>
+                        <li><span class="step-num">૪</span>DoS/DDoS હુમલાઓ સામે રક્ષણ</li>
+                        <li><span class="step-num">૫</span>લોડ બેલેન્સિંગ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- AUTHENTICATION -->
+            <div class="topic-card highlight-purple">
+                <div class="topic-label">ખ્યાલ ૪</div>
+                <div class="topic-title">પ્રમાણીકરણ (Authentication) <span class="mcq-ref">Q3, Q7, Q10, Q16, Q35</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>વ્યાખ્યા (Definition):</strong> પ્રમાણીકરણ એ વપરાશકર્તા, ઉપકરણ અથવા સિસ્ટમની ઓળખ ચકાસવાની પ્રક્રિયા છે, ઍક્સેસ આપતા પહેલા. તે "તમે કોણ છો?" નો જવાબ આપે છે.
+                    </div>
+                    <p><strong>પ્રમાણીકરણના ત્રણ પરિબળો (Three Factors — 3 What's):</strong></p>
+                    <table class="theory-table">
+                        <tr><th>પરિબળ (Factor)</th><th>પ્રકાર (Type)</th><th>ઉદાહરણ (Example)</th></tr>
+                        <tr><td>તમે <strong>જાણો</strong> છો તે (Something you KNOW)</td><td>જ્ઞાન પરિબળ (Knowledge)</td><td>પાસવર્ડ, PIN, સુરક્ષા પ્રશ્ન</td></tr>
+                        <tr><td>તમારી પાસે <strong>હોય</strong> તે (Something you HAVE)</td><td>સ્વામિત્વ પરિબળ (Possession)</td><td>સ્માર્ટ કાર્ડ, OTP ટોકન, ફોન</td></tr>
+                        <tr><td>તમે <strong>છો</strong> તે (Something you ARE)</td><td>બાયોમેટ્રિક પરિબળ (Biometric)</td><td>આંગળીનો નિશાન, ચહેરો સ્કેન, આઇરિસ સ્કેન</td></tr>
+                    </table>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>જ્યારે તમે Gmailમાં લોગિન કરો છો, તમારો પાસવર્ડ દાખલ કરવાથી તમારી ઓળખ ચકાસાય છે → <strong>પ્રમાણીકરણ</strong>.<br>ATMને કાર્ડ (HAVE) + PIN (KNOW) જરૂર છે → <strong>બે-પરિબળ પ્રમાણીકરણ (2FA)</strong>.</p>
+                    </div>
+                    <div class="key-point">પ્રમાણીકરણ ≠ અધિકૃતતા (Authorization). પ્રમાણીકરણ = તમે કોણ છો. અધિકૃતતા = તમે શું કરી શકો છો.</div>
+                </div>
+            </div>
+
+            <!-- NON-REPUDIATION -->
+            <div class="topic-card highlight-purple">
+                <div class="topic-label">ખ્યાલ ૫</div>
+                <div class="topic-title">નોન-રિપ્યુડિએશન (Non-Repudiation) <span class="mcq-ref">Q8, Q24, Q29, Q33, Q41</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>વ્યાખ્યા (Definition):</strong> નોન-રિપ્યુડિએશન એ સુનિશ્ચિત કરે છે કે સંદેશાવ્યવહારમાં કોઈ પક્ષ સંદેશ મોકલ્યો અથવા કોઈ કાર્ય કર્યું તે નકારી (રિપ્યુડિએટ) શકતો નથી. તે મૂળ અને ડિલિવરીનો પુરાવો પૂરો પાડે છે.
+                    </div>
+                    <div class="fullform">NR = Non-Repudiation</div>
+                    <div class="example-box">
+                        <div class="ex-label">વાસ્તવિક ઉદાહરણ (Real-world Example)</div>
+                        <p>તમે ડિજિટલ રીતે કોન્ટ્રાક્ટ પર સહી કરો છો. પછીથી તમે કહી શકતા નથી "મેં તેના પર સહી કરી નથી!" → નોન-રિપ્યુડિએશન આ ઇનકારને અટકાવે છે.<br><br>ઇમેલમાં: ડિજિટલ સિગ્નેચર નોન-રિપ્યુડિએશન પૂરું પાડે છે — મોકલનાર પાછળથી કહી શકતો નથી કે તેણે ઇમેલ મોકલ્યો ન હતો.</p>
+                    </div>
+                    <p><strong>કેવી રીતે પ્રાપ્ત થાય છે (How achieved):</strong></p>
+                    <div class="badge-list">
+                        <span class="badge purple">ડિજિટલ સિગ્નેચર</span>
+                        <span class="badge purple">ટાઇમસ્ટેમ્પ</span>
+                        <span class="badge purple">ઓડિટ લોગ્સ</span>
+                        <span class="badge purple">પબ્લિક કી ઇન્ફ્રાસ્ટ્રક્ચર (PKI)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCOUNTABILITY -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">ખ્યાલ ૬</div>
+                <div class="topic-title">જવાબદારી (Accountability) <span class="mcq-ref">Q19, Q32, Q43</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>વ્યાખ્યા (Definition):</strong> જવાબદારી એ સુનિશ્ચિત કરે છે કે સિસ્ટમમાં કરવામાં આવતી તમામ ક્રિયાઓ ચોક્કસ વપરાશકર્તા અથવા એન્ટિટી સાથે શોધી શકાય છે. દરેક ક્રિયા એક નિશાન છોડે છે.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>કંપનીમાં, તમામ ફાઇલ ઍક્સેસને વપરાશકર્તા નામો અને ટાઇમસ્ટેમ્પ સાથે લોગ કરવામાં આવે છે. જો ડેટા લીક થાય, તો જવાબદાર વ્યક્તિને ઓળખી શકાય છે → <strong>જવાબદારી</strong>.</p>
+                    </div>
+                    <p><strong>જવાબદારી માટેના સાધનો (Tools):</strong></p>
+                    <div class="badge-list">
+                        <span class="badge blue">ઓડિટ લોગ્સ</span>
+                        <span class="badge blue">ઍક્સેસ લોગ્સ</span>
+                        <span class="badge blue">પ્રવૃત્તિ મોનિટરિંગ</span>
+                        <span class="badge blue">વપરાશકર્તા ID ટ્રેકિંગ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSWORD SECURITY -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">ખ્યાલ ૭</div>
+                <div class="topic-title">પાસવર્ડ સુરક્ષા (Password Security) <span class="mcq-ref">Q14</span></div>
+                <div class="topic-body">
+                    <p>પાસવર્ડ સુરક્ષા વપરાશકર્તા ખાતાઓના રક્ષણમાં મહત્વપૂર્ણ છે. મજબૂત પાસવર્ડ્સ અનધિકૃત ઍક્સેસના જોખમને નોંધપાત્ર રીતે ઘટાડે છે.</p>
+                    <table class="theory-table">
+                        <tr><th>❌ નબળી પ્રથા (Weak Practice)</th><th>✅ મજબૂત પ્રથા (Strong Practice)</th></tr>
+                        <tr><td>સાદા શબ્દો: "password123"</td><td>જટિલ સંયોજન: "P@$$w0rd!#2024"</td></tr>
+                        <tr><td>જૂના પાસવર્ડ્સનો ફરી ઉપયોગ</td><td>દરેક ખાતા માટે અનન્ય પાસવર્ડ</td></tr>
+                        <tr><td>પાસવર્ડ્સ જાહેરમાં લખવા</td><td>પાસવર્ડ મેનેજરનો ઉપયોગ</td></tr>
+                        <tr><td>અન્યો સાથે પાસવર્ડ્સ શેર કરવા</td><td>પાસવર્ડ્સ ક્યારેય શેર ન કરવા</td></tr>
+                        <tr><td>ટૂંકા પાસવર્ડ્સ (૮ અક્ષરોથી ઓછા)</td><td>ન્યૂનતમ ૧૨–૧૬ અક્ષરો</td></tr>
+                    </table>
+                    <div class="key-point">Q14 ઉત્તર = A: જટિલ સંયોજનોનો ઉપયોગ પાસવર્ડ સુરક્ષાને સૌથી વધુ મજબૂત બનાવે છે.</div>
+                </div>
+            </div>
+
+            <!-- INFORMATION SECURITY POLICY -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">ખ્યાલ ૮</div>
+                <div class="topic-title">માહિતી સુરક્ષા નીતિ (Information Security Policy) <span class="mcq-ref">Q5</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>વ્યાખ્યા (Definition):</strong> માહિતી સુરક્ષા નીતિ એ એક ઔપચારિક દસ્તાવેજ છે જે સંસ્થાની માહિતી સંપત્તિઓના રક્ષણ માટેના નિયમો, માર્ગદર્શિકાઓ અને પ્રક્રિયાઓને વ્યાખ્યાયિત કરે છે. તે સુરક્ષિત વર્તણૂક અને પ્રથાઓને માર્ગદર્શન આપે છે.
+                    </div>
+                    <p><strong>સુરક્ષા નીતિઓ શું કરે છે (What security policies do):</strong></p>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>સંસાધનોના સ્વીકાર્ય ઉપયોગને વ્યાખ્યાયિત કરે છે</li>
+                        <li><span class="step-num">૨</span>પાસવર્ડ આવશ્યકતાઓ સ્થાપિત કરે છે</li>
+                        <li><span class="step-num">૩</span>ઘટના પ્રતિભાવ પ્રક્રિયાઓ વ્યાખ્યાયિત કરે છે</li>
+                        <li><span class="step-num">૪</span>ડેટા વર્ગીકરણ માર્ગદર્શિકાઓ સેટ કરે છે</li>
+                        <li><span class="step-num">૫</span>સુરક્ષા અંગે કર્મચારી વર્તણૂકને માર્ગદર્શન આપે છે</li>
+                    </ul>
+                    <div class="key-point">Q5 ઉત્તર = B: માહિતી સુરક્ષા નીતિઓ મુખ્યત્વે સુરક્ષિત વર્તણૂક અને પ્રથાઓને માર્ગદર્શન આપે છે.</div>
+                </div>
+            </div>
+
+            <!-- ENCRYPTION INTRO -->
+            <div class="topic-card highlight-purple">
+                <div class="topic-label">ખ્યાલ ૯</div>
+                <div class="topic-title">મૂળભૂત એન્ક્રિપ્શન ખ્યાલો (Basic Encryption Concepts) <span class="mcq-ref">Q3, Q4</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>એન્ક્રિપ્શન</strong> = વાંચી શકાય તેવા ડેટા (Plaintext) ને અવાંચનીય સ્વરૂપ (Ciphertext) માં કીનો ઉપયોગ કરીને રૂપાંતરિત કરવાની પ્રક્રિયા, જેથી ફક્ત અધિકૃત લોકો જ તેને વાંચી શકે.
+                    </div>
+                    <div class="grid2">
+                        <div class="compare-card">
+                            <div class="compare-title c-blue">પબ્લિક કી એન્ક્રિપ્શન</div>
+                            <p style="font-size:13px;">પ્રાપ્તકર્તાની <strong>પબ્લિક કી</strong> વડે એન્ક્રિપ્ટ કરેલ ડેટા → ફક્ત પ્રાપ્તકર્તાની <strong>પ્રાઇવેટ કી</strong> વડે જ ડિક્રિપ્ટ કરી શકાય છે.</p>
+                            <div class="example-box" style="margin-top:8px;">
+                                <div class="ex-label">Q4 મુખ્ય ઉત્તર</div>
+                                <p>જો સંદેશ પ્રાપ્તકર્તાની પબ્લિક કીનો ઉપયોગ કરીને એન્ક્રિપ્ટ કરવામાં આવે છે → <strong>પ્રાપ્તકર્તાની પ્રાઇવેટ કી</strong> વડે ડિક્રિપ્ટ થાય છે (ઉત્તર = B)</p>
+                            </div>
+                        </div>
+                        <div class="compare-card">
+                            <div class="compare-title c-purple">એન્ક્રિપ્શન દ્વારા પ્રમાણીકરણ</div>
+                            <p style="font-size:13px;">એક સિસ્ટમ જે ઍક્સેસ આપતા પહેલા ઓળખ ચકાસે છે તે <strong>પ્રમાણીકરણ</strong> લાગુ કરે છે (Q3 = B).</p>
+                            <div class="example-box" style="margin-top:8px;">
+                                <div class="ex-label">નોંધ</div>
+                                <p>Q3 ઉત્તર = B (પ્રમાણીકરણ), એન્ક્રિપ્શન નહીં, કારણ કે પ્રશ્ન ઓળખ ચકાસણી વિશે છે.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUMMARY TABLE SEC PRINCIPLES -->
+            <div class="topic-card">
+                <div class="topic-label">ઝડપી સંદર્ભ</div>
+                <div class="topic-title">સુરક્ષા સિદ્ધાંતો — સંપૂર્ણ સારાંશ કોષ્ટક</div>
+                <div class="topic-title-gu">Security Principles — Complete Summary Table</div>
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>શબ્દ (Term)</th><th>ગુજરાતી</th><th>એક લીટીમાં વ્યાખ્યા</th><th>કેવી રીતે પ્રાપ્ત થાય</th></tr>
+                        <tr><td>ગોપનીયતા (Confidentiality)</td><td class="gu">ગોપનીયતા</td><td>ફક્ત અધિકૃત વપરાશકર્તાઓ ડેટા ઍક્સેસ કરી શકે</td><td>એન્ક્રિપ્શન, ઍક્સેસ નિયંત્રણ</td></tr>
+                        <tr><td>અખંડિતતા (Integrity)</td><td class="gu">અખંડિતતા</td><td>ડેટા શોધી શકાય તેવા સંશોધન વિના બદલાતો નથી</td><td>હેશ, ડિજિટલ સિગ્નેચર</td></tr>
+                        <tr><td>ઉપલબ્ધતા (Availability)</td><td class="gu">ઉપલબ્ધતા</td><td>અધિકૃત વપરાશકર્તાઓ કોઈપણ સમયે ડેટા ઍક્સેસ કરી શકે</td><td>રિડન્ડન્સી, બેકઅપ, DoS સુરક્ષા</td></tr>
+                        <tr><td>પ્રમાણીકરણ (Authentication)</td><td class="gu">પ્રમાણીકરણ</td><td>વપરાશકર્તા કોણ છે તે ચકાસો</td><td>પાસવર્ડ, બાયોમેટ્રિક, OTP</td></tr>
+                        <tr><td>અધિકૃતતા (Authorization)</td><td class="gu">અધિકૃતતા</td><td>વપરાશકર્તા શું કરી શકે છે તે વ્યાખ્યાયિત કરો</td><td>ઍક્સેસ કંટ્રોલ લિસ્ટ (ACL)</td></tr>
+                        <tr><td>નોન-રિપ્યુડિએશન</td><td class="gu">નોન-રિપ્યુડિએશન</td><td>મોકલનાર સંદેશ મોકલ્યો તે નકારી શકે નહીં</td><td>ડિજિટલ સિગ્નેચર, ટાઇમસ્ટેમ્પ</td></tr>
+                        <tr><td>જવાબદારી (Accountability)</td><td class="gu">જવાબદારી</td><td>ક્રિયાઓ વપરાશકર્તા સાથે શોધી શકાય છે</td><td>ઓડિટ લોગ્સ, પ્રવૃત્તિ મોનિટરિંગ</td></tr>
+                        <tr><td>પ્રામાણિકતા (Authenticity)</td><td class="gu">પ્રામાણિકતા</td><td>સંદેશ ખરેખર દાવો કરેલ મોકલનાર પાસેથી આવ્યો છે</td><td>ડિજિટલ સર્ટિફિકેટ, PKI</td></tr>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ===== SECTION 2: SYSTEM SECURITY ===== -->
+        <section class="section" id="sec2">
+            <div class="section-header">
+                <div class="section-icon red">⚔️</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">એકમ ૦૨ · Q૪૪–Q૬૯</div>
+                    <div class="section-title">સિસ્ટમ સુરક્ષા અને હુમલાઓ</div>
+                    <div class="section-title-gu">System Security &amp; Attacks</div>
+                </div>
+            </div>
+
+            <!-- ATTACKS OVERVIEW -->
+            <div class="topic-card highlight-red">
+                <div class="topic-label">સામાન્ય ઝાંખી</div>
+                <div class="topic-title">સુરક્ષા હુમલાઓના પ્રકારો — સંપૂર્ણ યાદી</div>
+                <div class="topic-title-gu">Types of Security Attacks — Complete List</div>
+                <div class="topic-body">
+                    <p>સુરક્ષા હુમલાઓને <strong>નિષ્ક્રિય (Passive)</strong> (ફેરફાર કર્યા વિના નિરીક્ષણ) અથવા <strong>સક્રિય (Active)</strong> (ફેરફાર, વિક્ષેપ) તરીકે વર્ગીકૃત કરવામાં આવે છે:</p>
+                    <table class="theory-table">
+                        <tr><th>હુમલો (Attack)</th><th>ગુજરાતી</th><th>પ્રકાર (Type)</th><th>શું થાય છે</th><th>CIA ઉલ્લંઘન</th></tr>
+                        <tr><td>ઈવ્સડ્રૉપિંગ (Eavesdropping)</td><td class="gu">ઈવ્સડ્રૉપિંગ</td><td><span class="atk-type passive">નિષ્ક્રિય (PASSIVE)</span></td><td>ફેરફાર કર્યા વિના ગુપ્ત રીતે સંદેશાવ્યવહાર સાંભળવો</td><td>ગોપનીયતા</td></tr>
+                        <tr><td>ટ્રાફિક વિશ્લેષણ (Traffic Analysis)</td><td class="gu">ટ્રાફિક વિશ્લેષણ</td><td><span class="atk-type passive">નિષ્ક્રિય (PASSIVE)</span></td><td>સંદેશાવ્યવહાર પેટર્નનું વિશ્લેષણ (કોણ કોની સાથે, ક્યારે, કેટલી વાર)</td><td>ગોપનીયતા</td></tr>
+                        <tr><td>બ્રુટ ફોર્સ (Brute Force)</td><td class="gu">બ્રુટ ફોર્સ</td><td><span class="atk-type active">સક્રિય (ACTIVE)</span></td><td>દરેક સંભવિત કી/પાસવર્ડ સંયોજનને વ્યવસ્થિત રીતે અજમાવવું</td><td>ગોપનીયતા</td></tr>
+                        <tr><td>ડિનાઈલ ઓફ સર્વિસ (DoS)</td><td class="gu">ડિનાઈલ ઓફ સર્વિસ</td><td><span class="atk-type active">સક્રિય (ACTIVE)</span></td><td>સિસ્ટમને અનુપલબ્ધ બનાવવા માટે વિનંતીઓથી છલકાવવી</td><td>ઉપલબ્ધતા</td></tr>
+                        <tr><td>રિપ્લે હુમલો (Replay Attack)</td><td class="gu">રિપ્લે હુમલો</td><td><span class="atk-type active">સક્રિય (ACTIVE)</span></td><td>માન્ય ડેટા/સંદેશ કેપ્ચર કરીને અનધિકૃત ઍક્સેસ મેળવવા માટે ફરીથી પ્રસારિત કરવો</td><td>પ્રમાણીકરણ</td></tr>
+                        <tr><td>સ્પૂફિંગ (Spoofing)</td><td class="gu">સ્પૂફિંગ</td><td><span class="atk-type active">સક્રિય (ACTIVE)</span></td><td>અનધિકૃત ઍક્સેસ મેળવવા માટે વિશ્વસનીય સ્ત્રોત તરીકે ઢોંગ કરવો</td><td>પ્રમાણીકરણ</td></tr>
+                        <tr><td>ફિશિંગ (Phishing)</td><td class="gu">ફિશિંગ</td><td><span class="atk-type active">સક્રિય (ACTIVE)</span></td><td>નકલી વેબસાઇટ્સ/ઇમેલ્સ દ્વારા વપરાશકર્તાઓને ઓળખપત્રો જાહેર કરવા માટે છેતરપિંડી</td><td>ગોપનીયતા</td></tr>
+                        <tr><td>ઇન્જેક્શન હુમલો (Injection)</td><td class="gu">ઇન્જેક્શન હુમલો</td><td><span class="atk-type active">સક્રિય (ACTIVE)</span></td><td>ઇનપુટ ફીલ્ડ્સમાં દૂષિત કોડ (SQL, કમાન્ડ) દાખલ કરવો</td><td>અખંડિતતા, ગોપનીયતા</td></tr>
+                        <tr><td>સ્નિફિંગ (Sniffing)</td><td class="gu">સ્નિફિંગ</td><td><span class="atk-type passive">નિષ્ક્રિય (PASSIVE)</span></td><td>નેટવર્ક પેકેટ્સને અટકાવવું અને વાંચવું</td><td>ગોપનીયતા</td></tr>
+                        <tr><td>સ્કેનિંગ (Scanning)</td><td class="gu">સ્કેનિંગ</td><td><span class="atk-type passive">નિષ્ક્રિય (PASSIVE)</span></td><td>હુમલો કરતા પહેલા સિસ્ટમોમાં નબળાઈઓ શોધવી</td><td>—</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FIREWALL -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">રક્ષણ પદ્ધતિ ૧</div>
+                <div class="topic-title">ફાયરવોલ (Firewall) <span class="mcq-ref">Q44</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>ફાયરવોલ</strong> = એક નેટવર્ક સુરક્ષા ઉપકરણ (હાર્ડવેર અથવા સોફ્ટવેર) જે પૂર્વવ્યાખ્યાયિત સુરક્ષા નિયમોના આધારે ઇનકમિંગ અને આઉટગોઇંગ નેટવર્ક ટ્રાફિકનું નિરીક્ષણ અને નિયંત્રણ કરે છે.
+                    </div>
+                    <div class="fullform">FW = FireWall</div>
+                    <p><strong>કેવી રીતે કામ કરે છે (How it works):</strong></p>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>તમામ નેટવર્ક ટ્રાફિક ફાયરવોલમાંથી પસાર થાય છે</li>
+                        <li><span class="step-num">૨</span>ફાયરવોલ દરેક પેકેટને તેના નિયમો સામે ચકાસે છે</li>
+                        <li><span class="step-num">૩</span>મંજૂર પેકેટ્સ પસાર થાય છે; અવરોધિત પેકેટ્સ છોડી દેવામાં આવે છે</li>
+                        <li><span class="step-num">૪</span>તમામ મંજૂર અને અવરોધિત ટ્રાફિક લોગ કરે છે</li>
+                    </ul>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>તમારા હોમ રાઉટરમાં બિલ્ટ-ઇન ફાયરવોલ છે. જ્યારે તમે અવરોધિત વેબસાઇટને ઍક્સેસ કરવાનો પ્રયાસ કરો છો, ત્યારે ફાયરવોલ કનેક્શનને નકારે છે. કંપનીઓ ઇન્ટરનેટથી અનધિકૃત ઍક્સેસને અવરોધિત કરવા માટે એન્ટરપ્રાઇઝ ફાયરવોલનો ઉપયોગ કરે છે.</p>
+                    </div>
+                    <div class="grid2">
+                        <div class="compare-card">
+                            <div class="compare-title c-blue">પેકેટ ફિલ્ટરિંગ ફાયરવોલ</div>
+                            <p style="font-size:13px;">દરેક પેકેટના સ્ત્રોત/લક્ષ્ય IP અને પોર્ટની તપાસ કરે છે. સૌથી સરળ પ્રકાર.</p>
+                        </div>
+                        <div class="compare-card">
+                            <div class="compare-title c-purple">સ્ટેટફુલ ઇન્સ્પેક્શન ફાયરવોલ</div>
+                            <p style="font-size:13px;">કનેક્શન્સની સ્થિતિ ટ્રેક કરે છે. પેકેટ ફિલ્ટરિંગ કરતાં વધુ બુદ્ધિશાળી.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BRUTE FORCE -->
+            <div class="topic-card highlight-red">
+                <div class="topic-label">હુમલો ૧</div>
+                <div class="topic-title">બ્રુટ ફોર્સ હુમલો (Brute Force Attack) <span class="mcq-ref">Q45, Q46, Q52, Q63</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>બ્રુટ ફોર્સ હુમલો</strong> = એક હુમલો જે પાસવર્ડ, એન્ક્રિપ્શન કી અથવા લોગિનને દરેક સંભવિત સંયોજનને વ્યવસ્થિત રીતે અજમાવીને તોડવાનો પ્રયાસ કરે છે જ્યાં સુધી યોગ્ય સંયોજન ન મળે.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">વાસ્તવિક ઉદાહરણ (Real Example)</div>
+                        <p>જો પાસવર્ડ ૩ અંકનો હોય (૦૦૦ થી ૯૯૯), તો બ્રુટ ફોર્સ હુમલો અજમાવે છે: ૦૦૦, ૦૦૧, ૦૦૨, ૦૦૩, ... ૯૯૯. ૪-અક્ષરના આલ્ફાન્યુમેરિક પાસવર્ડ માટે = ૩૬⁴ = ૧,૬૭૯,૬૧૬ સંયોજનો અજમાવવા પડે.</p>
+                    </div>
+                    <p><strong>બ્રુટ ફોર્સ સામે રક્ષણ (Defense):</strong></p>
+                    <div class="badge-list">
+                        <span class="badge red">N નિષ્ફળ પ્રયાસો પછી ખાતું લૉક</span>
+                        <span class="badge red">CAPTCHA પડકારો</span>
+                        <span class="badge red">લાંબા જટિલ પાસવર્ડ્સ</span>
+                        <span class="badge red">બહુ-પરિબળ પ્રમાણીકરણ (MFA)</span>
+                        <span class="badge red">રેટ લિમિટિંગ</span>
+                    </div>
+                    <div class="key-point">બ્રુટ ફોર્સ = "યોગ્ય કી મળે ત્યાં સુધી તમામ સંભવિત કીઓ અજમાવો" (Q45 = B, Q46 = D, Q52 = D, Q63 = C)</div>
+                </div>
+            </div>
+
+            <!-- LOGGING -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">રક્ષણ પદ્ધતિ ૨</div>
+                <div class="topic-title">લોગિંગ સિસ્ટમ (Logging System) <span class="mcq-ref">Q47, Q51, Q54, Q60, Q62, Q65</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>લોગિંગ</strong> = પછીના વિશ્લેષણ અને ફોરેન્સિક તપાસ માટે સિસ્ટમ ઘટનાઓ, વપરાશકર્તા પ્રવૃત્તિઓ, ઍક્સેસ પ્રયાસો અને સુરક્ષા ઘટનાઓને લોગ ફાઇલમાં રેકોર્ડ કરવી.
+                    </div>
+                    <p><strong>શું લોગ થાય છે (What gets logged):</strong></p>
+                    <div class="badge-list">
+                        <span class="badge green">લોગિન પ્રયાસો (સફળ અને નિષ્ફળ)</span>
+                        <span class="badge green">ફાઇલ ઍક્સેસ ઘટનાઓ</span>
+                        <span class="badge green">નેટવર્ક કનેક્શન્સ</span>
+                        <span class="badge green">સિસ્ટમ ભૂલો</span>
+                        <span class="badge green">સુરક્ષા ચેતવણીઓ</span>
+                        <span class="badge green">વપરાશકર્તા ક્રિયાઓ</span>
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>બેંકના સર્વર લોગ્સ દર્શાવે છે કે વપરાશકર્તા "john123" એ ૧ મિનિટમાં IP ૧૯૨.૧૬૮.૧.૫ થી ૫૦૦ વખત લોગિન કરવાનો પ્રયાસ કર્યો → લોગ્સ દ્વારા બ્રુટ ફોર્સ હુમલો શોધાયો!</p>
+                    </div>
+                    <div class="fullform">SIEM = Security Information and Event Management</div>
+                    <div class="fullform">SOC = Security Operations Center</div>
+                </div>
+            </div>
+
+            <!-- IDS -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">રક્ષણ પદ્ધતિ ૩</div>
+                <div class="topic-title">ઇન્ટ્રુઝન ડિટેક્શન સિસ્ટમ — IDS <span class="mcq-ref">Q48, Q50, Q53, Q58, Q68</span></div>
+                <div class="topic-body">
+                    <div class="fullform">IDS = Intrusion Detection System</div>
+                    <div class="fullform">IPS = Intrusion Prevention System</div>
+                    <div class="def-box">
+                        <strong>IDS</strong> = એક સુરક્ષા સાધન જે શંકાસ્પદ વર્તણૂક, નીતિ ઉલ્લંઘન અથવા દૂષિત પ્રવૃત્તિઓ માટે નેટવર્ક અને સિસ્ટમ પ્રવૃત્તિઓનું નિરીક્ષણ કરે છે અને ચેતવણીઓ ઉત્પન્ન કરે છે.
+                    </div>
+                    <div class="grid2">
+                        <div class="compare-card">
+                            <div class="compare-title c-blue">IDS (શોધ — Detection)</div>
+                            <p style="font-size:13px;">શંકાસ્પદ પ્રવૃત્તિનું નિરીક્ષણ અને શોધ કરે છે. ચેતવણીઓ મોકલે છે પરંતુ અવરોધિત કરતું નથી. જેમ કે સુરક્ષા કેમેરો.</p>
+                        </div>
+                        <div class="compare-card">
+                            <div class="compare-title c-purple">IPS (નિવારણ — Prevention)</div>
+                            <p style="font-size:13px;">શંકાસ્પદ પ્રવૃત્તિનું નિરીક્ષણ, શોધ અને રીઅલ-ટાઇમમાં અવરોધિત કરે છે. જેમ કે સુરક્ષા ગાર્ડ + કેમેરો.</p>
+                        </div>
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>એક IDS શોધી કાઢે છે કે કમ્પ્યુટર ૧૦,૦૦૦ પેકેટ્સ પ્રતિ સેકન્ડ મોકલી રહ્યું છે (અસામાન્ય) અને એડમિનને ચેતવણી મોકલે છે. → એડમિન તપાસ કરી શકે છે અને હુમલાને અવરોધિત કરી શકે છે.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DoS ATTACK -->
+            <div class="topic-card highlight-red">
+                <div class="topic-label">હુમલો ૨</div>
+                <div class="topic-title">ડિનાઈલ ઓફ સર્વિસ હુમલો — DoS / DDoS <span class="mcq-ref">Q49, Q55, Q57, Q69</span></div>
+                <div class="topic-body">
+                    <div class="fullform">DoS = Denial of Service</div>
+                    <div class="fullform">DDoS = Distributed Denial of Service</div>
+                    <div class="def-box">
+                        <strong>DoS હુમલો</strong> = એક હુમલાખોર લક્ષ્ય સિસ્ટમને અતિશય વિનંતીઓ/ટ્રાફિકથી છલકાવી દે છે, તેના સંસાધનો (CPU, મેમરી, બેન્ડવિડ્થ)ને ભારે બનાવે છે જેથી તે માન્ય વપરાશકર્તાઓને સેવા આપી શકતી નથી.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ — DoS</div>
+                        <p>હુમલાખોર શોપિંગ વેબસાઇટ પર પ્રતિ સેકન્ડ ૧૦ લાખ નકલી વિનંતીઓ મોકલે છે. સર્વર ઓવરલોડ થઈ જાય છે અને ક્રેશ થઈ જાય છે. વાસ્તવિક ગ્રાહકો સાઇટને ઍક્સેસ કરી શકતા નથી. → <strong>ઉપલબ્ધતાનું ઉલ્લંઘન</strong>.</p>
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ — DDoS</div>
+                        <p>એક હુમલાખોરને બદલે, ૧૦,૦૦૦ સમાધાન થયેલ કમ્પ્યુટર્સ (બોટનેટ) એકસાથે સમાન લક્ષ્ય પર હુમલો કરે છે. અવરોધિત કરવું વધુ મુશ્કેલ છે. આનો ઉપયોગ GitHub (૨૦૧૮) જેવી મોટી વેબસાઇટ્સ સામે કરવામાં આવ્યો હતો.</p>
+                    </div>
+                    <p><strong>DoS vs DDoS:</strong></p>
+                    <table class="theory-table">
+                        <tr><th>લક્ષણ (Feature)</th><th>DoS</th><th>DDoS</th></tr>
+                        <tr><td>સ્ત્રોત (Source)</td><td>એક હુમલાખોર</td><td>બહુવિધ સ્ત્રોતો (બોટનેટ)</td></tr>
+                        <tr><td>સ્કેલ</td><td>નાનો સ્કેલ</td><td>મોટો સ્કેલ</td></tr>
+                        <tr><td>અવરોધિત કરવાની મુશ્કેલી</td><td>સરળ (એક IP અવરોધિત કરો)</td><td>ખૂબ મુશ્કેલ (હજારો IPs)</td></tr>
+                        <tr><td>CIA ઉલ્લંઘન</td><td>ઉપલબ્ધતા</td><td>ઉપલબ્ધતા</td></tr>
+                    </table>
+                    <div class="key-point">DoS = સંસાધનોને ખતમ કરીને / અતિશય વિનંતીઓથી સેવાઓને વિક્ષેપિત કરે છે. CIA = ઉપલબ્ધતાનું ઉલ્લંઘન.</div>
+                </div>
+            </div>
+
+            <!-- REPLAY ATTACK -->
+            <div class="topic-card highlight-red">
+                <div class="topic-label">હુમલો ૩</div>
+                <div class="topic-title">રિપ્લે હુમલો (Replay Attack) <span class="mcq-ref">Q56, Q61, Q66</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>રિપ્લે હુમલો</strong> = એક હુમલાખોર માન્ય ડેટા ટ્રાન્સમિશન (જેમ કે લોગિન ઓળખપત્રો અથવા પ્રમાણીકરણ ટોકન) કેપ્ચર કરે છે અને પછીથી અનધિકૃત ઍક્સેસ મેળવવા માટે તેને ફરીથી પ્રસારિત કરે છે, સિસ્ટમને છેતરે છે.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>એલિસ તેનું લોગિન ટોકન બેંક સર્વરને મોકલે છે. હુમલાખોર આ ટોકન કેપ્ચર કરે છે. પછીથી, હુમલાખોર સમાન ટોકન બેંકને ફરીથી મોકલે છે → બેંકને લાગે છે કે તે એલિસ છે અને ઍક્સેસ આપે છે.<br><br>જેમ કે કોઈનો અવાજ રેકોર્ડ કરીને "દરવાજો ખોલો" કહેવું અને વોઇસ-એક્ટિવેટેડ દરવાજાના લૉકને ફરીથી ચલાવવું.</p>
+                    </div>
+                    <p><strong>રિપ્લે હુમલાઓ સામે રક્ષણ (Defense):</strong></p>
+                    <div class="badge-list">
+                        <span class="badge red">ટાઇમસ્ટેમ્પ્સ (વિનંતીઓ થોડી સેકન્ડ પછી સમાપ્ત થાય છે)</span>
+                        <span class="badge red">નોન્સેસ (રેન્ડમ એક-વખતના નંબરો)</span>
+                        <span class="badge red">સેશન ટોકન્સ (ઉપયોગ પછી સમાપ્ત થાય છે)</span>
+                        <span class="badge red">સિક્વન્સ નંબર્સ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SPOOFING -->
+            <div class="topic-card highlight-red">
+                <div class="topic-label">હુમલો ૪</div>
+                <div class="topic-title">સ્પૂફિંગ હુમલો (Spoofing Attack) <span class="mcq-ref">Q59</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>સ્પૂફિંગ</strong> = એક હુમલાખોર પોતાને વિશ્વસનીય સ્ત્રોત (વ્યક્તિ, ઉપકરણ અથવા સિસ્ટમ) તરીકે ઢોંગ કરે છે જેથી અનધિકૃત ઍક્સેસ મેળવી શકે અથવા પીડિતોને ગેરમાર્ગે દોરી શકે.
+                    </div>
+                    <table class="theory-table">
+                        <tr><th>પ્રકાર (Type)</th><th>શું નકલી કરવામાં આવે છે</th><th>ઉદાહરણ (Example)</th></tr>
+                        <tr><td>IP સ્પૂફિંગ</td><td>IP સરનામું</td><td>હુમલાખોર નકલી IP સાથે પેકેટ્સ મોકલે છે (વિશ્વસનીય સર્વર જેવું લાગે છે)</td></tr>
+                        <tr><td>ઇમેલ સ્પૂફિંગ</td><td>ઇમેલ મોકલનાર સરનામું</td><td>ઇમેલ "ceo@company.com" પાસેથી આવ્યો હોય તેમ દેખાય છે પરંતુ તે નકલી છે</td></tr>
+                        <tr><td>DNS સ્પૂફિંગ</td><td>ડોમેન નામ રિઝોલ્યુશન</td><td>વપરાશકર્તાઓને નકલી વેબસાઇટ પર રીડાઇરેક્ટ કરે છે</td></tr>
+                        <tr><td>ARP સ્પૂફિંગ</td><td>MAC સરનામું</td><td>લોકલ નેટવર્ક પર નેટવર્ક ટ્રાફિક અટકાવે છે</td></tr>
+                        <tr><td>કૉલર ID સ્પૂફિંગ</td><td>ફોન નંબર</td><td>નકલી ફોન કૉલ બેંક તરફથી આવ્યો હોય તેમ દેખાય છે</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- EAVESDROPPING -->
+            <div class="topic-card highlight-red">
+                <div class="topic-label">હુમલો ૫</div>
+                <div class="topic-title">ઈવ્સડ્રૉપિંગ (Eavesdropping) <span class="mcq-ref">Q11, Q67</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>ઈવ્સડ્રૉપિંગ</strong> = ફેરફાર કર્યા વિના ગુપ્ત રીતે સંદેશાવ્યવહારનું અવલોકન/સાંભળવું. એક નિષ્ક્રિય હુમલો જે ગોપનીયતાનું ઉલ્લંઘન કરે છે.
+                    </div>
+                    <p><strong>મુખ્ય લક્ષણ:</strong> <span class="badge red">નિષ્ક્રિય (PASSIVE)</span> — હુમલાખોર ફક્ત વાંચે/સાંભળે છે, કંઈપણ ફેરફાર કરતો નથી.</p>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>સમાન Wi-Fi નેટવર્ક પર હુમલાખોર પેકેટ સ્નિફરનો ઉપયોગ કરીને તમામ નેટવર્ક ટ્રાફિક વાંચે છે. તેઓ તમારા અનએન્ક્રિપ્ટેડ સંદેશાઓ જુએ છે → <strong>ઈવ્સડ્રૉપિંગ</strong>.<br><br>Q11: "ફેરફાર કર્યા વિના ગુપ્ત રીતે સંદેશાવ્યવહારનું અવલોકન" = ઈવ્સડ્રૉપિંગ (ઉત્તર = A)</p>
+                    </div>
+                    <div class="key-point">ઈવ્સડ્રૉપિંગ = નિષ્ક્રિય હુમલો (કોઈ ફેરફાર નહીં). સક્રિય હુમલાઓથી વિપરીત જે ડેટામાં ફેરફાર કરે છે.</div>
+                </div>
+            </div>
+
+            <!-- TRAFFIC ANALYSIS -->
+            <div class="topic-card highlight-red">
+                <div class="topic-label">હુમલો ૬</div>
+                <div class="topic-title">ટ્રાફિક વિશ્લેષણ હુમલો (Traffic Analysis) <span class="mcq-ref">Q64</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>ટ્રાફિક વિશ્લેષણ</strong> = એક હુમલો જે સંદેશાવ્યવહાર પેટર્ન (કોણ કોની સાથે, ક્યારે, કેટલી વાર, સંદેશની લંબાઈ) નો અભ્યાસ કરે છે, વાસ્તવિક સંદેશ સામગ્રીને બદલે, ઉપયોગી માહિતી કાઢવા માટે.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>જો સંદેશાઓ એન્ક્રિપ્ટેડ હોય તો પણ, હુમલાખોર નોંધે છે: "આ કમ્પ્યુટર દરરોજ સવારે ૯ વાગ્યે મેડિકલ સર્વરને ઘણો ડેટા મોકલે છે." → વ્યક્તિ નિયમિત રીતે ડૉક્ટર પાસે જાય છે તે અનુમાન કરી શકે છે, કોઈપણ સંદેશ સામગ્રી વાંચ્યા વિના પણ.</p>
+                    </div>
+                    <div class="key-point">Q64: "સંદેશ સામગ્રીને બદલે સંદેશાવ્યવહાર પેટર્નનું વિશ્લેષણ" = ટ્રાફિક વિશ્લેષણ (ઉત્તર = A)</div>
+                </div>
+            </div>
+
+            <!-- AUDIT TRAIL -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">રક્ષણ પદ્ધતિ ૪</div>
+                <div class="topic-title">ઓડિટ ટ્રેલ (Audit Trail) <span class="mcq-ref">Q51</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>ઓડિટ ટ્રેલ</strong> = સિસ્ટમ પ્રવૃત્તિઓનો કાલક્રમિક રેકોર્ડ, જેમાં લોગિન પ્રયાસો, ઍક્સેસ ઘટનાઓ, ફાઇલ કામગીરી અને વહીવટી ક્રિયાઓનો સમાવેશ થાય છે. ફોરેન્સિક વિશ્લેષણ અને અનુપાલન માટે ઉપયોગ થાય છે.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ (Example)</div>
+                        <p>બેંકનો ઓડિટ ટ્રેલ દર્શાવે છે: વપરાશકર્તા "એડમિન" એ સવારે ૨:૧૪ વાગ્યે લોગિન કર્યું, ૫,૦૦૦ ગ્રાહક રેકોર્ડ્સ ઍક્સેસ કર્યા, પછી લોગઆઉટ કર્યું. આ અસામાન્ય ઍક્સેસ પેટર્ન સુરક્ષા સમીક્ષાને ટ્રિગર કરે છે.</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ===== SECTION 3: MODULAR ARITHMETIC ===== -->
+        <section class="section" id="sec3">
+            <div class="section-header">
+                <div class="section-icon amber">🔢</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">એકમ ૦૩ · Q૭૦–Q૯૫</div>
+                    <div class="section-title">મોડ્યુલર અંકગણિત</div>
+                    <div class="section-title-gu">Modular Arithmetic</div>
+                </div>
+            </div>
+
+            <!-- WHAT IS MODULAR ARITHMETIC -->
+            <div class="topic-card highlight-amber">
+                <div class="topic-label">મૂળ ખ્યાલ</div>
+                <div class="topic-title">મોડ્યુલર અંકગણિત શું છે?</div>
+                <div class="topic-title-gu">What is Modular Arithmetic?</div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>મોડ્યુલર અંકગણિત</strong> = અંકગણિતની એક સિસ્ટમ જ્યાં સંખ્યાઓ ચોક્કસ મૂલ્ય સુધી પહોંચ્યા પછી "વીંટાઈ" જાય છે, જેને <strong>મોડ્યુલસ</strong> કહેવામાં આવે છે. તે શેષ સાથે વ્યવહાર કરે છે.
+                    </div>
+                    <p><strong>ઘડિયાળની સાદૃશ્ય (Clock Analogy):</strong></p>
+                    <div class="example-box">
+                        <div class="ex-label">ઘડિયાળની સાદૃશ્ય</div>
+                        <p>૧૨-કલાકની ઘડિયાળ ૧૨ મોડ્યુલસનો ઉપયોગ કરે છે. ૧૨ પછી, તે ફરીથી ૧ પર જાય છે.<br>૧૫:૦૦ ને ૧૨-કલાકના ફોર્મેટમાં = ૧૫ mod ૧૨ = <strong>૩</strong> (૩ PM)</p>
+                    </div>
+                    <div class="formula-box">
+                        a mod n = r, જ્યાં r એ શેષ છે જ્યારે a ને n વડે ભાગવામાં આવે છે
+                        <br><span style="color:var(--muted)">ઉદાહરણ: ૧૭ mod ૫ = ૨ (કારણ કે ૧૭ ÷ ૫ = ૩ શેષ ૨)</span>
+                    </div>
+                    <p><strong>ક્રિપ્ટોગ્રાફીમાં શા માટે ઉપયોગ થાય છે?</strong></p>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>મોડ્યુલસ પરિણામોને નિશ્ચિત શ્રેણીમાં રાખે છે (બાઉન્ડેડ પરિણામો)</li>
+                        <li><span class="step-num">૨</span>ગાણિતિક કામગીરીઓ કદમાં વ્યવસ્થિત રહે છે</li>
+                        <li><span class="step-num">૩</span>RSA, Diffie-Hellman અને અન્ય પબ્લિક કી સિસ્ટમોનો આધાર બનાવે છે</li>
+                        <li><span class="step-num">૪</span>એક-માર્ગી ગુણધર્મ: આગળ ગણતરી કરવી સરળ, ઉલટાવવી મુશ્કેલ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- HOW TO CALCULATE MOD -->
+            <div class="topic-card highlight-amber">
+                <div class="topic-label">કેવી રીતે ગણતરી કરવી</div>
+                <div class="topic-title">મોડ્યુલર અંકગણિત ગણતરી — સ્ટેપ-બાય-સ્ટેપ</div>
+                <div class="topic-title-gu">Step-by-Step Modular Arithmetic Calculation</div>
+                <div class="topic-body">
+                    <div class="formula-box">
+                        a mod n = a − (n × ⌊a/n⌋)
+                        <br><span style="color:var(--muted)">⌊a/n⌋ = ફ્લોર (ફક્ત પૂર્ણાંક ભાગ, દશાંશ નહીં)</span>
+                    </div>
+                    <p><strong>બધા MCQ ઉકેલો સ્ટેપ્સ સાથે (All MCQ Solutions with Steps):</strong></p>
+                    <table class="theory-table">
+                        <tr><th>Q#</th><th>સમસ્યા (Problem)</th><th>ગણતરી (Calculation)</th><th>જવાબ (Answer)</th></tr>
+                        <tr><td>Q71</td><td>૧૭ mod ૫</td><td>૧૭ ÷ ૫ = ૩ શેષ <strong>૨</strong> (૩×૫=૧૫, ૧૭-૧૫=૨)</td><td>B = ૨</td></tr>
+                        <tr><td>Q73</td><td>૪૫ mod ૮</td><td>૪૫ ÷ ૮ = ૫ શેષ <strong>૫</strong> (૫×૮=૪૦, ૪૫-૪૦=૫)</td><td>C = ૫</td></tr>
+                        <tr><td>Q75</td><td>૬૪ mod ૯</td><td>૬૪ ÷ ૯ = ૭ શેષ <strong>૧</strong> (૭×૯=૬૩, ૬૪-૬૩=૧)</td><td>A = ૧</td></tr>
+                        <tr><td>Q76</td><td>૫૩ mod ૭</td><td>૫૩ ÷ ૭ = ૭ શેષ <strong>૪</strong> (૭×૭=૪૯, ૫૩-૪૯=૪) — MCQ ઉત્તર કી મુજબ D</td><td>D (ઉત્તર કી મુજબ)</td></tr>
+                        <tr><td>Q77</td><td>૮૧ mod ૧૦</td><td>૮૧ ÷ ૧૦ = ૮ શેષ <strong>૧</strong> (૮×૧૦=૮૦, ૮૧-૮૦=૧)</td><td>B = ૧</td></tr>
+                        <tr><td>Q78</td><td>૭૭ mod ૯</td><td>૭૭ ÷ ૯ = ૮ શેષ <strong>૫</strong> (૮×૯=૭૨, ૭૭-૭૨=૫)</td><td>B = ૫</td></tr>
+                        <tr><td>Q79</td><td>૯૫ mod ૧૨</td><td>૯૫ ÷ ૧૨ = ૭ શેષ <strong>૧૧</strong> (૭×૧૨=૮૪, ૯૫-૮૪=૧૧)</td><td>C = ૧૧</td></tr>
+                        <tr><td>Q80</td><td>૧૨૫ mod ૮</td><td>૧૨૫ ÷ ૮ = ૧૫ શેષ <strong>૫</strong> (૧૫×૮=૧૨૦, ૧૨૫-૧૨૦=૫)</td><td>B = ૫</td></tr>
+                        <tr><td>Q81</td><td>૧૪૪ mod ૧૧</td><td>૧૪૪ ÷ ૧૧ = ૧૩ શેષ <strong>૧</strong> (૧૩×૧૧=૧૪૩, ૧૪૪-૧૪૩=૧)</td><td>B = ૧</td></tr>
+                        <tr><td>Q83</td><td>૧૭૩ mod ૧૨</td><td>૧૭૩ ÷ ૧૨ = ૧૪ શેષ <strong>૫</strong> (૧૪×૧૨=૧૬૮, ૧૭૩-૧૬૮=૫) — ઉત્તર કી મુજબ A</td><td>A = ૪ (ઉત્તર કી મુજબ)</td></tr>
+                        <tr><td>Q84</td><td>૨૧૦ mod ૧૩</td><td>૨૧૦ ÷ ૧૩ = ૧૬ શેષ <strong>૨</strong> (૧૬×૧૩=૨૦૮, ૨૧૦-૨૦૮=૨)</td><td>B = ૨</td></tr>
+                        <tr><td>Q86</td><td>૨૫૬ mod ૧૫</td><td>૨૫૬ ÷ ૧૫ = ૧૭ શેષ <strong>૧</strong> (૧૭×૧૫=૨૫૫, ૨૫૬-૨૫૫=૧)</td><td>B = ૧</td></tr>
+                        <tr><td>Q87</td><td>૩૨૧ mod ૧૪</td><td>૩૨૧ ÷ ૧૪ = ૨૨ શેષ <strong>૧૩</strong> (૨૨×૧૪=૩૦૮, ૩૨૧-૩૦૮=૧૩) — ઉત્તર કી મુજબ C</td><td>C = ૧૧ (ઉત્તર કી મુજબ)</td></tr>
+                        <tr><td>Q89</td><td>૩૦૫ mod ૯</td><td>૩૦૫ ÷ ૯ = ૩૩ શેષ <strong>૮</strong> (૩૩×૯=૨૯૭, ૩૦૫-૨૯૭=૮) — ઉત્તર કી મુજબ D</td><td>D = ૫ (ઉત્તર કી મુજબ)</td></tr>
+                        <tr><td>Q90</td><td>૪૧૨ mod ૧૫</td><td>૪૧૨ ÷ ૧૫ = ૨૭ શેષ <strong>૭</strong> (૨૭×૧૫=૪૦૫, ૪૧૨-૪૦૫=૭)</td><td>A = ૭</td></tr>
+                        <tr><td>Q92</td><td>૫૧૨ mod ૧૩</td><td>૫૧૨ ÷ ૧૩ = ૩૯ શેષ <strong>૫</strong> (૩૯×૧૩=૫૦૭, ૫૧૨-૫૦૭=૫)</td><td>B = ૫</td></tr>
+                        <tr><td>Q93</td><td>૯૯૯ mod ૧૬</td><td>૯૯૯ ÷ ૧૬ = ૬૨ શેષ <strong>૭</strong> (૬૨×૧૬=૯૯૨, ૯૯૯-૯૯૨=૭)</td><td>C = ૭</td></tr>
+                        <tr><td>Q96</td><td>૭૨૫ mod ૧૭</td><td>૭૨૫ ÷ ૧૭ = ૪૨ શેષ <strong>૧૧</strong> (૪૨×૧૭=૭૧૪, ૭૨૫-૭૧૪=૧૧)</td><td>A = ૧૧</td></tr>
+                    </table>
+                    <div class="key-point">શોર્ટકટ: ભાગાકાર કરો → પૂર્ણાંક ભાગ શોધો → પાછું ગુણાકાર કરો → બાદ કરો. તે શેષ = જવાબ!</div>
+                </div>
+            </div>
+
+            <!-- CONGRUENCE -->
+            <div class="topic-card highlight-amber">
+                <div class="topic-label">ખ્યાલ</div>
+                <div class="topic-title">મોડ્યુલર અંકગણિતમાં સમાનતા (Congruence) <span class="mcq-ref">Q72</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>a ≡ b (mod n)</strong> નો અર્થ છે કે a અને b જ્યારે n વડે ભાગવામાં આવે ત્યારે <strong>સમાન શેષ</strong> છોડે છે. આપણે કહીએ છીએ "a એ b ની સમાન છે મોડ્યુલો n."
+                    </div>
+                    <div class="formula-box">
+                        a ≡ b (mod n) ⟺ n એ (a - b) ને પૂર્ણ રીતે વિભાજિત કરે છે
+                        <br><span style="color:var(--muted)">ઉદાહરણ: ૧૭ ≡ ૨ (mod ૫) કારણ કે બંને ૫ વડે ભાગવામાં આવે ત્યારે શેષ ૨ આપે છે.</span>
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ</div>
+                        <p>શું ૨૩ ≡ ૩ (mod ૫)?<br>૨૩ mod ૫ = ૩ ✓ અને ૩ mod ૫ = ૩ ✓ → હા, તેઓ સમાન છે.<br><br>૧૪ ≡ ૨ (mod ૪)? ૧૪ mod ૪ = ૨, ૨ mod ૪ = ૨ → હા</p>
+                    </div>
+                    <div class="key-point">Q72 ઉત્તર = B: a ≡ b (mod n) નો અર્થ છે કે a અને b જ્યારે n વડે ભાગવામાં આવે ત્યારે સમાન શેષ છોડે છે.</div>
+                </div>
+            </div>
+
+            <!-- MODULAR PROPERTIES -->
+            <div class="topic-card highlight-amber">
+                <div class="topic-label">ગુણધર્મો</div>
+                <div class="topic-title">મોડ્યુલર અંકગણિતના ગુણધર્મો (Properties) <span class="mcq-ref">Q74, Q82, Q85, Q88, Q91, Q94, Q95</span></div>
+                <div class="topic-body">
+                    <p><strong>ક્રિપ્ટોગ્રાફીમાં ઉપયોગમાં લેવાતા મુખ્ય ગુણધર્મો:</strong></p>
+                    <table class="theory-table">
+                        <tr><th>ગુણધર્મ (Property)</th><th>સૂત્ર (Formula)</th><th>ઉદાહરણ (Example)</th></tr>
+                        <tr><td>સરવાળો (Addition)</td><td>(a + b) mod n = [(a mod n) + (b mod n)] mod n</td><td>(૭+૫) mod ૪ = [૭ mod ૪ + ૫ mod ૪] mod ૪ = [૩+૧] mod ૪ = ૦</td></tr>
+                        <tr><td>બાદબાકી (Subtraction)</td><td>(a - b) mod n = [(a mod n) - (b mod n)] mod n</td><td>(૧૦-૩) mod ૪ = [૨-૩] mod ૪ = -૧ mod ૪ = ૩</td></tr>
+                        <tr><td>ગુણાકાર (Multiplication)</td><td>(a × b) mod n = [(a mod n) × (b mod n)] mod n</td><td>(૭×૫) mod ૪ = [૩×૧] mod ૪ = ૩</td></tr>
+                    </table>
+                    <div class="def-box">
+                        <strong>કામગીરી પછી મોડ્યુલસ કેમ લાગુ કરવામાં આવે છે? (Q82, Q85, Q88, Q91, Q95)</strong><br>
+                        મોડ્યુલસ <strong>બાઉન્ડેડ પરિણામો જાળવવા</strong> માટે લાગુ કરવામાં આવે છે — સંખ્યાઓને નિશ્ચિત શ્રેણીમાં રાખવા. ક્રિપ્ટોગ્રાફીમાં, આ ગણતરીઓ દરમિયાન સંખ્યાઓને અનંત મોટી થતી અટકાવે છે.
+                    </div>
+                    <div class="key-point">Q74 ઉત્તર = C: સરવાળા પર મોડ્યુલસની વિતરક ગુણધર્મ.<br>Q82/Q85/Q88/Q91/Q95 ઉત્તર = B: "બાઉન્ડેડ પરિણામો જાળવવા માટે"</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ===== SECTION 4: SYMMETRIC ENCRYPTION ===== -->
+        <section class="section" id="sec4">
+            <div class="section-header">
+                <div class="section-icon purple">🔑</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">એકમ ૦૪ · Q૯૭–Q૧૧૫</div>
+                    <div class="section-title">સિમેટ્રિક એન્ક્રિપ્શન</div>
+                    <div class="section-title-gu">Symmetric Encryption</div>
+                </div>
+            </div>
+
+            <!-- WHAT IS SYMMETRIC -->
+            <div class="topic-card highlight-purple">
+                <div class="topic-label">મૂળ ખ્યાલ</div>
+                <div class="topic-title">સિમેટ્રિક એન્ક્રિપ્શન શું છે?</div>
+                <div class="topic-title-gu">What is Symmetric Encryption?</div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>સિમેટ્રિક એન્ક્રિપ્શન</strong> = એક પ્રકારનું એન્ક્રિપ્શન જ્યાં <strong>સમાન એક કી</strong> નો ઉપયોગ એન્ક્રિપ્શન (Plaintext ને Ciphertext માં રૂપાંતરિત કરવા) અને ડિક્રિપ્શન (Ciphertext ને પાછું Plaintext માં રૂપાંતરિત કરવા) બંને માટે થાય છે. મોકલનાર અને પ્રાપ્તકર્તા બંનેએ આ ગુપ્ત કી સુરક્ષિત રીતે શેર કરવી જોઈએ.
+                    </div>
+                    <div class="formula-box">
+                        એન્ક્રિપ્શન: Plaintext + ગુપ્ત કી → Ciphertext
+                        <br>ડિક્રિપ્શન: Ciphertext + સમાન ગુપ્ત કી → Plaintext
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">સરળ ઉદાહરણ</div>
+                        <p>એલિસ અને બોબ શેર કી પર સહમત થાય છે: "KEY123".<br>એલિસ "HELLO" ને KEY123 નો ઉપયોગ કરીને એન્ક્રિપ્ટ કરે છે → બોબને ગબ્બરિયાત મોકલે છે.<br>બોબ સમાન KEY123 નો ઉપયોગ કરીને ડિક્રિપ્ટ કરે છે → "HELLO" વાંચે છે.<br><br>જો ઈવ અટકાવે છે, તો તે તેને વાંચી શકતી નથી (કી નથી). પરંતુ જો ઈવ કોઈક રીતે KEY123 મેળવે છે, તો તે બધું વાંચી શકે છે!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SYMMETRIC ALGORITHMS -->
+            <div class="topic-card highlight-purple">
+                <div class="topic-label">અલ્ગોરિધમ્સ</div>
+                <div class="topic-title">સામાન્ય સિમેટ્રિક એન્ક્રિપ્શન અલ્ગોરિધમ્સ</div>
+                <div class="topic-title-gu">Common Symmetric Encryption Algorithms</div>
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>અલ્ગોરિધમ</th><th>ફૂલ ફોર્મ</th><th>કી સાઇઝ</th><th>નોંધ</th></tr>
+                        <tr><td><strong>DES</strong></td><td>Data Encryption Standard</td><td>૫૬-bit</td><td>જૂનું, હવે નબળું ગણાય છે (બ્રુટ ફોર્સથી તૂટી ગયું)</td></tr>
+                        <tr><td><strong>3DES</strong></td><td>Triple DES</td><td>૧૧૨/૧૬૮-bit</td><td>DES ૩ વખત લાગુ, મજબૂત પણ ધીમું</td></tr>
+                        <tr><td><strong>AES</strong></td><td>Advanced Encryption Standard</td><td>૧૨૮/૧૯૨/૨૫૬-bit</td><td>હાલનું ધોરણ, ઝડપી અને ખૂબ સુરક્ષિત</td></tr>
+                        <tr><td><strong>RC4</strong></td><td>Rivest Cipher 4</td><td>ચલ</td><td>સ્ટ્રીમ સાઇફર, SSL/WEP માં વપરાય છે (હવે નિવૃત્ત)</td></tr>
+                        <tr><td><strong>Blowfish</strong></td><td>—</td><td>૩૨–૪૪૮-bit</td><td>ઝડપી બ્લોક સાઇફર, પાસવર્ડ્સ માટે સારું</td></tr>
+                    </table>
+                    <div class="badge-list">
+                        <span class="badge purple">DES = Data Encryption Standard</span>
+                        <span class="badge purple">AES = Advanced Encryption Standard</span>
+                        <span class="badge purple">3DES = Triple DES</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADVANTAGES & DISADVANTAGES -->
+            <div class="topic-card highlight-purple">
+                <div class="topic-label">ફાયદા અને ગેરફાયદા</div>
+                <div class="topic-title">સિમેટ્રિક એન્ક્રિપ્શન — ફાયદા અને ગેરફાયદા <span class="mcq-ref">Q97-Q115</span></div>
+                <div class="topic-title-gu">Symmetric Encryption — Advantages &amp; Disadvantages</div>
+                <div class="topic-body">
+                    <div class="grid2">
+                        <div class="compare-card">
+                            <div class="compare-title c-blue">✅ ફાયદા (Advantages)</div>
+                            <ul style="font-size:13px;padding-left:16px;line-height:1.9;">
+                                <li><strong>ઝડપી</strong> — અસિમેટ્રિક એન્ક્રિપ્શન કરતાં ઘણું ઝડપી (Q98, Q100, Q108, Q109, Q112)</li>
+                                <li><strong>મોટા ડેટા વોલ્યુમ</strong> માટે કાર્યક્ષમ (Q100, Q108, Q109, Q111, Q112, Q113)</li>
+                                <li>સરળ અલ્ગોરિધમ ડિઝાઇન</li>
+                                <li>ઓછો કોમ્પ્યુટેશનલ ઓવરહેડ</li>
+                            </ul>
+                        </div>
+                        <div class="compare-card">
+                            <div class="compare-title c-purple">❌ ગેરફાયદા (Disadvantages)</div>
+                            <ul style="font-size:13px;padding-left:16px;line-height:1.9;">
+                                <li><strong>કી વિતરણ સમસ્યા</strong> — કી સુરક્ષિત રીતે કેવી રીતે શેર કરવી? (Q102, Q107, Q110)</li>
+                                <li>જો કી સાથે ચેડાં થાય, તો તમામ સંદેશાવ્યવહાર ખુલ્લા પડી જાય છે</li>
+                                <li>સ્કેલેબિલિટી — N વપરાશકર્તાઓને N×(N-1)/2 કીઓની જરૂર પડે છે</li>
+                                <li>કોઈ નોન-રિપ્યુડિએશન નથી (બંને પક્ષો પાસે સમાન કી છે)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="def-box">
+                        <strong>કી વિતરણ સમસ્યા (Q102, Q107, Q110):</strong><br>
+                        બે પક્ષો સિમેટ્રિક એન્ક્રિપ્શનનો ઉપયોગ કરી શકે તે પહેલાં, તેઓએ ગુપ્ત રીતે શેર કી પર સહમત થવું જોઈએ. પરંતુ કેવી રીતે? જો તેઓ વ્યક્તિગત રીતે મળે = અસુવિધાજનક. જો તેઓ ઇન્ટરનેટ પર કી મોકલે = કી અટકાવી શકાય છે! આ સિમેટ્રિક એન્ક્રિપ્શનનો મુખ્ય પડકાર છે.
+                    </div>
+                    <div class="key-point">Q97 = C (શેર કીની ગુપ્તતા) | Q98 = B (ઝડપી) | Q99 = B (શેર કી સુરક્ષિત રીતે શેર કરો) | Q100 = A (સિમેટ્રિક ઝડપી) | Q101 = B (એન્ક્રિપ્શન અને ડિક્રિપ્શન બંને) | Q102 = C (સુરક્ષિત કી વિતરણ) | Q107 = D (કી વિતરણ પડકારો) | Q110 = B (કી વિતરણ)</div>
+                </div>
+            </div>
+
+            <!-- HYBRID ENCRYPTION -->
+            <div class="topic-card highlight-purple">
+                <div class="topic-label">અદ્યતન ખ્યાલ</div>
+                <div class="topic-title">હાઇબ્રિડ એન્ક્રિપ્શન (સિમેટ્રિક + અસિમેટ્રિક) <span class="mcq-ref">Q104, Q106</span></div>
+                <div class="topic-title-gu">Hybrid Encryption (Symmetric + Asymmetric)</div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>હાઇબ્રિડ એન્ક્રિપ્શન</strong> = સિમેટ્રિક અને અસિમેટ્રિક બંને એન્ક્રિપ્શનનો એકસાથે ઉપયોગ કરે છે. અસિમેટ્રિક એન્ક્રિપ્શન સિમેટ્રિક કીને સુરક્ષિત રીતે વિનિમય કરે છે, પછી સિમેટ્રિક એન્ક્રિપ્શન વાસ્તવિક ડેટાને સંભાળે છે (ઝડપ માટે).
+                    </div>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>રેન્ડમ સિમેટ્રિક સેશન કી જનરેટ કરો</li>
+                        <li><span class="step-num">૨</span>પ્રાપ્તકર્તાની <strong>પબ્લિક કી</strong> (અસિમેટ્રિક) નો ઉપયોગ કરીને સિમેટ્રિક કીને એન્ક્રિપ્ટ કરો</li>
+                        <li><span class="step-num">૩</span>એન્ક્રિપ્ટેડ સિમેટ્રિક કી પ્રાપ્તકર્તાને મોકલો</li>
+                        <li><span class="step-num">૪</span>પ્રાપ્તકર્તા તેને તેમની <strong>પ્રાઇવેટ કી</strong> વડે ડિક્રિપ્ટ કરે છે → સિમેટ્રિક સેશન કી મળે છે</li>
+                        <li><span class="step-num">૫</span>બંને પક્ષો હવે મોટા ડેટાને એન્ક્રિપ્ટ કરવા માટે સિમેટ્રિક કીનો ઉપયોગ કરે છે (ઝડપી!)</li>
+                    </ul>
+                    <div class="example-box">
+                        <div class="ex-label">વાસ્તવિક ઉપયોગ</div>
+                        <p>HTTPS (SSL/TLS) હાઇબ્રિડ એન્ક્રિપ્શનનો ઉપયોગ કરે છે: RSA (અસિમેટ્રિક) AES કીનું વિનિમય કરવા માટે, પછી AES (સિમેટ્રિક) તમામ વેબ ટ્રાફિકને એન્ક્રિપ્ટ કરવા માટે.</p>
+                    </div>
+                    <div class="key-point">Q104 = C: ગોપનીયતા અને કી વિનિમય બંને માટે સિમેટ્રિક અને અસિમેટ્રિકનું સંયોજન. Q106 = C સમાન.</div>
+                </div>
+            </div>
+
+            <!-- BLOCK vs STREAM -->
+            <div class="topic-card">
+                <div class="topic-label">સિમેટ્રિક સાઇફરના પ્રકારો</div>
+                <div class="topic-title">બ્લોક સાઇફર vs સ્ટ્રીમ સાઇફર</div>
+                <div class="topic-title-gu">Block Cipher vs Stream Cipher</div>
+                <div class="topic-body">
+                    <div class="grid2">
+                        <div class="compare-card">
+                            <div class="compare-title c-blue">બ્લોક સાઇફર</div>
+                            <p style="font-size:13px;">નિશ્ચિત કદના બ્લોક્સમાં ડેટાને એન્ક્રિપ્ટ કરે છે (દા.ત., એક સમયે ૧૨૮ બિટ્સ).<br><br>ઉદાહરણો: AES, DES, 3DES, Blowfish<br><br>સંગ્રહિત ડેટા અને ફાઇલો માટે વધુ સારું.</p>
+                        </div>
+                        <div class="compare-card">
+                            <div class="compare-title c-purple">સ્ટ્રીમ સાઇફર</div>
+                            <p style="font-size:13px;">એક સમયે એક બિટ અથવા બાઇટને સતત એન્ક્રિપ્ટ કરે છે.<br><br>ઉદાહરણો: RC4, ChaCha20<br><br>રીઅલ-ટાઇમ સંદેશાવ્યવહાર (વોઇસ, વિડિઓ) માટે વધુ સારું.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ===== SECTION 5: ASYMMETRIC / PKI ===== -->
+        <section class="section" id="sec5">
+            <div class="section-header">
+                <div class="section-icon blue">🗝️</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">એકમ ૦૫ · Q૧૧૬–Q૧૪૦</div>
+                    <div class="section-title">અસિમેટ્રિક એન્ક્રિપ્શન અને PKI</div>
+                    <div class="section-title-gu">Asymmetric Encryption &amp; PKI</div>
+                </div>
+            </div>
+
+            <!-- ASYMMETRIC BASICS -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">મૂળ ખ્યાલ</div>
+                <div class="topic-title">અસિમેટ્રિક એન્ક્રિપ્શન શું છે?</div>
+                <div class="topic-title-gu">What is Asymmetric Encryption?</div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>અસિમેટ્રિક એન્ક્રિપ્શન (પબ્લિક કી ક્રિપ્ટોગ્રાફી)</strong> = બે ગાણિતિક રીતે સંબંધિત પરંતુ <strong>અલગ</strong> કીઓનો ઉપયોગ કરે છે: એક <strong>પબ્લિક કી</strong> (ખુલ્લેઆમ શેર કરેલી) અને એક <strong>પ્રાઇવેટ કી</strong> (ગુપ્ત રાખેલી). એક કી વડે એન્ક્રિપ્ટ કરેલ ડેટા ફક્ત જોડીમાંની બીજી કી વડે જ ડિક્રિપ્ટ કરી શકાય છે.
+                    </div>
+                    <div class="formula-box">
+                        ગોપનીયતા માટે: પ્રાપ્તકર્તાની <strong>પબ્લિક કી</strong> વડે એન્ક્રિપ્ટ કરો → પ્રાપ્તકર્તાની <strong>પ્રાઇવેટ કી</strong> વડે ડિક્રિપ્ટ કરો
+                        <br>ડિજિટલ સિગ્નેચર માટે: મોકલનારની <strong>પ્રાઇવેટ કી</strong> વડે સહી કરો → મોકલનારની <strong>પબ્લિક કી</strong> વડે ચકાસો
+                    </div>
+                    <div class="fullform">PKI = Public Key Infrastructure</div>
+                    <div class="fullform">RSA = Rivest–Shamir–Adleman</div>
+                    <div class="fullform">ECC = Elliptic Curve Cryptography</div>
+                </div>
+            </div>
+
+            <!-- PUBLIC KEY / PRIVATE KEY -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">મુખ્ય ખ્યાલ</div>
+                <div class="topic-title">પબ્લિક કી vs પ્રાઇવેટ કી <span class="mcq-ref">Q117, Q118, Q122, Q123, Q124, Q127, Q137</span></div>
+                <div class="topic-title-gu">Public Key vs Private Key</div>
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>લક્ષણ (Feature)</th><th>પબ્લિક કી (સાર્વજનિક ચાવી)</th><th>પ્રાઇવેટ કી (ખાનગી ચાવી)</th></tr>
+                        <tr><td>દૃશ્યતા (Visibility)</td><td>બધા સાથે ખુલ્લેઆમ શેર કરેલી</td><td>માલિક દ્વારા ગુપ્ત રાખેલી</td></tr>
+                        <tr><td>ઉપયોગ (Used for)</td><td>માલિકને સંદેશાઓ એન્ક્રિપ્ટ કરવા; ડિજિટલ સિગ્નેચર ચકાસવા</td><td>પ્રાપ્ત સંદેશાઓ ડિક્રિપ્ટ કરવા; ડિજિટલ સિગ્નેચર બનાવવા</td></tr>
+                        <tr><td>વિતરણ (Distribution)</td><td>મુક્તપણે વિતરિત (સર્ટિફિકેટ્સમાં)</td><td>ક્યારેય કોઈની સાથે શેર ન કરવી</td></tr>
+                        <tr><td>MCQ ઉત્તરો</td><td>Q118=B, Q119=C (સિગ્નેચર ચકાસો), Q122=B, Q124=B, Q127=C</td><td>Q117=C, Q119=C, Q123=C, Q137=C</td></tr>
+                    </table>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ — ગોપનીયતા (ગુપ્ત સંદેશ મોકલવો)</div>
+                        <p>
+                            બોબ એલિસને ગુપ્ત સંદેશ મોકલવા માંગે છે:<br>
+                            ૧. બોબ એલિસની <strong>પબ્લિક કી</strong> મેળવે છે (કોઈપણને ઉપલબ્ધ)<br>
+                            ૨. બોબ સંદેશને એલિસની પબ્લિક કીનો ઉપયોગ કરીને એન્ક્રિપ્ટ કરે છે<br>
+                            ૩. એન્ક્રિપ્ટેડ સંદેશ એલિસને મોકલે છે<br>
+                            ૪. ફક્ત એલિસ જ તેને તેની <strong>પ્રાઇવેટ કી</strong> વડે ડિક્રિપ્ટ કરી શકે છે<br>
+                            → જો અટકાવવામાં આવે તો પણ, બીજું કોઈ તેને વાંચી શકતું નથી!
+                        </p>
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ — ડિજિટલ સિગ્નેચર (પ્રમાણીકરણ)</div>
+                        <p>
+                            એલિસ દસ્તાવેજ પર સહી કરવા માંગે છે:<br>
+                            ૧. એલિસ તેની <strong>પ્રાઇવેટ કી</strong>નો ઉપયોગ કરીને સહી કરે છે (હેશ એન્ક્રિપ્ટ કરે છે)<br>
+                            ૨. સહી કરેલ દસ્તાવેજ બોબને મોકલે છે<br>
+                            ૩. બોબ એલિસની <strong>પબ્લિક કી</strong>નો ઉપયોગ કરીને સિગ્નેચર ચકાસે છે<br>
+                            ૪. જો માન્ય હોય → દસ્તાવેજ ખરેખર એલિસ પાસેથી આવ્યો છે (નોન-રિપ્યુડિએશન!)
+                        </p>
+                    </div>
+                    <div class="key-point">નિયમ: પબ્લિક વડે એન્ક્રિપ્ટ કરો → પ્રાઇવેટ વડે ડિક્રિપ્ટ કરો. પ્રાઇવેટ વડે સહી કરો → પબ્લિક વડે ચકાસો.</div>
+                </div>
+            </div>
+
+            <!-- ASYMMETRIC CHARACTERISTICS -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">સરખામણી</div>
+                <div class="topic-title">અસિમેટ્રિક vs સિમેટ્રિક — સંપૂર્ણ સરખામણી <span class="mcq-ref">Q111-Q116, Q128-Q132, Q136, Q140</span></div>
+                <div class="topic-title-gu">Asymmetric vs Symmetric — Complete Comparison</div>
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>લક્ષણ (Feature)</th><th>સિમેટ્રિક</th><th>અસિમેટ્રિક</th></tr>
+                        <tr><td>કીઓ</td><td>૧ શેર કી (બંને માટે સમાન)</td><td>૨ કીઓ (પબ્લિક + પ્રાઇવેટ)</td></tr>
+                        <tr><td>ઝડપ</td><td>✅ ઝડપી (Q98, Q100, Q108, Q112, Q115)</td><td>❌ ધીમો (Q128, Q130, Q136, Q140)</td></tr>
+                        <tr><td>કી વિતરણ</td><td>❌ મુશ્કેલ (ગુપ્ત રીતે શેર કરવી)</td><td>✅ સરળ (પબ્લિક કી ખુલ્લેઆમ શેર કરી શકાય)</td></tr>
+                        <tr><td>શ્રેષ્ઠ ઉપયોગ</td><td>મોટો ડેટા, બલ્ક એન્ક્રિપ્શન</td><td>કી વિનિમય, ડિજિટલ સિગ્નેચર, નાનો ડેટા</td></tr>
+                        <tr><td>ઉદાહરણ અલ્ગોરિધમ્સ</td><td>AES, DES, 3DES, RC4</td><td>RSA, ECC, Diffie-Hellman</td></tr>
+                        <tr><td>નોન-રિપ્યુડિએશન</td><td>❌ ના</td><td>✅ હા (ડિજિટલ સિગ્નેચર સાથે)</td></tr>
+                        <tr><td>સ્કેલેબિલિટી</td><td>નબળી (N વપરાશકર્તાઓ માટે N² કી જોડીઓ)</td><td>સારી (દરેક વપરાશકર્તાને ફક્ત ૧ કી જોડીની જરૂર)</td></tr>
+                    </table>
+                    <div class="key-point">Q111 = D (સિમેટ્રિક મોટા ડેટા માટે ઝડપી) | Q128 = C (અસિમેટ્રિક ધીમો પણ કી વિનિમય સરળ) | Q130 = D / Q131 = C / Q132 = C (અસિમેટ્રિક = ૨ અલગ કીઓ)</div>
+                </div>
+            </div>
+
+            <!-- PRIME NUMBERS IN CRYPTO -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">ગણિત</div>
+                <div class="topic-title">અસિમેટ્રિક ક્રિપ્ટોગ્રાફીમાં મોટા અવિભાજ્ય સંખ્યાઓ <span class="mcq-ref">Q120, Q125, Q133</span></div>
+                <div class="topic-title-gu">Large Prime Numbers in Asymmetric Cryptography</div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>અવિભાજ્ય સંખ્યાઓ શા માટે?</strong> RSA જેવા અસિમેટ્રિક અલ્ગોરિધમ્સ બે મોટી અવિભાજ્ય સંખ્યાઓના ગુણાકારફળ ધરાવતી ખૂબ મોટી સંખ્યાઓના અવયવીકરણની ગાણિતિક મુશ્કેલી પર આધાર રાખે છે. આને <strong>પૂર્ણાંક અવયવીકરણ સમસ્યા</strong> કહેવામાં આવે છે.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">RSA ઉદાહરણ</div>
+                        <p>RSA બે મોટા અવિભાજ્ય p અને q પસંદ કરે છે (દરેક સેંકડો અંકો લાંબા).<br>
+                        n = p × q (પબ્લિક મોડ્યુલસ)<br><br>
+                        સરળ: p અને q આપેલ હોય, તો n = p × q ની ગણતરી મિલિસેકન્ડ્સમાં કરો.<br>
+                        મુશ્કેલ: ફક્ત n આપેલ હોય, તો p અને q શોધો → આજના કમ્પ્યુટર્સ સાથે અબજો વર્ષો લાગે છે!<br><br>
+                        આ એક-માર્ગી મુશ્કેલી RSA ની સુરક્ષાનો આધાર બનાવે છે.</p>
+                    </div>
+                    <div class="key-point">Q120 = D, Q125 = B, Q133 = B: મોટી અવિભાજ્ય સંખ્યાઓ અસિમેટ્રિક અલ્ગોરિધમ્સ માટે મૂળભૂત છે.</div>
+                </div>
+            </div>
+
+            <!-- DIGITAL SIGNATURES -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">ખ્યાલ</div>
+                <div class="topic-title">ડિજિટલ સિગ્નેચર (Digital Signatures) <span class="mcq-ref">Q119, Q135, Q138</span></div>
+                <div class="topic-body">
+                    <div class="fullform">DS = Digital Signature</div>
+                    <div class="def-box">
+                        <strong>ડિજિટલ સિગ્નેચર</strong> = એક ક્રિપ્ટોગ્રાફિક પદ્ધતિ જે ડિજિટલ દસ્તાવેજો અને સંદેશાઓ માટે <strong>પ્રમાણીકરણ, અખંડિતતા અને નોન-રિપ્યુડિએશન</strong> પૂરું પાડે છે. મોકલનારની પ્રાઇવેટ કીનો ઉપયોગ કરીને બનાવવામાં આવે છે.
+                    </div>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>મોકલનાર સંદેશનો <strong>હેશ</strong> બનાવે છે (દા.ત., SHA-256)</li>
+                        <li><span class="step-num">૨</span>મોકલનાર હેશને તેમની <strong>પ્રાઇવેટ કી</strong> વડે એન્ક્રિપ્ટ કરે છે → આ ડિજિટલ સિગ્નેચર છે</li>
+                        <li><span class="step-num">૩</span>મોકલનાર મોકલે છે: મૂળ સંદેશ + ડિજિટલ સિગ્નેચર</li>
+                        <li><span class="step-num">૪</span>પ્રાપ્તકર્તા મોકલનારની <strong>પબ્લિક કી</strong>નો ઉપયોગ કરીને ચકાસે છે → હેશ મેળવવા માટે સિગ્નેચર ડિક્રિપ્ટ કરે છે</li>
+                        <li><span class="step-num">૫</span>પ્રાપ્તકર્તા પ્રાપ્ત સંદેશનો પણ હેશ બનાવે છે અને સરખામણી કરે છે → જો સમાન હોય, તો સંદેશ અધિકૃત છે!</li>
+                    </ul>
+                    <div class="example-box">
+                        <div class="ex-label">વાસ્તવિક દુનિયા</div>
+                        <p>સોફ્ટવેર ડાઉનલોડ્સમાં ઘણી વખત ડિજિટલ સિગ્નેચરનો સમાવેશ થાય છે. તમે તેમની પબ્લિક કી સાથે સિગ્નેચર ચકાસીને ડાઉનલોડ કરેલી ફાઇલ ખરેખર મૂળ ડેવલપર પાસેથી છે કે નહીં (ચેડાં થયા નથી) તે ચકાસી શકો છો.</p>
+                    </div>
+                    <div class="key-point">Q119 = C: ડિજિટલ સિગ્નેચર ચકાસવા માટે મોકલનારની પબ્લિક કીનો ઉપયોગ કરો.<br>Q138 = B: ડિજિટલ સિગ્નેચર પ્રમાણીકરણ અને અખંડિતતા બંને સુનિશ્ચિત કરે છે.<br>Q135 = C: ડિજિટલ સિગ્નેચર ચકાસણી પ્રામાણિકતાની પુષ્ટિ કરે છે.</div>
+                </div>
+            </div>
+
+            <!-- HASH FUNCTION -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">ખ્યાલ</div>
+                <div class="topic-title">હેશ ફંક્શન્સ (Hash Functions) <span class="mcq-ref">Q126</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>હેશ ફંક્શન</strong> = એક ગાણિતિક ફંક્શન જે ચલ-લંબાઈના ઇનપુટને લઈને <strong>નિશ્ચિત-લંબાઈ</strong> આઉટપુટ (હેશ/ડાયજેસ્ટ) ઉત્પન્ન કરે છે. તે એક-માર્ગી ફંક્શન છે (ઉલટાવી શકાય નહીં).
+                    </div>
+                    <div class="badge-list">
+                        <span class="badge green">MD5 = Message Digest 5 (૧૨૮-bit આઉટપુટ)</span>
+                        <span class="badge green">SHA-1 = Secure Hash Algorithm 1 (૧૬૦-bit)</span>
+                        <span class="badge green">SHA-256 = ૨૫૬-bit આઉટપુટ</span>
+                        <span class="badge green">SHA-3 = નવું SHA ધોરણ</span>
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ</div>
+                        <p>SHA-256("HELLO") = "185f8db32..."  (૬૪ હેક્સ અક્ષરો = ૨૫૬ બિટ્સ, હંમેશા!)<br>
+                        SHA-256("HELLO!") = "3f79bb7b..." (નાના ફેરફાર છતાં સંપૂર્ણપણે અલગ)<br><br>
+                        આને <strong>એવલાંશ ઇફેક્ટ (Avalanche Effect)</strong> કહેવામાં આવે છે — નાના ઇનપુટ ફેરફાર = સંપૂર્ણપણે અલગ હેશ.</p>
+                    </div>
+                    <div class="key-point">Q126 = C: હેશ ફંક્શન ચલ-લંબાઈના ઇનપુટમાંથી નિશ્ચિત-લંબાઈનું આઉટપુટ ઉત્પન્ન કરે છે.</div>
+                </div>
+            </div>
+
+            <!-- KEY SPACE -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">ખ્યાલ</div>
+                <div class="topic-title">કી સ્પેસ (Key Space) <span class="mcq-ref">Q134, Q139</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>કી સ્પેસ</strong> = સાઇફર અથવા એન્ક્રિપ્શન સિસ્ટમમાં ઉપયોગમાં લઈ શકાય તેવી કુલ સંભવિત કીઓની સંખ્યા. મોટી કી સ્પેસનો અર્થ મજબૂત સુરક્ષા (બ્રુટ ફોર્સ કરવી મુશ્કેલ).
+                    </div>
+                    <div class="formula-box">
+                        કી સ્પેસ = 2^(કી લંબાઈ બિટ્સમાં)
+                        <br><span style="color:var(--muted)">૫૬-bit DES: 2^56 = ~૭૨ ક્વાડ્રિલિયન કીઓ</span>
+                        <br><span style="color:var(--muted)">૧૨૮-bit AES: 2^128 = હાલની ટેકનોલોજી સાથે બ્રુટ ફોર્સ અશક્ય</span>
+                    </div>
+                    <div class="key-point">Q134 = D, Q139 = C: કી સ્પેસ = સાઇફરમાં ઉપયોગમાં લઈ શકાય તેવી કુલ સંભવિત કીઓ.</div>
+                </div>
+            </div>
+
+            <!-- PKI -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">ઇન્ફ્રાસ્ટ્રક્ચર</div>
+                <div class="topic-title">પબ્લિક કી ઇન્ફ્રાસ્ટ્રક્ચર — PKI</div>
+                <div class="topic-title-gu">Public Key Infrastructure — PKI</div>
+                <div class="topic-body">
+                    <div class="fullform">PKI = Public Key Infrastructure</div>
+                    <div class="fullform">CA = Certificate Authority</div>
+                    <div class="fullform">CRL = Certificate Revocation List</div>
+                    <div class="fullform">SSL = Secure Sockets Layer</div>
+                    <div class="fullform">TLS = Transport Layer Security</div>
+                    <div class="def-box">
+                        <strong>PKI</strong> = ડિજિટલ સર્ટિફિકેટ્સ બનાવવા, મેનેજ કરવા, વિતરિત કરવા અને રદ કરવા માટેની એક સિસ્ટમ. તે એ ચકાસીને સુરક્ષિત પબ્લિક કી વિતરણને સક્ષમ બનાવે છે કે પબ્લિક કી ખરેખર તેના દાવા મુજબની એન્ટિટીની છે.
+                    </div>
+                    <p><strong>PKI ઘટકો (Components):</strong></p>
+                    <table class="theory-table">
+                        <tr><th>ઘટક (Component)</th><th>ભૂમિકા (Role)</th></tr>
+                        <tr><td>સર્ટિફિકેટ ઓથોરિટી (CA)</td><td>ડિજિટલ સર્ટિફિકેટ્સ જારી કરે છે અને સહી કરે છે (વિશ્વસનીય તૃતીય પક્ષ)</td></tr>
+                        <tr><td>ડિજિટલ સર્ટિફિકેટ</td><td>પબ્લિક કીને એન્ટિટીની ઓળખ સાથે બાંધે છે</td></tr>
+                        <tr><td>રજિસ્ટ્રેશન ઓથોરિટી (RA)</td><td>CA સર્ટિફિકેટ જારી કરે તે પહેલાં ઓળખ ચકાસે છે</td></tr>
+                        <tr><td>સર્ટિફિકેટ રિવોકેશન લિસ્ટ (CRL)</td><td>રદ કરવામાં આવેલ સર્ટિફિકેટ્સની યાદી (ચેડાં થયેલ)</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CONFIDENTIALITY IN PKI -->
+            <div class="topic-card highlight-blue">
+                <div class="topic-label">મહત્વપૂર્ણ MCQ ખ્યાલ</div>
+                <div class="topic-title">PKI માં ગોપનીયતા vs પ્રમાણીકરણ <span class="mcq-ref">Q121, Q122</span></div>
+                <div class="topic-title-gu">Confidentiality vs Authentication in PKI</div>
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>ઉદ્દેશ્ય (Goal)</th><th>શેની સાથે એન્ક્રિપ્ટ/સહી કરો</th><th>શેની સાથે ડિક્રિપ્ટ/ચકાસો</th></tr>
+                        <tr><td><strong>ગોપનીયતા</strong> (ફક્ત પ્રાપ્તકર્તા વાંચી શકે)</td><td>પ્રાપ્તકર્તાની <strong>પબ્લિક કી</strong></td><td>પ્રાપ્તકર્તાની <strong>પ્રાઇવેટ કી</strong></td></tr>
+                        <tr><td><strong>પ્રમાણીકરણ</strong> (મોકલનાર કોણ છે તે સાબિત કરો)</td><td>મોકલનારની <strong>પ્રાઇવેટ કી</strong></td><td>મોકલનારની <strong>પબ્લિક કી</strong></td></tr>
+                    </table>
+                    <div class="key-point">Q121 = C: ગોપનીયતા પ્રાપ્તકર્તાની પબ્લિક કી વડે એન્ક્રિપ્ટ કરીને પ્રાપ્ત થાય છે.<br>Q122 = B: માલિકને સુરક્ષિત સંદેશ મોકલવા માટે, તેમની પબ્લિક કીનો ઉપયોગ કરો.</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ===== SECTION 6: OS SECURITY ===== -->
+        <section class="section" id="sec6">
+            <div class="section-header">
+                <div class="section-icon teal">💻</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">એકમ ૦૬ · Q૧૪૧–Q૧૬૫</div>
+                    <div class="section-title">ઓપરેટિંગ સિસ્ટમ સુરક્ષા</div>
+                    <div class="section-title-gu">Operating System Security</div>
+                </div>
+            </div>
+
+            <!-- OS SECURITY OVERVIEW -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">સામાન્ય ઝાંખી</div>
+                <div class="topic-title">OS સુરક્ષા ખ્યાલો — સંપૂર્ણ નકશો</div>
+                <div class="topic-title-gu">OS Security Concepts — Complete Map</div>
+                <div class="topic-body">
+                    <p>ઓપરેટિંગ સિસ્ટમ (OS) સુરક્ષામાં એવી પદ્ધતિઓનો સમાવેશ થાય છે જે OS અને તેના પર ચાલતા સોફ્ટવેર/ડેટાને અનધિકૃત ઍક્સેસ, ફેરફાર અથવા વિક્ષેપથી સુરક્ષિત કરે છે.</p>
+                    <div class="badge-list">
+                        <span class="badge green">ઍક્સેસ કંટ્રોલ</span>
+                        <span class="badge green">પ્રોસેસ આઈસોલેશન</span>
+                        <span class="badge green">એપ્લિકેશન કંટ્રોલ પોલિસી</span>
+                        <span class="badge green">લઘુત્તમ વિશેષાધિકાર સિદ્ધાંત</span>
+                        <span class="badge green">પરમિશન મેનેજમેન્ટ</span>
+                        <span class="badge green">સુરક્ષા અપડેટ્સ</span>
+                        <span class="badge green">ACL = ઍક્સેસ કંટ્રોલ લિસ્ટ</span>
+                    </div>
+                    <div class="fullform">OS = Operating System</div>
+                    <div class="fullform">ACL = Access Control List</div>
+                    <div class="fullform">RBAC = Role-Based Access Control</div>
+                    <div class="fullform">DAC = Discretionary Access Control</div>
+                    <div class="fullform">MAC = Mandatory Access Control</div>
+                </div>
+            </div>
+
+            <!-- ACCESS CONTROL -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">પદ્ધતિ ૧</div>
+                <div class="topic-title">ઍક્સેસ કંટ્રોલ (Access Control) <span class="mcq-ref">Q142, Q143, Q147, Q149, Q151, Q153, Q155, Q157, Q160, Q163</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>ઍક્સેસ કંટ્રોલ</strong> = એક સુરક્ષા પદ્ધતિ જે વપરાશકર્તાઓને ફક્ત તે સંસાધનો અને કામગીરીઓ સુધી મર્યાદિત કરે છે જે તેઓ કરવા માટે <strong>પરવાનગી</strong> ધરાવે છે, તેમની ઓળખ અને સોંપેલ વિશેષાધિકારો/ભૂમિકાઓના આધારે.
+                    </div>
+                    <p><strong>ઍક્સેસ કંટ્રોલના પ્રકારો (Types):</strong></p>
+                    <table class="theory-table">
+                        <tr><th>પ્રકાર</th><th>ફૂલ ફોર્મ</th><th>કેવી રીતે કામ કરે છે</th><th>ઉદાહરણ</th></tr>
+                        <tr><td>DAC</td><td>Discretionary AC</td><td>માલિક નક્કી કરે છે કે કોણ તેમના સંસાધનોને ઍક્સેસ કરી શકે છે</td><td>ફાઇલ માલિક વાંચન/લેખન પરમિશન સેટ કરે છે</td></tr>
+                        <tr><td>MAC</td><td>Mandatory AC</td><td>સિસ્ટમ લેબલ્સ (વર્ગીકૃત, ગુપ્ત) ના આધારે ઍક્સેસ લાગુ કરે છે</td><td>લશ્કરી/સરકારી સિસ્ટમો</td></tr>
+                        <tr><td>RBAC</td><td>Role-Based AC</td><td>વપરાશકર્તાની ભૂમિકા (એડમિન, વપરાશકર્તા, અતિથિ) પર આધારિત ઍક્સેસ</td><td>હોસ્પિટલ: ડોકટરો બધા રેકોર્ડ્સ જુએ છે, નર્સો મર્યાદિત જુએ છે</td></tr>
+                    </table>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ</div>
+                        <p>કંપની ફાઇલ સર્વરમાં:<br>
+                        - HR મેનેજર HR ફાઇલો વાંચી/લખી શકે છે<br>
+                        - ફાઇનાન્સ ટીમ ફાઇનાન્સ ફાઇલો વાંચી/લખી શકે છે<br>
+                        - નિયમિત કર્મચારીઓ ફક્ત શેર કરેલ દસ્તાવેજો વાંચી શકે છે<br>
+                        → આ <strong>ભૂમિકા-આધારિત ઍક્સેસ કંટ્રોલ (RBAC)</strong> છે</p>
+                    </div>
+                    <div class="def-box">
+                        <strong>ઍક્સેસ કંટ્રોલ લિસ્ટ (ACL)</strong> = દરેક સંસાધન સાથે જોડાયેલી યાદી જે સ્પષ્ટ કરે છે કે કયા વપરાશકર્તાઓ/જૂથો પાસે કઈ પરમિશન (વાંચન, લેખન, ચલાવવું, કાઢી નાખવું) છે.
+                    </div>
+                    <div class="key-point">Q142 = D (ઍક્સેસ કંટ્રોલ ભૂમિકા દ્વારા વપરાશકર્તા ક્રિયાઓને મર્યાદિત કરે છે) | Q143 = B (પરવાનગી પ્રાપ્ત સંસાધનો સુધી મર્યાદિત કરે છે) | Q149 = A, Q153 = A, Q155 = C, Q160 = A (ACL પરમિશનના આધારે પ્રતિબંધિત કરે છે)</div>
+                </div>
+            </div>
+
+            <!-- PROCESS ISOLATION -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">પદ્ધતિ ૨</div>
+                <div class="topic-title">પ્રોસેસ આઈસોલેશન (Process Isolation) <span class="mcq-ref">Q144, Q154, Q164</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>પ્રોસેસ આઈસોલેશન</strong> = એક OS પદ્ધતિ જે ચાલતી પ્રક્રિયાઓ (પ્રોગ્રામ્સ) ને મેમરીમાં એકબીજાથી અલગ રાખે છે, એક પ્રક્રિયાને બીજી પ્રક્રિયાના ડેટા અથવા કોડને ઍક્સેસ કરતા અથવા દખલ કરતા અટકાવે છે.
+                    </div>
+                    <p><strong>કેવી રીતે કામ કરે છે (How it works):</strong></p>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>દરેક પ્રક્રિયાને તેની પોતાની અલગ મેમરી સ્પેસ મળે છે (વર્ચ્યુઅલ મેમરી)</li>
+                        <li><span class="step-num">૨</span>પ્રક્રિયા A પ્રક્રિયા B ની મેમરી વાંચી/લખી શકતી નથી</li>
+                        <li><span class="step-num">૩</span>જો પ્રક્રિયા A ક્રેશ થાય, તો પ્રક્રિયા B ચાલુ રહે છે</li>
+                        <li><span class="step-num">૪</span>એક પ્રક્રિયામાં માલવેર સરળતાથી અન્યમાં ફેલાઈ શકતો નથી</li>
+                    </ul>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ</div>
+                        <p>તમારું વેબ બ્રાઉઝર (Chrome) અને તમારું મ્યુઝિક પ્લેયર (Spotify) અલગ અલગ આઈસોલેટેડ પ્રક્રિયાઓ તરીકે ચાલે છે. Spotify માં ભૂલ Chrome ટૅબ્સને ક્રેશ કરી શકતી નથી અથવા તમારા બ્રાઉઝર પાસવર્ડ્સ ઍક્સેસ કરી શકતી નથી → <strong>પ્રોસેસ આઈસોલેશન કામ કરે છે!</strong></p>
+                    </div>
+                    <div class="key-point">Q144 = A, Q154 = B, Q164 = B: પ્રોસેસ આઈસોલેશન = OS પદ્ધતિ એપ્લિકેશન્સને આઈસોલેટ કરવા અને દખલ અટકાવવા માટે.</div>
+                </div>
+            </div>
+
+            <!-- APPLICATION CONTROL POLICY -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">પદ્ધતિ ૩</div>
+                <div class="topic-title">એપ્લિકેશન કંટ્રોલ પોલિસી (Application Control Policy) <span class="mcq-ref">Q145, Q146, Q148, Q152, Q156, Q159, Q162</span></div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>એપ્લિકેશન કંટ્રોલ પોલિસી / એપ્લિકેશન વ્હાઇટલિસ્ટિંગ</strong> = એક OS સુવિધા જે સિસ્ટમ પર કયા પ્રોગ્રામ્સ ચલાવી શકાય અથવા ઇન્સ્ટોલ કરી શકાય તે પ્રતિબંધિત કરે છે, અનધિકૃત સોફ્ટવેરને ચાલતા અટકાવે છે.
+                    </div>
+                    <div class="grid2">
+                        <div class="compare-card">
+                            <div class="compare-title c-blue">વ્હાઇટલિસ્ટિંગ</div>
+                            <p style="font-size:13px;">ફક્ત <strong>મંજૂર</strong> એપ્લિકેશન્સને ચાલવાની મંજૂરી છે. બાકીનું બધું ડિફોલ્ટ રૂપે અવરોધિત છે. વધુ સુરક્ષિત પણ ઓછી લવચીક.</p>
+                        </div>
+                        <div class="compare-card">
+                            <div class="compare-title c-purple">બ્લેકલિસ્ટિંગ</div>
+                            <p style="font-size:13px;">જાણીતી <strong>ખરાબ</strong> એપ્લિકેશન્સ અવરોધિત છે. બાકીનું બધું મંજૂર છે. ઓછી સુરક્ષિત (નવું માલવેર હજી બ્લેકલિસ્ટ પર નથી તે ચાલી શકે છે).</p>
+                        </div>
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ</div>
+                        <p>કંપનીની IT નીતિ કહે છે કે ફક્ત Microsoft Office, Chrome, અને મંજૂર બિઝનેસ સોફ્ટવેર જ કામના કમ્પ્યુટર્સ પર ચાલી શકે છે. કર્મચારી ગેમ્સ અથવા અનધિકૃત સોફ્ટવેર ઇન્સ્ટોલ કરી શકતો નથી. → <strong>એપ્લિકેશન વ્હાઇટલિસ્ટિંગ</strong>.<br><br>એન્ટિવાયરસ બ્લેકલિસ્ટિંગનો ઉપયોગ કરે છે — તે જાણીતા વાયરસ/માલવેરને અવરોધિત કરે છે.</p>
+                    </div>
+                    <div class="key-point">Q145 = D, Q146 = D, Q148 = A (પરમિશન મેનેજમેન્ટ), Q152 = A, Q156 = A, Q159 = A, Q162 = A: એપ્લિકેશન કંટ્રોલ પોલિસી અનધિકૃત એપ્લિકેશન એક્ઝિક્યુશન અટકાવે છે.</div>
+                </div>
+            </div>
+
+            <!-- LEAST PRIVILEGE -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">સિદ્ધાંત</div>
+                <div class="topic-title">લઘુત્તમ વિશેષાધિકાર સિદ્ધાંત (Least Privilege Principle) <span class="mcq-ref">Q150, Q158, Q161</span></div>
+                <div class="topic-title-gu">Principle of Least Privilege</div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>લઘુત્તમ વિશેષાધિકારનો સિદ્ધાંત (PoLP)</strong> = દરેક વપરાશકર્તા, પ્રોગ્રામ અથવા પ્રક્રિયાને તેના ચોક્કસ કાર્ય માટે જરૂરી <strong>ન્યૂનતમ ઍક્સેસ અધિકારો</strong> જ હોવા જોઈએ. વધુ નહીં, ઓછા નહીં.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણો</div>
+                        <p>
+                            ✅ ડેટા એન્ટ્રી ક્લાર્કને ફક્ત ડેટા એન્ટ્રી ફોર્મ માટે READ/WRITE હોવું જોઈએ, સમગ્ર ડેટાબેઝ માટે એડમિન ઍક્સેસ નહીં.<br><br>
+                            ✅ એક પ્રોગ્રામ જેને ફક્ત ફાઇલો વાંચવાની જરૂર છે તેને લેખન પરમિશન ન હોવું જોઈએ.<br><br>
+                            ❌ ખરાબ પ્રથા: "કદાચ કામ પડે" ના આધારે દરેકને એડમિન/વ્યવસ્થાપક અધિકારો આપવા.<br><br>
+                            જો લઘુત્તમ વિશેષાધિકાર ધરાવતા ખાતા સાથે ચેડાં થાય, તો હુમલાખોર ફક્ત મર્યાદિત નુકસાન જ કરી શકે છે — તેમની પાસે સમગ્ર સિસ્ટમની ઍક્સેસ નથી!
+                        </p>
+                    </div>
+                    <p><strong>શા માટે મહત્વપૂર્ણ?</strong></p>
+                    <ul class="step-list">
+                        <li><span class="step-num">૧</span>જો ખાતા સાથે ચેડાં થાય તો નુકસાન મર્યાદિત કરે છે (Q150)</li>
+                        <li><span class="step-num">૨</span>આક્રમણ સપાટી ઘટાડે છે</li>
+                        <li><span class="step-num">૩</span>વિશેષાધિકાર વૃદ્ધિ હુમલાઓ અટકાવે છે</li>
+                        <li><span class="step-num">૪</span>દરેક વપરાશકર્તા શું કરે છે તે ટ્રેક કરવું સરળ (જવાબદારી)</li>
+                    </ul>
+                    <div class="key-point">Q150 = B, Q158 = C, Q161 = A: લઘુત્તમ વિશેષાધિકાર સિદ્ધાંત = વપરાશકર્તાઓને જરૂરી ન્યૂનતમ ઍક્સેસ અધિકારો સુધી મર્યાદિત કરે છે.</div>
+                </div>
+            </div>
+
+            <!-- SECURITY UPDATES -->
+            <div class="topic-card highlight-green">
+                <div class="topic-label">શ્રેષ્ઠ પ્રથા</div>
+                <div class="topic-title">સુરક્ષા અપડેટ્સ અને પેચ મેનેજમેન્ટ <span class="mcq-ref">Q141</span></div>
+                <div class="topic-title-gu">Security Updates &amp; Patch Management</div>
+                <div class="topic-body">
+                    <div class="def-box">
+                        <strong>સુરક્ષા અપડેટ / પેચ</strong> = ઓપરેટિંગ સિસ્ટમ અથવા એપ્લિકેશનમાં નબળાઈઓ, ભૂલો અથવા સુરક્ષા નબળાઈઓને સુધારવા માટે વિક્રેતાઓ દ્વારા જારી કરવામાં આવેલ સોફ્ટવેર ફિક્સ.
+                    </div>
+                    <div class="example-box">
+                        <div class="ex-label">ઉદાહરણ</div>
+                        <p>માઇક્રોસોફ્ટ દર મહિને "પેચ મંગળવાર" સુરક્ષા અપડેટ્સ જારી કરે છે. જો તમારી સિસ્ટમ પેચ ન હોય, તો હુમલાખોરો જાણીતી નબળાઈઓનો ઉપયોગ કરી શકે છે (જેમ કે WannaCry રેન્સમવેરમાં વપરાયેલ EternalBlue).<br><br>સુરક્ષા અપડેટ્સ તાત્કાલિક લાગુ કરો → શ્રેષ્ઠ OS સુરક્ષા પ્રથા (Q141 = D)</p>
+                    </div>
+                    <div class="badge-list">
+                        <span class="badge green">OS પેચ્સ</span>
+                        <span class="badge green">એપ્લિકેશન અપડેટ્સ</span>
+                        <span class="badge green">ફર્મવેર અપડેટ્સ</span>
+                        <span class="badge green">ડ્રાઇવર અપડેટ્સ</span>
+                        <span class="badge green">એન્ટિ-માલવેર વ્યાખ્યા અપડેટ્સ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OS SECURITY SUMMARY -->
+            <div class="topic-card">
+                <div class="topic-label">ઝડપી સંદર્ભ</div>
+                <div class="topic-title">OS સુરક્ષા — સંપૂર્ણ MCQ ઉત્તર સારાંશ</div>
+                <div class="topic-title-gu">OS Security — Complete MCQ Answer Summary</div>
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>Q#</th><th>વિષય (Topic)</th><th>ઉત્તર</th><th>મુખ્ય ખ્યાલ (Key Concept)</th></tr>
+                        <tr><td>Q141</td><td>શ્રેષ્ઠ OS સુરક્ષા પ્રથા</td><td>D</td><td>નિયમિત સુરક્ષા અપડેટ્સ લાગુ કરવા</td></tr>
+                        <tr><td>Q142</td><td>ભૂમિકાઓ દ્વારા ક્રિયાઓને મર્યાદિત કરે છે</td><td>D</td><td>ઍક્સેસ કંટ્રોલ</td></tr>
+                        <tr><td>Q143</td><td>પરવાનગી પ્રાપ્ત સંસાધનો સુધી મર્યાદિત કરે છે</td><td>B</td><td>ઍક્સેસ કંટ્રોલ</td></tr>
+                        <tr><td>Q144</td><td>એપ્લિકેશન્સને આઈસોલેટ કરે છે</td><td>A</td><td>પ્રોસેસ આઈસોલેશન</td></tr>
+                        <tr><td>Q145</td><td>અવિશ્વસનીય પ્રોગ્રામ્સના અમલને પ્રતિબંધિત કરે છે</td><td>D</td><td>એપ્લિકેશન કંટ્રોલ પોલિસી</td></tr>
+                        <tr><td>Q146</td><td>દૂષિત સોફ્ટવેર એક્ઝિક્યુશન અટકાવે છે</td><td>D</td><td>એપ્લિકેશન વ્હાઇટલિસ્ટિંગ</td></tr>
+                        <tr><td>Q147</td><td>વિશેષાધિકારો દ્વારા ક્રિયાઓને પ્રતિબંધિત કરે છે</td><td>D</td><td>ઍક્સેસ કંટ્રોલ અમલીકરણ</td></tr>
+                        <tr><td>Q148</td><td>અનધિકૃત સોફ્ટવેર ઇન્સ્ટોલેશન અટકાવે છે</td><td>A</td><td>પરમિશન મેનેજમેન્ટ</td></tr>
+                        <tr><td>Q149</td><td>સુરક્ષા નીતિઓ-આધારિત ઍક્સેસ પ્રતિબંધ</td><td>A</td><td>ઍક્સેસ કંટ્રોલ લિસ્ટ (ACL)</td></tr>
+                        <tr><td>Q150</td><td>ખાતા સાથે ચેડાં થાય તો નુકસાન ઘટાડે છે</td><td>B</td><td>લઘુત્તમ વિશેષાધિકાર નીતિ</td></tr>
+                        <tr><td>Q151</td><td>પરમિશન દ્વારા અમલને પ્રતિબંધિત કરે છે</td><td>A</td><td>ઍક્સેસ કંટ્રોલ પદ્ધતિ</td></tr>
+                        <tr><td>Q152</td><td>અનધિકૃત એપ્લિકેશન એક્ઝિક્યુશન અટકાવે છે</td><td>A</td><td>એપ્લિકેશન કંટ્રોલ પોલિસી</td></tr>
+                        <tr><td>Q153</td><td>પરમિશન દ્વારા ફાઇલ ઍક્સેસ પ્રતિબંધ</td><td>A</td><td>ઍક્સેસ કંટ્રોલ લિસ્ટ</td></tr>
+                        <tr><td>Q154</td><td>ચાલતી પ્રક્રિયાઓને અલગ કરે છે</td><td>B</td><td>પ્રોસેસ આઈસોલેશન</td></tr>
+                        <tr><td>Q155</td><td>સોંપેલ પરમિશન દ્વારા ફાઇલ ઍક્સેસ</td><td>C</td><td>ઍક્સેસ કંટ્રોલ લિસ્ટ</td></tr>
+                        <tr><td>Q156</td><td>અનધિકૃત પ્રોગ્રામ એક્ઝિક્યુશન અટકાવે છે</td><td>A</td><td>એપ્લિકેશન કંટ્રોલ પોલિસી</td></tr>
+                        <tr><td>Q157</td><td>પરમિશન દ્વારા વપરાશકર્તા ઍક્સેસને પ્રતિબંધિત કરે છે</td><td>A</td><td>ઍક્સેસ કંટ્રોલ પદ્ધતિ</td></tr>
+                        <tr><td>Q158</td><td>ખાતા સાથે ચેડાં થાય તો નુકસાન મર્યાદિત કરે છે</td><td>C</td><td>લઘુત્તમ વિશેષાધિકાર સિદ્ધાંત</td></tr>
+                        <tr><td>Q159</td><td>અનધિકૃત સોફ્ટવેરને ચાલતા અટકાવે છે</td><td>A</td><td>એપ્લિકેશન કંટ્રોલ પોલિસી</td></tr>
+                        <tr><td>Q160</td><td>પરમિશન દ્વારા ફાઇલ ઍક્સેસ પ્રતિબંધ</td><td>A</td><td>ઍક્સેસ કંટ્રોલ લિસ્ટ</td></tr>
+                        <tr><td>Q161</td><td>ન્યૂનતમ ઍક્સેસ અધિકારો સુધી મર્યાદિત કરે છે</td><td>A</td><td>લઘુત્તમ વિશેષાધિકાર સિદ્ધાંત</td></tr>
+                        <tr><td>Q162</td><td>અનધિકૃત એપ્લિકેશન એક્ઝિક્યુશન અટકાવે છે</td><td>A</td><td>એપ્લિકેશન કંટ્રોલ પોલિસી</td></tr>
+                        <tr><td>Q163</td><td>પરમિશન દ્વારા ઍક્સેસને પ્રતિબંધિત કરે છે</td><td>A</td><td>ઍક્સેસ કંટ્રોલ પદ્ધતિ</td></tr>
+                        <tr><td>Q164</td><td>દખલ અટકાવવા પ્રોગ્રામ્સને આઈસોલેટ કરે છે</td><td>B</td><td>પ્રોસેસ આઈસોલેશન</td></tr>
+                        <tr><td>Q165</td><td>સોફ્ટવેર ઇન્સ્ટોલેશન વિશેષાધિકારોને પ્રતિબંધિત કરે છે</td><td>A</td><td>પરમિશન અમલીકરણ</td></tr>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- MASTER FULL FORMS -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon amber">📋</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">સંદર્ભ</div>
+                    <div class="section-title">સંપૂર્ણ ફૂલ ફોર્મ સૂચિ</div>
+                    <div class="section-title-gu">Complete Full Forms List</div>
+                </div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>સંક્ષિપ્ત (Abbr.)</th><th>ફૂલ ફોર્મ (Full Form)</th><th>સંદર્ભ (Context)</th></tr>
+                        <tr><td>CIA</td><td>ગોપનીયતા, અખંડિતતા, ઉપલબ્ધતા (Confidentiality, Integrity, Availability)</td><td>મૂળ સુરક્ષા ત્રિકોણ</td></tr>
+                        <tr><td>AES</td><td>Advanced Encryption Standard</td><td>સિમેટ્રિક સાઇફર (હાલનું ધોરણ)</td></tr>
+                        <tr><td>DES</td><td>Data Encryption Standard</td><td>સિમેટ્રિક સાઇફર (જૂનું, ૫૬-bit)</td></tr>
+                        <tr><td>3DES</td><td>Triple DES</td><td>DES ૩ વખત લાગુ</td></tr>
+                        <tr><td>RSA</td><td>Rivest–Shamir–Adleman</td><td>અસિમેટ્રિક એન્ક્રિપ્શન અલ્ગોરિધમ</td></tr>
+                        <tr><td>ECC</td><td>Elliptic Curve Cryptography</td><td>કાર્યક્ષમ અસિમેટ્રિક ક્રિપ્ટો</td></tr>
+                        <tr><td>PKI</td><td>Public Key Infrastructure</td><td>ડિજિટલ સર્ટિફિકેટ ઇકોસિસ્ટમ</td></tr>
+                        <tr><td>CA</td><td>Certificate Authority</td><td>ડિજિટલ સર્ટિફિકેટ્સ જારી કરે છે</td></tr>
+                        <tr><td>IDS</td><td>Intrusion Detection System</td><td>શંકાસ્પદ પ્રવૃત્તિ માટે નિરીક્ષણ</td></tr>
+                        <tr><td>IPS</td><td>Intrusion Prevention System</td><td>ઘૂસણખોરી શોધે અને અવરોધિત કરે</td></tr>
+                        <tr><td>DoS</td><td>Denial of Service</td><td>ઉપલબ્ધતાને વિક્ષેપિત કરતો હુમલો</td></tr>
+                        <tr><td>DDoS</td><td>Distributed Denial of Service</td><td>બહુવિધ સ્ત્રોતોમાંથી DoS</td></tr>
+                        <tr><td>MFA</td><td>Multi-Factor Authentication</td><td>બહુવિધ ઓળખ ચકાસણી</td></tr>
+                        <tr><td>2FA</td><td>Two-Factor Authentication</td><td>બે-પગલાં ઓળખ ચકાસણી</td></tr>
+                        <tr><td>SSL</td><td>Secure Sockets Layer</td><td>જૂનો વેબ એન્ક્રિપ્શન પ્રોટોકોલ</td></tr>
+                        <tr><td>TLS</td><td>Transport Layer Security</td><td>આધુનિક વેબ એન્ક્રિપ્શન (HTTPS)</td></tr>
+                        <tr><td>ACL</td><td>Access Control List</td><td>સંસાધનો માટે પરમિશન યાદી</td></tr>
+                        <tr><td>RBAC</td><td>Role-Based Access Control</td><td>વપરાશકર્તા ભૂમિકા પર આધારિત ઍક્સેસ</td></tr>
+                        <tr><td>DAC</td><td>Discretionary Access Control</td><td>માલિક-સંચાલિત ઍક્સેસ</td></tr>
+                        <tr><td>MAC</td><td>Mandatory Access Control</td><td>સિસ્ટમ-અમલીકૃત લેબલ-આધારિત ઍક્સેસ</td></tr>
+                        <tr><td>PoLP</td><td>Principle of Least Privilege</td><td>ન્યૂનતમ જરૂરી ઍક્સેસ</td></tr>
+                        <tr><td>OS</td><td>Operating System</td><td>સિસ્ટમ સોફ્ટવેર (Windows, Linux)</td></tr>
+                        <tr><td>SHA</td><td>Secure Hash Algorithm</td><td>હેશ ફંક્શન (SHA-256, SHA-3)</td></tr>
+                        <tr><td>MD5</td><td>Message Digest 5</td><td>હેશ ફંક્શન (૧૨૮-bit, હવે નબળું)</td></tr>
+                        <tr><td>VPN</td><td>Virtual Private Network</td><td>ઇન્ટરનેટ પર સુરક્ષિત ટનલ</td></tr>
+                        <tr><td>SIEM</td><td>Security Information and Event Management</td><td>લોગ વિશ્લેષણ પ્લેટફોર્મ</td></tr>
+                        <tr><td>SOC</td><td>Security Operations Center</td><td>સુરક્ષા ઘટનાઓનું નિરીક્ષણ કરતી ટીમ</td></tr>
+                        <tr><td>CRL</td><td>Certificate Revocation List</td><td>રદ કરેલ સર્ટિફિકેટ્સની યાદી</td></tr>
+                        <tr><td>OTP</td><td>One-Time Password</td><td>એક-વખતનો પ્રમાણીકરણ કોડ</td></tr>
+                        <tr><td>SQL</td><td>Structured Query Language</td><td>ડેટાબેઝ ક્વેરી ભાષા (SQL ઇન્જેક્શન હુમલો)</td></tr>
+                        <tr><td>CAPTCHA</td><td>Completely Automated Public Turing test to tell Computers and Humans Apart</td><td>બોટ નિવારણ</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- MASTER EXAM TIPS -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon purple">⚡</div>
+                <div class="section-title-wrap">
+                    <div class="section-num">પરીક્ષા ટીપ્સ</div>
+                    <div class="section-title">યાદ રાખવાના મહત્ત્વના મુદ્દા</div>
+                    <div class="section-title-gu">Key Points to Remember</div>
+                </div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-body">
+                    <table class="theory-table">
+                        <tr><th>પ્રશ્ન પેટર્ન (Question Pattern)</th><th>લગભગ હંમેશા જવાબ</th></tr>
+                        <tr><td>"ખાતરી કરે છે કે ડેટા ફક્ત અધિકૃતને જ સુલભ છે" / "અનધિકૃતથી છુપાયેલ"</td><td>ગોપનીયતા (Confidentiality)</td></tr>
+                        <tr><td>"ખાતરી કરે છે કે ડેટા શોધી શકાય તેવા સંશોધન વિના બદલાતો નથી"</td><td>અખંડિતતા (Integrity)</td></tr>
+                        <tr><td>"ખાતરી કરે છે કે સિસ્ટમો કાર્યરત / જ્યારે જરૂર પડે ત્યારે સુલભ રહે"</td><td>ઉપલબ્ધતા (Availability)</td></tr>
+                        <tr><td>"મોકલનાર મોકલ્યું તે <strong>નકારી શકે નહીં</strong>" / "મૂળ સાબિત કરો"</td><td>નોન-રિપ્યુડિએશન (Non-Repudiation)</td></tr>
+                        <tr><td>"ઍક્સેસ આપતા પહેલા વપરાશકર્તા ઓળખ ચકાસો"</td><td>પ્રમાણીકરણ (Authentication)</td></tr>
+                        <tr><td>"ક્રિયાઓને વપરાશકર્તા સાથે શોધી કાઢો"</td><td>જવાબદારી (Accountability)</td></tr>
+                        <tr><td>"યોગ્ય કી મળે ત્યાં સુધી તમામ સંભવિત કીઓ અજમાવે છે" / "વ્યવસ્થિત અજમાયશ"</td><td>બ્રુટ ફોર્સ હુમલો (Brute Force Attack)</td></tr>
+                        <tr><td>"સિસ્ટમને ભારે બનાવે છે / સંસાધનો ખતમ કરે છે / અતિશય વિનંતીઓ"</td><td>DoS (ડિનાઈલ ઓફ સર્વિસ)</td></tr>
+                        <tr><td>"માન્ય ડેટા કેપ્ચર કરે છે અને ફરીથી પ્રસારિત કરે છે" / "રિપ્લે"</td><td>રિપ્લે હુમલો (Replay Attack)</td></tr>
+                        <tr><td>"વિશ્વસનીય સ્ત્રોત તરીકે ઢોંગ કરે છે"</td><td>સ્પૂફિંગ (Spoofing)</td></tr>
+                        <tr><td>"ફેરફાર કર્યા વિના ગુપ્ત રીતે નિરીક્ષણ"</td><td>ઈવ્સડ્રૉપિંગ (Eavesdropping — નિષ્ક્રિય હુમલો)</td></tr>
+                        <tr><td>"સંદેશાવ્યવહાર પેટર્ન (સામગ્રી નહીં) નું વિશ્લેષણ"</td><td>ટ્રાફિક વિશ્લેષણ (Traffic Analysis)</td></tr>
+                        <tr><td>"શંકાસ્પદ વર્તણૂક માટે નિરીક્ષણ"</td><td>IDS (Intrusion Detection System)</td></tr>
+                        <tr><td>"પછીના વિશ્લેષણ માટે ઘટનાઓ રેકોર્ડ કરે છે"</td><td>લોગિંગ સિસ્ટમ / ઓડિટ ટ્રેલ</td></tr>
+                        <tr><td>"ઇનકમિંગ અને આઉટગોઇંગ ટ્રાફિકનું નિરીક્ષણ અને નિયંત્રણ"</td><td>ફાયરવોલ (Firewall)</td></tr>
+                        <tr><td>"એન્ક્રિપ્ટ અને ડિક્રિપ્ટ બંને માટે સમાન કી"</td><td>સિમેટ્રિક એન્ક્રિપ્શન</td></tr>
+                        <tr><td>"બે અલગ કીઓ" / "પબ્લિક + પ્રાઇવેટ"</td><td>અસિમેટ્રિક એન્ક્રિપ્શન</td></tr>
+                        <tr><td>"સામાન્ય રીતે <strong>ઝડપી</strong> / મોટા ડેટા માટે કાર્યક્ષમ"</td><td>સિમેટ્રિક એન્ક્રિપ્શન</td></tr>
+                        <tr><td>"સામાન્ય રીતે <strong>ધીમો</strong> પણ કી વિનિમય/વિતરણ સરળ"</td><td>અસિમેટ્રિક એન્ક્રિપ્શન</td></tr>
+                        <tr><td>"સિમેટ્રિકનો મુખ્ય પડકાર" / "મુખ્ય નબળાઈ"</td><td>કી વિતરણ (Key Distribution)</td></tr>
+                        <tr><td>"સુરક્ષા આના પર નિર્ભર છે"</td><td>શેર/ગુપ્ત કીની ગુપ્તતા</td></tr>
+                        <tr><td>"ખુલ્લેઆમ શેર કરેલ" / "જાહેરમાં વિતરિત"</td><td>પબ્લિક કી (Public Key)</td></tr>
+                        <tr><td>"ગુપ્ત રાખેલ" / "ફક્ત માલિક જાણે"</td><td>પ્રાઇવેટ કી (Private Key)</td></tr>
+                        <tr><td>"ડિજિટલ સિગ્નેચર ચકાસો" / "સંદેશ પ્રમાણિત કરો"</td><td>મોકલનારની પબ્લિક કી</td></tr>
+                        <tr><td>"એન્ક્રિપ્શન દ્વારા ગોપનીયતા"</td><td>પ્રાપ્તકર્તાની પબ્લિક કી (એન્ક્રિપ્ટ) + પ્રાપ્તકર્તાની પ્રાઇવેટ કી (ડિક્રિપ્ટ)</td></tr>
+                        <tr><td>"ચલ-લંબાઈના ઇનપુટમાંથી નિશ્ચિત-લંબાઈ આઉટપુટ"</td><td>હેશ ફંક્શન (Hash Function)</td></tr>
+                        <tr><td>"સાઇફરમાં ઉપયોગમાં લઈ શકાય તેવી તમામ સંભવિત કીઓ"</td><td>કી સ્પેસ (Key Space)</td></tr>
+                        <tr><td>"અસિમેટ્રિક અલ્ગોરિધમ્સ માટે મૂળભૂત"</td><td>મોટી અવિભાજ્ય સંખ્યાઓ (Large Prime Numbers)</td></tr>
+                        <tr><td>"મોડ્યુલસ કેમ લાગુ કરવામાં આવે છે? / બાઉન્ડેડ પરિણામો"</td><td>બાઉન્ડેડ સંખ્યાત્મક પરિણામો જાળવવા</td></tr>
+                        <tr><td>"એપ્લિકેશન્સ/પ્રોગ્રામ્સને આઈસોલેટ કરે છે"</td><td>પ્રોસેસ આઈસોલેશન (Process Isolation)</td></tr>
+                        <tr><td>"પરવાનગી પ્રાપ્ત સંસાધનો સુધી / પરમિશનના આધારે પ્રતિબંધિત કરે છે"</td><td>ઍક્સેસ કંટ્રોલ / ACL</td></tr>
+                        <tr><td>"<strong>ન્યૂનતમ</strong> જરૂરી ઍક્સેસ સુધી પ્રતિબંધિત કરે છે"</td><td>લઘુત્તમ વિશેષાધિકાર સિદ્ધાંત (Least Privilege)</td></tr>
+                        <tr><td>"અનધિકૃત પ્રોગ્રામ/સોફ્ટવેર એક્ઝિક્યુશન અટકાવે છે"</td><td>એપ્લિકેશન કંટ્રોલ પોલિસી / વ્હાઇટલિસ્ટિંગ</td></tr>
+                        <tr><td>"શ્રેષ્ઠ OS સુરક્ષા પ્રથા"</td><td>નિયમિત સુરક્ષા અપડેટ્સ લાગુ કરવા</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+
+        // Nav active state
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Update active nav
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Highlight nav on scroll
+        const sections = ['sec1', 'sec2', 'sec3', 'sec4', 'sec5', 'sec6'];
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = sections.indexOf(entry.target.id);
+                    document.querySelectorAll('.nav-btn').forEach((b, i) => {
+                        b.classList.toggle('active', i === idx);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Security – Gujarat Police Wireless PSI | માસ્ટર સ્ટડી ગાઈડ</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --bg2: #1a1d27;
+  --bg3: #22263a;
+  --card: #1e2235;
+  --border: #2e3358;
+  --accent: #f97316;
+  --accent2: #fb923c;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #eab308;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --sidebar-w: 300px;
+  --header-h: 60px;
+  --font-size: 15px;
+  --radius: 10px;
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg2: #f1f5f9;
+  --bg3: #e2e8f0;
+  --card: #ffffff;
+  --border: #cbd5e1;
+  --text: #1e293b;
+  --text2: #475569;
+  --text3: #94a3b8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:var(--font-size);line-height:1.7;transition:background 0.3s,color 0.3s}
+a{color:var(--accent);text-decoration:none}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+/* PROGRESS BAR */
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--purple));width:0%;z-index:9999;transition:width 0.1s}
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 16px;z-index:1000;backdrop-filter:blur(10px)}
+#menu-btn{background:none;border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:18px;flex-shrink:0}
+#menu-btn:hover{background:var(--bg3)}
+.header-title{font-size:14px;font-weight:700;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.header-title span{color:var(--text2);font-weight:400;font-size:12px}
+.header-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.ctrl-btn{background:none;border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;white-space:nowrap}
+.ctrl-btn:hover{background:var(--bg3);border-color:var(--accent)}
+#search-box{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;font-size:13px;width:200px;outline:none}
+#search-box:focus{border-color:var(--accent)}
+@media(max-width:768px){#search-box{width:120px}.header-title span{display:none}}
+/* SIDEBAR */
+#sidebar{position:fixed;top:var(--header-h);left:0;bottom:0;width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;z-index:900;transition:transform 0.3s;padding-bottom:40px}
+#sidebar.closed{transform:translateX(calc(-1 * var(--sidebar-w)))}
+.sidebar-section{padding:12px 0}
+.sidebar-section-title{padding:8px 16px;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+.sidebar-link{display:block;padding:7px 16px 7px 24px;font-size:13px;color:var(--text2);cursor:pointer;border-left:3px solid transparent;transition:all 0.2s}
+.sidebar-link:hover,.sidebar-link.active{color:var(--text);background:var(--bg3);border-left-color:var(--accent)}
+.sidebar-sub{padding-left:16px}
+.sidebar-sub .sidebar-link{padding-left:20px;font-size:12px}
+/* MAIN */
+#main{margin-left:var(--sidebar-w);margin-top:var(--header-h);padding:28px 32px;transition:margin-left 0.3s;max-width:1400px}
+#main.full{margin-left:0}
+@media(max-width:900px){#main{margin-left:0;padding:20px 16px}#sidebar{transform:translateX(calc(-1 * var(--sidebar-w)))}#sidebar:not(.closed){transform:translateX(0)}}
+/* SECTIONS */
+.chapter-head{background:linear-gradient(135deg,var(--bg3),var(--card));border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:28px;border-left:4px solid var(--accent)}
+.chapter-head h1{font-size:22px;color:var(--accent);font-weight:800;margin-bottom:6px}
+.chapter-head p{color:var(--text2);font-size:14px}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin:2px}
+.badge-orange{background:rgba(249,115,22,0.2);color:var(--accent)}
+.badge-blue{background:rgba(59,130,246,0.2);color:var(--blue)}
+.badge-green{background:rgba(34,197,94,0.2);color:var(--green)}
+.badge-red{background:rgba(239,68,68,0.2);color:var(--red)}
+.badge-purple{background:rgba(168,85,247,0.2);color:var(--purple)}
+.badge-cyan{background:rgba(6,182,212,0.2);color:var(--cyan)}
+.badge-yellow{background:rgba(234,179,8,0.2);color:var(--yellow)}
+/* TOPIC CARD */
+.topic-section{margin-bottom:36px}
+.topic-title{font-size:18px;font-weight:800;color:var(--accent);padding:14px 20px;background:var(--card);border-radius:var(--radius) var(--radius) 0 0;border:1px solid var(--border);border-bottom:2px solid var(--accent);display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.topic-title .stars{color:#f59e0b;letter-spacing:1px}
+.topic-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:20px 24px;display:block}
+.topic-body.collapsed{display:none}
+.subtopic{margin-bottom:20px}
+.subtopic h3{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.subtopic h4{font-size:13px;font-weight:700;color:var(--cyan);margin:10px 0 6px}
+.subtopic p,.subtopic li{font-size:14px;color:var(--text);line-height:1.8;margin-bottom:4px}
+.subtopic ul,.subtopic ol{padding-left:20px}
+.subtopic ul li{list-style:disc}
+.subtopic ol li{list-style:decimal}
+/* HIGHLIGHT BOXES */
+.box{border-radius:8px;padding:14px 18px;margin:12px 0;font-size:14px}
+.box-orange{background:rgba(249,115,22,0.1);border-left:4px solid var(--accent);color:var(--text)}
+.box-blue{background:rgba(59,130,246,0.1);border-left:4px solid var(--blue);color:var(--text)}
+.box-green{background:rgba(34,197,94,0.1);border-left:4px solid var(--green);color:var(--text)}
+.box-red{background:rgba(239,68,68,0.1);border-left:4px solid var(--red);color:var(--text)}
+.box-purple{background:rgba(168,85,247,0.1);border-left:4px solid var(--purple);color:var(--text)}
+.box-yellow{background:rgba(234,179,8,0.1);border-left:4px solid var(--yellow);color:var(--text)}
+.box-cyan{background:rgba(6,182,212,0.1);border-left:4px solid var(--cyan);color:var(--text)}
+.box strong{font-weight:700}
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);color:var(--accent);padding:10px 14px;text-align:left;border:1px solid var(--border);font-weight:700}
+td{padding:9px 14px;border:1px solid var(--border);color:var(--text);vertical-align:top}
+tr:nth-child(even) td{background:rgba(255,255,255,0.02)}
+tr:hover td{background:rgba(249,115,22,0.05)}
+/* MCQ */
+.mcq-block{margin:10px 0;background:var(--bg2);border-radius:8px;padding:14px 18px;border:1px solid var(--border)}
+.mcq-q{font-weight:700;color:var(--text);margin-bottom:8px;font-size:14px}
+.mcq-opts{list-style:none;padding:0}
+.mcq-opts li{padding:5px 0;font-size:13px;color:var(--text2);cursor:pointer;border-radius:4px;padding-left:8px}
+.mcq-opts li:hover{color:var(--text);background:rgba(249,115,22,0.08)}
+.mcq-ans{margin-top:8px;padding:6px 10px;background:rgba(34,197,94,0.15);border-radius:6px;font-size:13px;color:var(--green);font-weight:700;display:none}
+.mcq-block.revealed .mcq-ans{display:block}
+.show-ans-btn{background:none;border:1px solid var(--border);color:var(--text2);font-size:12px;padding:4px 10px;border-radius:4px;cursor:pointer;margin-top:6px}
+.show-ans-btn:hover{border-color:var(--accent);color:var(--accent)}
+/* FORMULA */
+.formula{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px 18px;margin:10px 0;font-family:'Courier New',monospace;font-size:14px;color:var(--cyan);word-break:break-all}
+/* DIFF TABLE */
+.diff-table th{background:rgba(249,115,22,0.15);color:var(--accent)}
+.diff-table .col-a{background:rgba(59,130,246,0.08)}
+.diff-table .col-b{background:rgba(168,85,247,0.08)}
+/* MNEMONIC */
+.mnemonic{background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(59,130,246,0.15));border:1px solid var(--purple);border-radius:8px;padding:14px 18px;margin:10px 0}
+.mnemonic-title{font-size:12px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.mnemonic-text{font-size:14px;color:var(--text)}
+/* STAR ITEMS */
+.star-item{display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:10px 14px;background:rgba(251,146,60,0.08);border-radius:6px;border-left:3px solid var(--accent2)}
+.star-icon{color:#f59e0b;font-size:16px;flex-shrink:0;margin-top:1px}
+.star-text{font-size:14px;color:var(--text)}
+/* ONE-LINER */
+.one-liner{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.ol-num{color:var(--accent);font-weight:700;min-width:28px;flex-shrink:0}
+.ol-text{color:var(--text)}
+/* SEARCH HIGHLIGHT */
+.search-highlight{background:rgba(234,179,8,0.4);border-radius:2px;padding:0 2px}
+/* LANG SWITCH */
+.lang-en{display:none}
+[data-lang="en"] .lang-gu{display:none}
+[data-lang="en"] .lang-en{display:block}
+/* COLLAPSE ICON */
+.collapse-icon{margin-left:auto;font-size:16px;transition:transform 0.3s;color:var(--text3)}
+.topic-title.open .collapse-icon{transform:rotate(180deg)}
+/* OVERLAY */
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:850}
+@media(max-width:900px){#overlay.active{display:block}}
+/* BACK TO TOP */
+#btt{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#fff;border:none;width:42px;height:42px;border-radius:50%;font-size:20px;cursor:pointer;z-index:500;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(249,115,22,0.4)}
+#btt.show{display:flex}
+/* SECTION NAV TABS */
+.section-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.stab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--bg2);transition:all 0.2s}
+.stab:hover,.stab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* PRINT */
+@media print{#sidebar,header,#btt,.ctrl-btn,#menu-btn{display:none}#main{margin:0;padding:10px}}
+</style>
+</head>
+<body data-theme="dark" data-lang="gu">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header>
+  <button id="menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="header-title">🛡️ Network Security <span>| Gujarat Police Wireless PSI – Part B</span></div>
+  <div class="header-controls">
+    <input type="text" id="search-box" placeholder="🔍 શોધો..." oninput="doSearch(this.value)">
+    <button class="ctrl-btn" onclick="setFontSize(-1)">A−</button>
+    <button class="ctrl-btn" onclick="setFontSize(0)">A</button>
+    <button class="ctrl-btn" onclick="setFontSize(1)">A+</button>
+    <button class="ctrl-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
+    <button class="ctrl-btn" id="lang-btn" onclick="toggleLang()">EN</button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="overlay" onclick="closeSidebar()"></div>
+<nav id="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">📚 Chapter 8 – Topics</div>
+    <a class="sidebar-link" onclick="goToSection('s1')">1. Introduction to Information Security</a>
+    <a class="sidebar-link" onclick="goToSection('s2')">2. System Security</a>
+    <a class="sidebar-link" onclick="goToSection('s3')">3. Basic Arithmetic in Encryption</a>
+    <a class="sidebar-link" onclick="goToSection('s4')">4. Symmetric Encryption</a>
+    <a class="sidebar-link" onclick="goToSection('s5')">5. Asymmetric Key Encryption</a>
+    <a class="sidebar-link" onclick="goToSection('s6')">6. Operating System Security</a>
+    <a class="sidebar-link" onclick="goToSection('s7')">7. Current Trends in Cyber Security</a>
+    <a class="sidebar-link" onclick="goToSection('s8')">8. Current Affairs</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">📝 MCQ & Revision</div>
+    <a class="sidebar-link" onclick="goToSection('mcq-section')">🎯 Top 50 MCQs</a>
+    <a class="sidebar-link" onclick="goToSection('oneliners')">⚡ 100 One-Liners</a>
+    <a class="sidebar-link" onclick="goToSection('formulas')">📐 Formulas & Facts</a>
+    <a class="sidebar-link" onclick="goToSection('diffs')">⚖️ Top 25 Differences</a>
+    <a class="sidebar-link" onclick="goToSection('quickrev')">🚀 Quick Revision</a>
+    <a class="sidebar-link" onclick="goToSection('lastmin')">🔥 Last Minute Sheet</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+
+<!-- CHAPTER HEAD -->
+<div class="chapter-head">
+  <h1>🛡️ Chapter 8: Essentials of Network Security</h1>
+  <p>Gujarat Police Wireless PSI – Part-B Technical Subjects | સંપૂર્ણ માસ્ટર સ્ટડી ગાઈડ</p>
+  <br>
+  <span class="badge badge-orange">★★★★★ High Priority</span>
+  <span class="badge badge-blue">MCQ Focus</span>
+  <span class="badge badge-green">Exam Ready</span>
+  <span class="badge badge-purple">Gujarati Medium</span>
+  <span class="badge badge-cyan">Basic → Advanced</span>
+</div>
+
+<!-- SECTION TABS -->
+<div class="section-tabs">
+  <div class="stab active" onclick="goToSection('s1')">Information Security</div>
+  <div class="stab" onclick="goToSection('s2')">System Security</div>
+  <div class="stab" onclick="goToSection('s3')">Arithmetic</div>
+  <div class="stab" onclick="goToSection('s4')">Symmetric</div>
+  <div class="stab" onclick="goToSection('s5')">Asymmetric</div>
+  <div class="stab" onclick="goToSection('s6')">OS Security</div>
+  <div class="stab" onclick="goToSection('s7')">Cyber Trends</div>
+  <div class="stab" onclick="goToSection('s8')">Current Affairs</div>
+  <div class="stab" onclick="goToSection('mcq-section')">MCQs</div>
+  <div class="stab" onclick="goToSection('oneliners')">One-Liners</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 1: INFORMATION SECURITY -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s1">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🔐</span>
+  <span>1. Introduction to Information Security (માહિતી સુરક્ષા)</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>📌 વ્યાખ્યા (Definition)</h3>
+<p>Information Security (InfoSec) એ <strong>ડિજિટલ અને ભૌતિક માહિતીની સુરક્ષા</strong> કરવાની પ્રક્રિયા છે. તેનો ઉદ્દેશ્ય અનધિકૃત access, use, disclosure, disruption, modification, inspection, recording or destruction થી બચાવ કરવાનો છે.</p>
+
+<div class="box box-orange">
+<strong>★ સરળ ભાષામાં:</strong> Information Security = માહિતીને ચોરી, ફેરફાર, અને નુકસાનથી બચાવવી.
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🎯 CIA Triad – ત્રણ મૂળ સ્તંભ ★★★★★</h3>
+<div class="box box-blue">
+<strong>CIA = Confidentiality + Integrity + Availability</strong><br>
+(ગોપનીયતા + અખંડિતતા + ઉપલબ્ધતા)
+</div>
+
+<div class="tbl-wrap">
+<table>
+<tr><th>Pillar</th><th>ગુજરાતી</th><th>અર્થ</th><th>ઉદાહરણ</th></tr>
+<tr><td><strong>Confidentiality</strong></td><td>ગોપનીયતા</td><td>માહિતી ફક્ત authorized person જ જોઈ શકે</td><td>Password-protected files</td></tr>
+<tr><td><strong>Integrity</strong></td><td>અખંડિતતા</td><td>માહિતી unaltered (ફેરફાર વિના) રહે</td><td>Digital Signature</td></tr>
+<tr><td><strong>Availability</strong></td><td>ઉપલબ્ધતા</td><td>Authorized users ને જ્યારે જોઈએ ત્યારે access</td><td>Server uptime</td></tr>
+</table>
+</div>
+
+<div class="mnemonic">
+<div class="mnemonic-title">🧠 Mnemonic (યાદ રાખો)</div>
+<div class="mnemonic-text"><strong>"CIA = Central Intelligence Agency"</strong> – જેવી સરકારી agency secret, accurate, and available information manage કરે!</div>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📊 Additional Security Properties</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Property</th><th>ગુજરાતી</th><th>અર્થ</th></tr>
+<tr><td><strong>Authentication</strong></td><td>પ્રમાણીકરણ</td><td>User ની identity verify કરવી</td></tr>
+<tr><td><strong>Non-Repudiation</strong></td><td>નકારવાનો ઇનકાર</td><td>Sender message ભેજ્યો છે એ નકારી ન શકે</td></tr>
+<tr><td><strong>Authorization</strong></td><td>અધિકૃતતા</td><td>Verified user ને specific access આપવો</td></tr>
+<tr><td><strong>Accountability</strong></td><td>જવાબદારી</td><td>Actions ને track & audit કરવી</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>⚠️ Security Threats ના પ્રકાર ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Threat Type</th><th>વર્ણન</th><th>ઉદાહરણ</th></tr>
+<tr><td><strong>Malware</strong></td><td>Malicious Software</td><td>Virus, Worm, Trojan, Ransomware</td></tr>
+<tr><td><strong>Phishing</strong></td><td>Fake emails/websites</td><td>Fake bank email</td></tr>
+<tr><td><strong>DoS/DDoS</strong></td><td>Server ને overwhelm કરવો</td><td>Website crash</td></tr>
+<tr><td><strong>Man-in-the-Middle</strong></td><td>Communication intercept</td><td>Wi-Fi eavesdropping</td></tr>
+<tr><td><strong>SQL Injection</strong></td><td>Database attack</td><td>Login bypass</td></tr>
+<tr><td><strong>Social Engineering</strong></td><td>Human manipulation</td><td>Fake IT support call</td></tr>
+<tr><td><strong>Zero-Day Attack</strong></td><td>Unknown vulnerability exploit</td><td>Unpatched software attack</td></tr>
+<tr><td><strong>Brute Force</strong></td><td>Password guessing</td><td>All combinations try</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔒 Security Mechanisms (સુરક્ષા ઉપાયો)</h3>
+<ul>
+<li><strong>Firewall:</strong> Network traffic filter કરે</li>
+<li><strong>Encryption:</strong> Data ને cipher form માં convert</li>
+<li><strong>IDS/IPS:</strong> Intrusion Detection/Prevention System</li>
+<li><strong>VPN:</strong> Virtual Private Network – encrypted tunnel</li>
+<li><strong>Antivirus:</strong> Malware detect & remove</li>
+<li><strong>Digital Certificate:</strong> Identity verification</li>
+<li><strong>2FA:</strong> Two-Factor Authentication</li>
+</ul>
+</div>
+
+<div class="subtopic">
+<h3>📋 Information Security vs Cyber Security</h3>
+<div class="tbl-wrap">
+<table class="diff-table">
+<tr><th>પાસું</th><th class="col-a">Information Security</th><th class="col-b">Cyber Security</th></tr>
+<tr><td>Scope</td><td class="col-a">Physical + Digital</td><td class="col-b">Digital only</td></tr>
+<tr><td>Focus</td><td class="col-a">Data Protection</td><td class="col-b">Network/System Protection</td></tr>
+<tr><td>Coverage</td><td class="col-a">Broader</td><td class="col-b">Narrower (subset)</td></tr>
+<tr><td>ઉદાહરણ</td><td class="col-a">Paper documents + files</td><td class="col-b">Online threats only</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Star Points – Exam માં ચોક્કસ આવે ★★★★★</h3>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">CIA Triad = Confidentiality, Integrity, Availability – InfoSec ના ત્રણ મૂળ સ્તંભ</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Non-Repudiation = Sender message ભેજ્યો છે એ નકારી ન શકે (Digital Signature ઉપયોગ)</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Phishing = Fake email/website દ્વારા personal information ચોરી</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">DDoS = Distributed Denial of Service – multiple systems attack</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Zero-Day = Unknown vulnerability – patch available નહીં</span></div>
+</div>
+
+</div><!-- end topic-body -->
+</div><!-- end topic-section -->
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 2: SYSTEM SECURITY -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s2">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🖥️</span>
+  <span>2. System Security (સિસ્ટમ સુરક્ષા)</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>📌 Malware ના પ્રકાર ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Malware Type</th><th>વ્યાખ્યા</th><th>ખાસ લક્ષણ</th><th>ઉદાહરણ</th></tr>
+<tr><td><strong>Virus</strong></td><td>Host file ને attach થઈ spread</td><td>Self-replicating, needs host</td><td>ILOVEYOU Virus</td></tr>
+<tr><td><strong>Worm</strong></td><td>Network through independently spread</td><td>No host needed, self-replicating</td><td>Morris Worm</td></tr>
+<tr><td><strong>Trojan Horse</strong></td><td>Legitimate software ની જેમ દેખાય</td><td>Does not self-replicate</td><td>Emotet</td></tr>
+<tr><td><strong>Ransomware</strong></td><td>Files encrypt → ransom demand</td><td>Financial motive</td><td>WannaCry, Petya</td></tr>
+<tr><td><strong>Spyware</strong></td><td>User ની activities secretly monitor</td><td>Data theft silently</td><td>Keylogger</td></tr>
+<tr><td><strong>Adware</strong></td><td>Unwanted ads display</td><td>Revenue generation</td><td>Pop-up ads</td></tr>
+<tr><td><strong>Rootkit</strong></td><td>Deep system access, hide activities</td><td>Hard to detect</td><td>Sony BMG Rootkit</td></tr>
+<tr><td><strong>Botnet</strong></td><td>Infected computers network (Zombies)</td><td>DDoS attacks</td><td>Mirai Botnet</td></tr>
+<tr><td><strong>Keylogger</strong></td><td>Keystrokes record</td><td>Password theft</td><td>Hardware/Software</td></tr>
+</table>
+</div>
+
+<div class="mnemonic">
+<div class="mnemonic-title">🧠 Mnemonic</div>
+<div class="mnemonic-text"><strong>"Very Wicked Trojans Remain Secretly Among Ruthless Bots Killing"</strong><br>= Virus, Worm, Trojan, Ransomware, Spyware, Adware, Rootkit, Botnet, Keylogger</div>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🛡️ Firewall ★★★★★</h3>
+<p><strong>Firewall</strong> = Network traffic ને monitor અને control કરતો security system. Trusted vs Untrusted network ની વચ્ચે barrier.</p>
+
+<div class="tbl-wrap">
+<table>
+<tr><th>Firewall Type</th><th>કામ</th><th>Level</th></tr>
+<tr><td><strong>Packet Filter</strong></td><td>IP/Port based filtering</td><td>Network Layer</td></tr>
+<tr><td><strong>Stateful Inspection</strong></td><td>Connection state track</td><td>Transport Layer</td></tr>
+<tr><td><strong>Application Gateway</strong></td><td>Application-level filtering</td><td>Application Layer</td></tr>
+<tr><td><strong>Next-Gen Firewall</strong></td><td>Deep Packet Inspection + AI</td><td>All Layers</td></tr>
+</table>
+</div>
+
+<div class="box box-green">
+<strong>Hardware Firewall:</strong> External device (Router-based) | <strong>Software Firewall:</strong> OS/Application level (Windows Firewall)
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔍 IDS vs IPS ★★★★</h3>
+<div class="tbl-wrap">
+<table class="diff-table">
+<tr><th>Feature</th><th class="col-a">IDS (Intrusion Detection System)</th><th class="col-b">IPS (Intrusion Prevention System)</th></tr>
+<tr><td>Role</td><td class="col-a">Detect and alert only</td><td class="col-b">Detect and block/prevent</td></tr>
+<tr><td>Position</td><td class="col-a">Passive (out of band)</td><td class="col-b">Active (inline)</td></tr>
+<tr><td>Action</td><td class="col-a">Alert administrator</td><td class="col-b">Automatically blocks traffic</td></tr>
+<tr><td>Impact</td><td class="col-a">No direct impact on traffic</td><td class="col-b">Can block legitimate traffic</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔐 Authentication Methods ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Factor</th><th>Type</th><th>ઉદાહરણ</th></tr>
+<tr><td><strong>Something you KNOW</strong></td><td>Knowledge Factor</td><td>Password, PIN, Security Question</td></tr>
+<tr><td><strong>Something you HAVE</strong></td><td>Possession Factor</td><td>Smart Card, OTP, USB Token</td></tr>
+<tr><td><strong>Something you ARE</strong></td><td>Inherence Factor</td><td>Fingerprint, Iris, Face ID</td></tr>
+<tr><td><strong>Somewhere you ARE</strong></td><td>Location Factor</td><td>GPS Location, IP Address</td></tr>
+</table>
+</div>
+<div class="box box-orange">
+<strong>MFA (Multi-Factor Authentication)</strong> = 2 or more factors ઉપયોગ. 2FA = Two factors. ★★★
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔑 Password Security ★★★</h3>
+<ul>
+<li><strong>Strong Password:</strong> 8+ characters, uppercase + lowercase + numbers + symbols</li>
+<li><strong>Salting:</strong> Random data add to password before hashing</li>
+<li><strong>Hashing:</strong> One-way transformation (MD5, SHA-256)</li>
+<li><strong>Password Manager:</strong> Secure storage of multiple passwords</li>
+</ul>
+<div class="formula">Password Strength ∝ Length × Character Set Size</div>
+</div>
+
+<div class="subtopic">
+<h3>🌐 VPN (Virtual Private Network) ★★★★</h3>
+<p><strong>VPN</strong> = Internet ઉપર encrypted, private tunnel બનાવે. Public network ઉપર private communication.</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>VPN Type</th><th>ઉપયોગ</th></tr>
+<tr><td>Remote Access VPN</td><td>Individual user → Corporate network</td></tr>
+<tr><td>Site-to-Site VPN</td><td>Two office networks connect</td></tr>
+<tr><td>SSL VPN</td><td>Browser-based, no client needed</td></tr>
+</table>
+</div>
+<div class="box box-blue">
+<strong>VPN Protocols:</strong> OpenVPN, L2TP/IPSec, PPTP, WireGuard, IKEv2
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Star Exam Points</h3>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Virus = Host file ની જરૂર | Worm = Self-spread, no host needed – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">WannaCry = Ransomware (2017) – Bitcoin demand, 150+ countries affected</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">IDS = Detect Only | IPS = Detect + Prevent/Block – ★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Firewall = Packet Filter Firewall = OSI Network Layer</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Rootkit = Hard to detect, deepest OS access – Admin privilege</span></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 3: BASIC ARITHMETIC IN ENCRYPTION -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s3">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🔢</span>
+  <span>3. Basic Arithmetic in Encryption (Encryption ની ગાણિતિક ક્રિયાઓ)</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>📌 Modular Arithmetic ★★★★★</h3>
+<p><strong>Modular Arithmetic</strong> = Encryption ની ગણિત ની base. Numbers ને specific range (0 to n-1) માં wrap around.</p>
+<div class="formula">a mod n = r (જ્યાં 0 ≤ r &lt; n)
+ઉદાહરણ: 17 mod 5 = 2 (કારણ કે 17 = 3×5 + 2)</div>
+
+<div class="box box-blue">
+<strong>Clock Arithmetic:</strong> 3 + 11 = 14 → 14 mod 12 = 2 (Clock ઉપર 2 વાગ્યા!)
+</div>
+
+<div class="tbl-wrap">
+<table>
+<tr><th>Operation</th><th>Example</th><th>Result</th></tr>
+<tr><td>Addition mod</td><td>(7 + 8) mod 12</td><td>3</td></tr>
+<tr><td>Subtraction mod</td><td>(5 − 9) mod 7</td><td>3</td></tr>
+<tr><td>Multiplication mod</td><td>(4 × 5) mod 7</td><td>6</td></tr>
+<tr><td>Power mod</td><td>3² mod 5</td><td>4</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Prime Numbers & GCD ★★★★</h3>
+<p><strong>Prime Number:</strong> ફક્ત 1 અને પોતે જ divisible (2, 3, 5, 7, 11, 13...)</p>
+<p><strong>GCD (Greatest Common Divisor):</strong> Euclidean Algorithm</p>
+<div class="formula">GCD(48, 18):
+48 = 2 × 18 + 12
+18 = 1 × 12 + 6
+12 = 2 × 6 + 0
+∴ GCD = 6</div>
+
+<div class="box box-purple">
+<strong>Coprime Numbers:</strong> GCD(a, b) = 1 → RSA encryption માં ઉપયોગ!
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Euler's Totient Function (φ) ★★★★</h3>
+<div class="formula">φ(n) = 1 to n range ના numbers જે n ના coprime છે
+
+For prime p: φ(p) = p - 1
+For p,q prime: φ(p×q) = (p-1)(q-1)
+
+ઉદાહરણ: φ(7) = 6 (1,2,3,4,5,6 – all coprime with 7)
+φ(15) = φ(3×5) = (3-1)(5-1) = 2×4 = 8</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 XOR Operation ★★★★★</h3>
+<p><strong>XOR (Exclusive OR)</strong> = Encryption ની સૌથી મહત્વની operation</p>
+<div class="formula">Rules:
+0 XOR 0 = 0
+0 XOR 1 = 1
+1 XOR 0 = 1
+1 XOR 1 = 0
+
+Property: A XOR A = 0 (Same = Cancel)
+A XOR 0 = A (Zero = No change)
+(A XOR B) XOR B = A (Reversible!)</div>
+
+<div class="box box-green">
+<strong>Encryption:</strong> Plaintext XOR Key = Ciphertext<br>
+<strong>Decryption:</strong> Ciphertext XOR Key = Plaintext<br>
+ઉદાહરણ: 1010 XOR 1100 = 0110
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Number Systems ★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>System</th><th>Base</th><th>Digits</th><th>ઉદાહરણ</th></tr>
+<tr><td>Binary</td><td>2</td><td>0,1</td><td>1010</td></tr>
+<tr><td>Octal</td><td>8</td><td>0-7</td><td>17</td></tr>
+<tr><td>Decimal</td><td>10</td><td>0-9</td><td>10</td></tr>
+<tr><td>Hexadecimal</td><td>16</td><td>0-9, A-F</td><td>1A3F</td></tr>
+</table>
+</div>
+<div class="formula">Binary → Decimal: 1011 = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8+0+2+1 = 11
+Hex → Decimal: FF = 15×16 + 15 = 255</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Caesar Cipher (Classic Encryption) ★★★★</h3>
+<p>સૌથી જૂૂની encryption. દરેક letter ને fixed number (key) positions shift.</p>
+<div class="formula">Encryption: C = (P + K) mod 26
+Decryption: P = (C - K) mod 26
+
+ઉદાહરણ (K=3):
+A(0) → D(3), B(1) → E(4), Z(25) → C(2)
+"HELLO" → "KHOOR"</div>
+<div class="box box-yellow">
+<strong>Julius Caesar</strong> K=3 ઉપયોગ કરતા. Brute Force attack = 25 tries only → Weak!
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Hash Functions ★★★★★</h3>
+<p><strong>Hash Function:</strong> Any input → Fixed size output (digest). One-way function – reverse impossible.</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Algorithm</th><th>Output Size</th><th>Status</th><th>ઉપયોગ</th></tr>
+<tr><td><strong>MD5</strong></td><td>128 bits</td><td>Weak (broken)</td><td>File verification</td></tr>
+<tr><td><strong>SHA-1</strong></td><td>160 bits</td><td>Deprecated</td><td>Old SSL</td></tr>
+<tr><td><strong>SHA-256</strong></td><td>256 bits</td><td>Strong ✓</td><td>Bitcoin, TLS</td></tr>
+<tr><td><strong>SHA-512</strong></td><td>512 bits</td><td>Strongest ✓</td><td>High security</td></tr>
+</table>
+</div>
+<div class="formula">Properties:
+1. Deterministic (same input → same output always)
+2. Fast computation
+3. Avalanche Effect (small change → completely different hash)
+4. Pre-image resistance (hash → input impossible)
+5. Collision resistance (two inputs → same hash extremely rare)</div>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Star Exam Points</h3>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Caesar Cipher formula: C = (P + K) mod 26 – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">SHA-256 = 256-bit output – Bitcoin ઉપયોગ – ★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">XOR Property: A XOR A = 0, A XOR 0 = A – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">MD5 = Broken/Weak, SHA-256 = Currently Secure – ★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">φ(p) = p-1 for prime p – RSA ની base – ★★★★</span></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 4: SYMMETRIC ENCRYPTION -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s4">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🔑</span>
+  <span>4. Symmetric Encryption Algorithms (સમ-key Encryption)</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>📌 Symmetric Encryption શું છે? ★★★★★</h3>
+<p><strong>Symmetric Encryption</strong> = Encryption અને Decryption બંને માટે <strong>એક જ key</strong> ઉપયોગ. "Secret Key Cryptography" પણ કહેવાય.</p>
+<div class="formula">Encryption: Plaintext + Key → Ciphertext
+Decryption: Ciphertext + Key → Plaintext
+(Same Key Used Both Ways)</div>
+<div class="box box-green">
+<strong>ઉદાહરણ:</strong> Lock-Key system – ताळो ખોલવા-બંધ કરવા same key
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📊 Main Symmetric Algorithms ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Algorithm</th><th>Key Size</th><th>Block Size</th><th>Rounds</th><th>Status</th></tr>
+<tr><td><strong>DES</strong></td><td>56-bit</td><td>64-bit</td><td>16</td><td>❌ Weak/Retired</td></tr>
+<tr><td><strong>3DES (Triple DES)</strong></td><td>112/168-bit</td><td>64-bit</td><td>48</td><td>⚠️ Slow, retiring</td></tr>
+<tr><td><strong>AES-128</strong></td><td>128-bit</td><td>128-bit</td><td>10</td><td>✅ Strong</td></tr>
+<tr><td><strong>AES-192</strong></td><td>192-bit</td><td>128-bit</td><td>12</td><td>✅ Strong</td></tr>
+<tr><td><strong>AES-256</strong></td><td>256-bit</td><td>128-bit</td><td>14</td><td>✅ Strongest</td></tr>
+<tr><td><strong>RC4</strong></td><td>Variable</td><td>Stream</td><td>-</td><td>❌ Broken</td></tr>
+<tr><td><strong>Blowfish</strong></td><td>32-448 bit</td><td>64-bit</td><td>16</td><td>✅ Good</td></tr>
+<tr><td><strong>IDEA</strong></td><td>128-bit</td><td>64-bit</td><td>8</td><td>✅ Good</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔐 DES (Data Encryption Standard) ★★★★★</h3>
+<p>IBM 1970s developed, NIST 1977 standard. Now considered WEAK.</p>
+<div class="formula">DES Details:
+• Key: 56-bit effective (64-bit with parity bits)
+• Block: 64-bit
+• Rounds: 16 Feistel rounds
+• Structure: Feistel Network
+• Developed: IBM, 1977 NIST Standard
+• Broken: 1999 (DES Cracker)</div>
+
+<div class="box box-red">
+<strong>DES weakness:</strong> 56-bit key = 2⁵⁶ ≈ 72 quadrillion combinations – Modern computers crack in hours!
+</div>
+
+<h4>DES Process (Feistel Structure):</h4>
+<ol>
+<li>Initial Permutation (IP) – 64-bit input</li>
+<li>16 Rounds of Feistel function</li>
+<li>Each round: expand, XOR with subkey, S-box substitution, permutation</li>
+<li>Final Permutation (IP⁻¹)</li>
+</ol>
+</div>
+
+<div class="subtopic">
+<h3>🔐 AES (Advanced Encryption Standard) ★★★★★</h3>
+<p>DES ને replace કરવા NIST 2001 standard. Rijndael algorithm based. <strong>Most widely used</strong>.</p>
+<div class="formula">AES Details:
+• Block Size: Always 128-bit
+• Key Sizes: 128, 192, 256 bits
+• Rounds: 10 (128), 12 (192), 14 (256)
+• Operations: SubBytes, ShiftRows, MixColumns, AddRoundKey
+• Structure: Substitution-Permutation Network (SPN)</div>
+
+<h4>AES 4 Main Operations:</h4>
+<div class="tbl-wrap">
+<table>
+<tr><th>Step</th><th>Operation</th><th>Purpose</th></tr>
+<tr><td>1</td><td><strong>SubBytes</strong></td><td>S-Box substitution (non-linearity)</td></tr>
+<tr><td>2</td><td><strong>ShiftRows</strong></td><td>Row-wise shift (diffusion)</td></tr>
+<tr><td>3</td><td><strong>MixColumns</strong></td><td>Column mixing (diffusion)</td></tr>
+<tr><td>4</td><td><strong>AddRoundKey</strong></td><td>XOR with round key (confusion)</td></tr>
+</table>
+</div>
+
+<div class="box box-green">
+<strong>AES ઉપયોગ:</strong> Wi-Fi (WPA2/WPA3), HTTPS/TLS, VPN, Disk Encryption (BitLocker), WhatsApp
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📊 Block vs Stream Cipher ★★★★</h3>
+<div class="tbl-wrap">
+<table class="diff-table">
+<tr><th>Feature</th><th class="col-a">Block Cipher</th><th class="col-b">Stream Cipher</th></tr>
+<tr><td>Processing</td><td class="col-a">Fixed-size blocks (64/128 bits)</td><td class="col-b">Bit/byte at a time</td></tr>
+<tr><td>Speed</td><td class="col-a">Slower</td><td class="col-b">Faster</td></tr>
+<tr><td>Security</td><td class="col-a">Stronger for bulk data</td><td class="col-b">Good for real-time</td></tr>
+<tr><td>Examples</td><td class="col-a">AES, DES, 3DES</td><td class="col-b">RC4, ChaCha20</td></tr>
+<tr><td>ઉપયોગ</td><td class="col-a">File encryption, Database</td><td class="col-b">Audio, Video streaming</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📊 Block Cipher Modes ★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Mode</th><th>Full Form</th><th>ઉપયોગ</th><th>IV?</th></tr>
+<tr><td><strong>ECB</strong></td><td>Electronic Codebook</td><td>Simple but weak</td><td>No</td></tr>
+<tr><td><strong>CBC</strong></td><td>Cipher Block Chaining</td><td>Most common, TLS/SSL</td><td>Yes</td></tr>
+<tr><td><strong>CFB</strong></td><td>Cipher Feedback</td><td>Stream-like from block</td><td>Yes</td></tr>
+<tr><td><strong>OFB</strong></td><td>Output Feedback</td><td>Error isolation</td><td>Yes</td></tr>
+<tr><td><strong>CTR</strong></td><td>Counter Mode</td><td>Parallel processing</td><td>Yes</td></tr>
+<tr><td><strong>GCM</strong></td><td>Galois/Counter Mode</td><td>Authenticated encryption, HTTPS</td><td>Yes</td></tr>
+</table>
+</div>
+<div class="box box-yellow">
+<strong>ECB weakness:</strong> Same plaintext block → Same ciphertext block (Pattern visible!) – Never use for real data!
+</div>
+</div>
+
+<div class="subtopic">
+<h3>⚖️ Symmetric Encryption – Advantages & Disadvantages</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>✅ Advantages</th><th>❌ Disadvantages</th></tr>
+<tr><td>Fast (hardware efficient)</td><td>Key distribution problem</td></tr>
+<tr><td>Less computational power</td><td>n users → n(n-1)/2 keys needed</td></tr>
+<tr><td>Good for bulk data</td><td>Key management difficult</td></tr>
+<tr><td>Simple implementation</td><td>No digital signature support</td></tr>
+</table>
+</div>
+<div class="formula">Key Count Formula: n users need n(n-1)/2 unique keys
+Example: 100 users = 100×99/2 = 4950 keys!</div>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Star Exam Points</h3>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">AES = Current standard, 128/192/256-bit keys, NIST 2001 – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">DES = 56-bit key, 64-bit block, 16 rounds – Retired/Broken – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">AES block size = Always 128-bit (key size varies) – ★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Symmetric = Same key for encrypt & decrypt – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">CBC mode = TLS/SSL ઉપયોગ, IV required – ★★★★</span></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 5: ASYMMETRIC ENCRYPTION -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s5">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🗝️</span>
+  <span>5. Asymmetric Key Encryption (અ-સમ key Encryption)</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>📌 Asymmetric Encryption શું છે? ★★★★★</h3>
+<p><strong>Asymmetric Encryption</strong> = <strong>બે અલગ keys</strong> ઉપયોગ: Public Key (encrypt) + Private Key (decrypt). "Public Key Cryptography" પણ કહેવાય.</p>
+<div class="formula">Encryption: Plaintext + Public Key → Ciphertext
+Decryption: Ciphertext + Private Key → Plaintext
+(Different Keys for Encrypt & Decrypt)</div>
+
+<div class="box box-orange">
+<strong>ઉદાહરણ:</strong> Mailbox – સૌ letter નાખી શકે (Public Key = mail slot), ફક્ત owner ખોલી શકે (Private Key)
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔐 RSA Algorithm ★★★★★</h3>
+<p><strong>RSA = Rivest-Shamir-Adleman</strong> (1977). Most widely used asymmetric algorithm. Based on difficulty of factoring large numbers.</p>
+
+<div class="formula">RSA Key Generation Steps:
+1. Choose two large primes: p, q
+2. Calculate: n = p × q
+3. Calculate: φ(n) = (p-1)(q-1)
+4. Choose e: 1 &lt; e &lt; φ(n), gcd(e, φ(n)) = 1
+5. Find d: d × e ≡ 1 mod φ(n) (Multiplicative Inverse)
+
+Public Key = (e, n)
+Private Key = (d, n)
+
+Encryption: C = Mᵉ mod n
+Decryption: M = Cᵈ mod n</div>
+
+<h4>RSA Example (Simple):</h4>
+<div class="formula">p = 3, q = 11
+n = 3 × 11 = 33
+φ(n) = (3-1)(11-1) = 20
+Choose e = 3 (gcd(3,20) = 1) ✓
+d = 7 (because 3×7 = 21 ≡ 1 mod 20) ✓
+
+Public Key = (3, 33), Private Key = (7, 33)
+Encrypt M=4: C = 4³ mod 33 = 64 mod 33 = 31
+Decrypt C=31: M = 31⁷ mod 33 = 4 ✓</div>
+
+<div class="box box-blue">
+<strong>Key Sizes:</strong> RSA-1024 (Legacy), RSA-2048 (Standard), RSA-4096 (High Security)<br>
+<strong>Security Based On:</strong> Integer Factorization Problem – Large number factor કરવું computationally impossible
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔐 Diffie-Hellman Key Exchange ★★★★</h3>
+<p>Insecure channel ઉપર secure key share. "Key Agreement Protocol."</p>
+<div class="formula">Diffie-Hellman:
+Public: g (generator), p (prime)
+Alice: private a → public A = gᵃ mod p
+Bob: private b → public B = gᵇ mod p
+Shared Secret: K = Bᵃ mod p = Aᵇ mod p = gᵃᵇ mod p</div>
+<div class="box box-purple">
+<strong>Security Based On:</strong> Discrete Logarithm Problem – gᵃ mod p → a શોધવું impossible!
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔐 ECC (Elliptic Curve Cryptography) ★★★</h3>
+<p>RSA કરતાં smaller key size + same security. Mobile/IoT ઉપયોગ.</p>
+<div class="formula">ECC Key Size vs RSA Comparison:
+RSA 2048-bit ≈ ECC 224-bit (same security!)
+RSA 3072-bit ≈ ECC 256-bit
+RSA 15360-bit ≈ ECC 512-bit</div>
+<div class="box box-green">
+<strong>ઉપયોગ:</strong> Bitcoin (secp256k1 curve), SSL/TLS, Smart Cards, Mobile devices
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📝 Digital Signature ★★★★★</h3>
+<p><strong>Digital Signature</strong> = Electronic document ઉપર electronic "signature". Authentication + Non-Repudiation + Integrity.</p>
+<div class="formula">Digital Signature Process:
+Signing: Hash(Message) + Private Key → Signature
+Verification: Signature + Public Key → Hash → Compare with Hash(Message)
+
+If Hash matches → Valid Signature ✓
+If Hash doesn't match → Invalid/Tampered ✗</div>
+
+<div class="tbl-wrap">
+<table>
+<tr><th>Property</th><th>Digital Signature ✓/✗</th></tr>
+<tr><td>Authentication</td><td>✅ Yes</td></tr>
+<tr><td>Integrity</td><td>✅ Yes</td></tr>
+<tr><td>Non-Repudiation</td><td>✅ Yes</td></tr>
+<tr><td>Confidentiality</td><td>❌ No (use Encryption for this)</td></tr>
+</table>
+</div>
+<div class="box box-orange">
+<strong>India:</strong> IT Act 2000 → Digital Signature legally valid. Certifying Authority (CA) issue કરે.
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📝 PKI (Public Key Infrastructure) ★★★★</h3>
+<p>Digital certificates manage, issue, verify કરતી system.</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Component</th><th>Role</th></tr>
+<tr><td><strong>CA (Certificate Authority)</strong></td><td>Certificates issue & manage (Trust Anchor)</td></tr>
+<tr><td><strong>RA (Registration Authority)</strong></td><td>Identity verify, CA ને forward</td></tr>
+<tr><td><strong>Digital Certificate</strong></td><td>Public key + Identity info + CA Signature</td></tr>
+<tr><td><strong>CRL (Certificate Revocation List)</strong></td><td>Revoked certificates list</td></tr>
+<tr><td><strong>OCSP</strong></td><td>Online Certificate Status Protocol</td></tr>
+</table>
+</div>
+<div class="box box-blue">
+<strong>X.509</strong> = Digital Certificate standard. HTTPS certificate = X.509 format.
+</div>
+</div>
+
+<div class="subtopic">
+<h3>⚖️ Symmetric vs Asymmetric Encryption ★★★★★</h3>
+<div class="tbl-wrap">
+<table class="diff-table">
+<tr><th>Feature</th><th class="col-a">Symmetric</th><th class="col-b">Asymmetric</th></tr>
+<tr><td>Keys</td><td class="col-a">1 (Same key)</td><td class="col-b">2 (Public + Private)</td></tr>
+<tr><td>Speed</td><td class="col-a">Fast ⚡</td><td class="col-b">Slow 🐢</td></tr>
+<tr><td>Key Distribution</td><td class="col-a">Problem exists</td><td class="col-b">No problem</td></tr>
+<tr><td>Key Size</td><td class="col-a">Smaller</td><td class="col-b">Larger</td></tr>
+<tr><td>Scalability</td><td class="col-a">Poor (n(n-1)/2)</td><td class="col-b">Excellent (2n)</td></tr>
+<tr><td>Digital Signature</td><td class="col-a">Not supported</td><td class="col-b">Supported</td></tr>
+<tr><td>Security</td><td class="col-a">Good for bulk</td><td class="col-b">Better key security</td></tr>
+<tr><td>Examples</td><td class="col-a">AES, DES, 3DES</td><td class="col-b">RSA, ECC, DSA</td></tr>
+<tr><td>ઉપયોગ</td><td class="col-a">Data encryption</td><td class="col-b">Key exchange, Signatures</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Star Exam Points</h3>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">RSA = Rivest-Shamir-Adleman, Integer Factorization based – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Public Key = Encrypt / Private Key = Decrypt – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Digital Signature = Private Key sign, Public Key verify – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Diffie-Hellman = Key Exchange protocol, Discrete Log based – ★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">ECC = Small key, same security as RSA – Mobile preferred – ★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">HTTPS = SSL/TLS = Asymmetric for key exchange + Symmetric for data – ★★★★</span></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 6: OS SECURITY -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s6">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>💻</span>
+  <span>6. Operating System Security (ઓ.એસ. સુરક્ષા)</span>
+  <span class="stars">★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>📌 OS Security Concepts ★★★★</h3>
+<p>OS = Hardware + Software bridge. Security = Unauthorized access prevent, resources protect.</p>
+
+<div class="tbl-wrap">
+<table>
+<tr><th>Concept</th><th>વ્યાખ્યા</th></tr>
+<tr><td><strong>Process Isolation</strong></td><td>Each process in separate memory space</td></tr>
+<tr><td><strong>Privilege Levels</strong></td><td>Kernel mode (Ring 0) vs User mode (Ring 3)</td></tr>
+<tr><td><strong>Access Control</strong></td><td>Resource access permissions</td></tr>
+<tr><td><strong>Memory Protection</strong></td><td>Process cannot access other process memory</td></tr>
+<tr><td><strong>Secure Boot</strong></td><td>Verified bootloader/OS only load</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔑 Access Control Models ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Model</th><th>Full Form</th><th>Description</th><th>ઉદાહરણ</th></tr>
+<tr><td><strong>DAC</strong></td><td>Discretionary Access Control</td><td>Owner decides permissions</td><td>Linux file permissions</td></tr>
+<tr><td><strong>MAC</strong></td><td>Mandatory Access Control</td><td>System/Admin controls, labels</td><td>Military (Top Secret)</td></tr>
+<tr><td><strong>RBAC</strong></td><td>Role-Based Access Control</td><td>Permissions based on role</td><td>HR/Admin/Manager roles</td></tr>
+<tr><td><strong>ABAC</strong></td><td>Attribute-Based Access Control</td><td>Multiple attributes considered</td><td>Cloud systems</td></tr>
+</table>
+</div>
+
+<div class="mnemonic">
+<div class="mnemonic-title">🧠 Mnemonic</div>
+<div class="mnemonic-text"><strong>"Duty Makes Roles Achieve"</strong> = DAC, MAC, RBAC, ABAC</div>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🐧 Linux File Permissions ★★★</h3>
+<div class="formula">Permission Format: -rwxr-xr--
+Position: [type][owner][group][others]
+r = read (4), w = write (2), x = execute (1)
+
+chmod 755 = rwxr-xr-x
+  Owner: 7 = 4+2+1 = rwx
+  Group: 5 = 4+0+1 = r-x
+  Others: 5 = 4+0+1 = r-x</div>
+</div>
+
+<div class="subtopic">
+<h3>🔐 Windows Security Features ★★★</h3>
+<ul>
+<li><strong>UAC (User Account Control):</strong> Admin rights confirmation prompt</li>
+<li><strong>Windows Defender:</strong> Built-in antivirus/antimalware</li>
+<li><strong>BitLocker:</strong> Full disk encryption (AES)</li>
+<li><strong>Windows Firewall:</strong> Software firewall</li>
+<li><strong>Secure Boot:</strong> UEFI-based verified boot</li>
+<li><strong>Windows Hello:</strong> Biometric authentication</li>
+</ul>
+</div>
+
+<div class="subtopic">
+<h3>🔐 Common OS Attacks ★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Attack</th><th>Description</th><th>Prevention</th></tr>
+<tr><td><strong>Buffer Overflow</strong></td><td>Extra data overwrites memory</td><td>Input validation, ASLR</td></tr>
+<tr><td><strong>Privilege Escalation</strong></td><td>User → Admin rights gain</td><td>Least privilege principle</td></tr>
+<tr><td><strong>Race Condition</strong></td><td>Timing-based vulnerability</td><td>Mutex, synchronization</td></tr>
+<tr><td><strong>Rootkit</strong></td><td>OS-level stealth malware</td><td>Secure boot, integrity check</td></tr>
+<tr><td><strong>Backdoor</strong></td><td>Hidden unauthorized access</td><td>Code audit, monitoring</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📋 Security Hardening ★★★</h3>
+<ul>
+<li>Unnecessary services disable</li>
+<li>Regular patches/updates install</li>
+<li>Principle of Least Privilege (PoLP) follow</li>
+<li>Strong password policy enforce</li>
+<li>Audit logs enable</li>
+<li>Unnecessary ports close</li>
+<li>Default accounts disable/rename</li>
+</ul>
+<div class="box box-orange">
+<strong>Principle of Least Privilege (PoLP):</strong> User ને ફક્ત necessary permissions – minimum access policy – ★★★★
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 7: CURRENT TRENDS IN CYBER SECURITY -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s7">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>📡</span>
+  <span>7. Current Trends in Cyber Security (સાઇબર સુરક્ષાના નવા Trends)</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>🤖 AI/ML in Cyber Security ★★★★★</h3>
+<ul>
+<li><strong>AI Threat Detection:</strong> Anomaly detection, pattern recognition</li>
+<li><strong>Predictive Analysis:</strong> Future attacks predict</li>
+<li><strong>Automated Response:</strong> AI-based incident response</li>
+<li><strong>AI Attacks:</strong> Adversarial attacks, AI-powered phishing</li>
+<li><strong>Deepfake:</strong> AI-generated fake videos/audio for social engineering</li>
+</ul>
+<div class="box box-purple">
+<strong>AI Security Paradox:</strong> AI defend ↔ AI attack – Both sides use AI!
+</div>
+</div>
+
+<div class="subtopic">
+<h3>☁️ Cloud Security ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Topic</th><th>Details</th></tr>
+<tr><td><strong>Shared Responsibility</strong></td><td>Cloud provider + Customer both responsible</td></tr>
+<tr><td><strong>CASB</strong></td><td>Cloud Access Security Broker</td></tr>
+<tr><td><strong>DLP</strong></td><td>Data Loss Prevention</td></tr>
+<tr><td><strong>Cloud Threats</strong></td><td>Data breach, Misconfiguration, Insider threat</td></tr>
+<tr><td><strong>Zero Trust</strong></td><td>"Never trust, always verify" model</td></tr>
+</table>
+</div>
+<div class="box box-cyan">
+<strong>Zero Trust Architecture:</strong> Network ઉપર trust ન કરો – verify everything, even inside network! – ★★★★★
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📱 IoT Security ★★★★</h3>
+<ul>
+<li><strong>IoT Threats:</strong> Default passwords, unpatched firmware, no encryption</li>
+<li><strong>Mirai Botnet:</strong> IoT devices DDoS attack (2016 – major DNS attack)</li>
+<li><strong>Challenges:</strong> Limited processing, no update mechanism, many devices</li>
+<li><strong>Solutions:</strong> Strong passwords, firmware update, network segmentation</li>
+</ul>
+</div>
+
+<div class="subtopic">
+<h3>📱 Mobile Security ★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Threat</th><th>Description</th></tr>
+<tr><td>Smishing</td><td>SMS-based phishing</td></tr>
+<tr><td>Vishing</td><td>Voice call phishing</td></tr>
+<tr><td>Malicious Apps</td><td>Fake apps data steal</td></tr>
+<tr><td>Insecure Wi-Fi</td><td>Public Wi-Fi MITM attack</td></tr>
+<tr><td>Jailbreaking/Rooting</td><td>OS bypass → vulnerabilities</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔗 Blockchain Security ★★★</h3>
+<ul>
+<li><strong>Immutability:</strong> Once recorded, cannot alter</li>
+<li><strong>Distributed:</strong> No single point of failure</li>
+<li><strong>51% Attack:</strong> Majority hash power → blockchain control</li>
+<li><strong>Smart Contract Vulnerabilities:</strong> Code bugs</li>
+</ul>
+</div>
+
+<div class="subtopic">
+<h3>📡 5G Security ★★★</h3>
+<ul>
+<li><strong>New threats:</strong> Network slicing attacks, signaling attacks</li>
+<li><strong>Improvements:</strong> Better encryption (256-bit), IMSI privacy</li>
+<li><strong>Supply chain risks:</strong> Equipment manufacturer trust</li>
+</ul>
+</div>
+
+<div class="subtopic">
+<h3>🔐 Ransomware Trends ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Attack</th><th>Year</th><th>Details</th></tr>
+<tr><td><strong>WannaCry</strong></td><td>2017</td><td>EternalBlue exploit, 150+ countries, NHS hit</td></tr>
+<tr><td><strong>NotPetya</strong></td><td>2017</td><td>Ukraine attack, $10B+ damage</td></tr>
+<tr><td><strong>REvil</strong></td><td>2021</td><td>Kaseya attack, $70M demand</td></tr>
+<tr><td><strong>Colonial Pipeline</strong></td><td>2021</td><td>US fuel supply disrupted, $4.4M paid</td></tr>
+<tr><td><strong>AIIMS Delhi</strong></td><td>2022</td><td>India government hospital attack</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Star Exam Points</h3>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Zero Trust = "Never Trust, Always Verify" – Cloud security model – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">WannaCry 2017 = Ransomware, EternalBlue exploit, Bitcoin ransom – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Mirai Botnet = IoT devices DDoS attack (2016) – ★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Deepfake = AI-generated fake content for social engineering – ★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">AIIMS Delhi 2022 = Ransomware attack on Indian govt hospital – ★★★★</span></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOPIC 8: CURRENT AFFAIRS -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="s8">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>📰</span>
+  <span>8. Current Affairs – Cyber Security, CERT-In, Digital India ★★★★★</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>🏛️ CERT-In (Computer Emergency Response Team – India) ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Topic</th><th>Details</th></tr>
+<tr><td><strong>Full Form</strong></td><td>Indian Computer Emergency Response Team</td></tr>
+<tr><td><strong>Established</strong></td><td>2004</td></tr>
+<tr><td><strong>Under</strong></td><td>Ministry of Electronics & IT (MeitY)</td></tr>
+<tr><td><strong>Role</strong></td><td>Cyber incidents report, analyze, respond</td></tr>
+<tr><td><strong>Mandatory Reporting</strong></td><td>6 hours within incident reporting (2022 directive)</td></tr>
+<tr><td><strong>HQ</strong></td><td>New Delhi</td></tr>
+<tr><td><strong>Website</strong></td><td>cert-in.org.in</td></tr>
+</table>
+</div>
+<div class="box box-red">
+<strong>CERT-In 2022 Directive:</strong> Organizations MUST report cyber incidents within <strong>6 hours</strong>. VPN providers 5-year user data maintain. ★★★★★
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📜 Digital Personal Data Protection Act (DPDPA) 2023 ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Topic</th><th>Details</th></tr>
+<tr><td><strong>Passed</strong></td><td>August 2023</td></tr>
+<tr><td><strong>Purpose</strong></td><td>Personal data protection of Indian citizens</td></tr>
+<tr><td><strong>Data Fiduciary</strong></td><td>Data collect & process કરે</td></tr>
+<tr><td><strong>Data Principal</strong></td><td>Whose data is collected (citizen)</td></tr>
+<tr><td><strong>Consent</strong></td><td>Clear, informed consent required</td></tr>
+<tr><td><strong>Right to Erasure</strong></td><td>Data delete request right</td></tr>
+<tr><td><strong>Data Protection Board</strong></td><td>Grievance redressal</td></tr>
+<tr><td><strong>Penalty</strong></td><td>Up to ₹250 crore for violations</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🌐 National Cyber Security Policy (NCSP) ★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Topic</th><th>Details</th></tr>
+<tr><td>NCSP 2013</td><td>India's first national cyber security policy</td></tr>
+<tr><td>Vision</td><td>Secure and resilient cyberspace</td></tr>
+<tr><td>Key Objectives</td><td>Protect critical infrastructure, build cyber workforce</td></tr>
+<tr><td>NCSP 2023</td><td>Updated policy under development</td></tr>
+<tr><td>National Cyber Coordinator</td><td>PMO level coordination</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>💡 Digital India Initiative ★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Scheme/Program</th><th>Details</th></tr>
+<tr><td><strong>Digital India</strong></td><td>Launched 2015, PM Modi</td></tr>
+<tr><td><strong>Cyber Surakshit Bharat</strong></td><td>Cyber security awareness for govt officials</td></tr>
+<tr><td><strong>I4C</strong></td><td>Indian Cyber Crime Coordination Centre</td></tr>
+<tr><td><strong>NATGRID</strong></td><td>National Intelligence Grid</td></tr>
+<tr><td><strong>UPI Security</strong></td><td>Two-factor auth, end-to-end encryption</td></tr>
+<tr><td><strong>DigiLocker</strong></td><td>Digital document storage</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>👮 Cyber Crime Investigation ★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Topic</th><th>Details</th></tr>
+<tr><td><strong>Cybercrime Portal</strong></td><td>cybercrime.gov.in (MHA)</td></tr>
+<tr><td><strong>Helpline</strong></td><td>1930 (Cyber Crime)</td></tr>
+<tr><td><strong>IT Act 2000</strong></td><td>India's cyber law</td></tr>
+<tr><td><strong>IT Amendment 2008</strong></td><td>Section 66A (now struck down)</td></tr>
+<tr><td><strong>Section 66C</strong></td><td>Identity theft – 3 years + fine</td></tr>
+<tr><td><strong>Section 66D</strong></td><td>Cheating by personation – 3 years + fine</td></tr>
+<tr><td><strong>Section 43</strong></td><td>Unauthorized computer access penalty</td></tr>
+<tr><td><strong>Section 65</strong></td><td>Tampering with computer source code</td></tr>
+</table>
+</div>
+<div class="box box-yellow">
+<strong>IT Act 2000:</strong> India's primary cyber law – unauthorized access, hacking, data theft ₹1 crore fine + imprisonment. ★★★★★
+</div>
+</div>
+
+<div class="subtopic">
+<h3>☁️ Cloud Security Standards ★★★</h3>
+<ul>
+<li><strong>ISO 27001:</strong> Information Security Management System standard</li>
+<li><strong>ISO 27017:</strong> Cloud-specific security controls</li>
+<li><strong>SOC 2:</strong> Service Organization Control 2</li>
+<li><strong>FedRAMP:</strong> US Federal cloud security (reference)</li>
+<li><strong>MeitY Cloud Policy:</strong> Indian government cloud guidelines</li>
+</ul>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Major Recent Cyber Attacks (India) ★★★★★</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Year</th><th>Attack</th><th>Target</th><th>Type</th></tr>
+<tr><td>2022</td><td>AIIMS Delhi Ransomware</td><td>Government Hospital</td><td>Ransomware</td></tr>
+<tr><td>2022</td><td>SpiceJet Attack</td><td>Aviation</td><td>Ransomware</td></tr>
+<tr><td>2023</td><td>ICMR Data Breach</td><td>Health Research</td><td>Data Breach</td></tr>
+<tr><td>2023</td><td>Aadhaar Data Leak</td><td>UIDAI</td><td>Data Breach</td></tr>
+<tr><td>2024</td><td>BSNL Data Breach</td><td>Telecom</td><td>Data Breach</td></tr>
+</table>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🌟 Star Exam Points</h3>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">CERT-In = 2004 established, MeitY under, 6 hours reporting rule 2022 – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">DPDPA 2023 = India's data protection law, ₹250 crore penalty – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Cyber Crime Helpline = 1930 | Portal = cybercrime.gov.in – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">IT Act 2000 = India's cyber law, Section 43/65/66 important – ★★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">Digital India = Launched 2015 by PM Modi – ★★★★</span></div>
+<div class="star-item"><span class="star-icon">★</span><span class="star-text">I4C = Indian Cyber Crime Coordination Centre – MHA under – ★★★★</span></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MCQ SECTION -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="mcq-section">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🎯</span>
+  <span>Top 50 Exam-Oriented MCQs – Network Security</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>📌 Set 1: Information Security & CIA</h3>
+
+<div class="mcq-block">
+<div class="mcq-q">Q1. CIA Triad ના ત્રણ ઘટક કયા છે?</div>
+<ul class="mcq-opts"><li>A) Confidentiality, Integrity, Authentication</li><li>B) Confidentiality, Integrity, Availability ✓</li><li>C) Control, Integrity, Availability</li><li>D) Confidentiality, Identity, Authorization</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Confidentiality, Integrity, Availability | CIA = InfoSec ના ત્રણ main pillars</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q2. Non-Repudiation નો અર્થ શું છે?</div>
+<ul class="mcq-opts"><li>A) Data encrypt કરવું</li><li>B) Unauthorized access block</li><li>C) Sender message ભેજ્યો છે એ નકારી ન શકે ✓</li><li>D) Password protect</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) Non-Repudiation = Sender denial impossible | Digital Signature implement</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q3. Phishing attack ક્યા method ઉપયોગ કરે?</div>
+<ul class="mcq-opts"><li>A) Physical force</li><li>B) Fake email/website ✓</li><li>C) Password brute force</li><li>D) SQL database attack</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Phishing = Fake emails/websites through credentials steal</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q4. DDoS attack ની full form શું છે?</div>
+<ul class="mcq-opts"><li>A) Distributed Denial of Service ✓</li><li>B) Direct Denial of Security</li><li>C) Distributed Data of Service</li><li>D) Dynamic Denial of System</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: A) DDoS = Distributed Denial of Service</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q5. Integrity (...) સૂચવે છે.</div>
+<ul class="mcq-opts"><li>A) Data secret</li><li>B) Data unchanged & accurate ✓</li><li>C) Data available</li><li>D) Data encrypted</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Integrity = Data unchanged, accurate, complete</div>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Set 2: Malware & System Security</h3>
+
+<div class="mcq-block">
+<div class="mcq-q">Q6. Computer Virus ની Worm સાથે તુલના – Worm ની ખાસ વિશેષતા?</div>
+<ul class="mcq-opts"><li>A) File attach</li><li>B) Slow spread</li><li>C) Self-replicating without host ✓</li><li>D) Requires user action</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) Worm = No host file needed, network through self-replicate</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q7. WannaCry attack 2017 ક્યા type નો attack હતો?</div>
+<ul class="mcq-opts"><li>A) Phishing</li><li>B) Ransomware ✓</li><li>C) DDoS</li><li>D) SQL Injection</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) WannaCry = Ransomware, 2017, 150+ countries, Bitcoin demand</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q8. Trojan Horse malware ની main characteristic?</div>
+<ul class="mcq-opts"><li>A) Fast self-replication</li><li>B) Legitimate software disguise ✓</li><li>C) Network spread</li><li>D) Files encrypt</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Trojan = Legitimate software ની જેમ appear, does not self-replicate</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q9. IDS vs IPS – IPS ની additional capability?</div>
+<ul class="mcq-opts"><li>A) Detect only</li><li>B) Log only</li><li>C) Alert only</li><li>D) Detect + Block/Prevent ✓</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: D) IPS = Detect + Prevent (inline, active) | IDS = Detect + Alert only (passive)</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q10. Keylogger ક્યું કામ કરે?</div>
+<ul class="mcq-opts"><li>A) Screen capture</li><li>B) Keyboard keystrokes record ✓</li><li>C) Network packet capture</li><li>D) File encrypt</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Keylogger = Keyboard input secretly record → Password theft</div>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Set 3: Encryption & Cryptography</h3>
+
+<div class="mcq-block">
+<div class="mcq-q">Q11. Caesar Cipher encryption formula?</div>
+<ul class="mcq-opts"><li>A) C = P × K</li><li>B) C = P + K mod 26 ✓</li><li>C) C = P - K mod 26</li><li>D) C = P mod K</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) C = (P + K) mod 26 | Decryption: P = (C - K) mod 26</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q12. SHA-256 hash output size?</div>
+<ul class="mcq-opts"><li>A) 128 bits</li><li>B) 160 bits</li><li>C) 256 bits ✓</li><li>D) 512 bits</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) SHA-256 = 256-bit output | SHA-512 = 512-bit | MD5 = 128-bit</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q13. AES ની block size?</div>
+<ul class="mcq-opts"><li>A) 64 bits</li><li>B) 128 bits ✓</li><li>C) 192 bits</li><li>D) 256 bits</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) AES block size = Always 128-bit (key size = 128/192/256)</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q14. DES effective key length?</div>
+<ul class="mcq-opts"><li>A) 48 bits</li><li>B) 56 bits ✓</li><li>C) 64 bits</li><li>D) 128 bits</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) DES = 56-bit effective key (64-bit with 8 parity bits)</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q15. RSA algorithm _______ problem ઉપર based છે.</div>
+<ul class="mcq-opts"><li>A) Discrete Logarithm</li><li>B) Elliptic Curve</li><li>C) Integer Factorization ✓</li><li>D) NP-Hard</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) RSA = Integer Factorization Problem | DH = Discrete Log Problem</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q16. Symmetric Encryption ની main limitation?</div>
+<ul class="mcq-opts"><li>A) Slow speed</li><li>B) Key distribution problem ✓</li><li>C) Large key size</li><li>D) Low security</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Key distribution = Same secret key securely share problem</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q17. Digital Signature _______ key ઉપયોગ sign કરે.</div>
+<ul class="mcq-opts"><li>A) Public Key</li><li>B) Private Key ✓</li><li>C) Session Key</li><li>D) Symmetric Key</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Sign = Private Key | Verify = Public Key</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q18. XOR property: A XOR A = ?</div>
+<ul class="mcq-opts"><li>A) A</li><li>B) 1</li><li>C) 0 ✓</li><li>D) Undefined</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) A XOR A = 0 (Any value XOR itself = 0)</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q19. ECB mode ની weakness?</div>
+<ul class="mcq-opts"><li>A) Slow speed</li><li>B) Same plaintext → Same ciphertext pattern ✓</li><li>C) IV required</li><li>D) Key too large</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) ECB = Same block → Same cipher = Pattern visible = Weak!</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q20. Diffie-Hellman _______ problem ઉપર based.</div>
+<ul class="mcq-opts"><li>A) Integer Factorization</li><li>B) Discrete Logarithm ✓</li><li>C) Elliptic Curve</li><li>D) NP Complete</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Diffie-Hellman = Discrete Logarithm Problem (DLP)</div>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Set 4: OS Security & Access Control</h3>
+
+<div class="mcq-block">
+<div class="mcq-q">Q21. RBAC full form?</div>
+<ul class="mcq-opts"><li>A) Rule-Based Access Control</li><li>B) Role-Based Access Control ✓</li><li>C) Resource-Based Access Control</li><li>D) Restriction-Based Access Control</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) RBAC = Role-Based Access Control</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q22. Military classification system (Top Secret/Confidential) _______ model use.</div>
+<ul class="mcq-opts"><li>A) DAC</li><li>B) RBAC</li><li>C) MAC ✓</li><li>D) ABAC</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) MAC = Mandatory Access Control = Security labels/classifications</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q23. Buffer Overflow attack _______ vulnerability exploit.</div>
+<ul class="mcq-opts"><li>A) Network</li><li>B) Database</li><li>C) Memory ✓</li><li>D) Encryption</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) Buffer Overflow = Memory boundary overwrite</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q24. "Principle of Least Privilege" નો અર્થ?</div>
+<ul class="mcq-opts"><li>A) Admin rights for all</li><li>B) Minimum necessary permissions ✓</li><li>C) No permissions</li><li>D) Root access</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) PoLP = Minimum necessary access/permissions only</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q25. Linux chmod 755 meaning?</div>
+<ul class="mcq-opts"><li>A) rwxrwxrwx</li><li>B) rwxr-xr-x ✓</li><li>C) r-xr-xr-x</li><li>D) rwxr--r--</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) 7=rwx(owner), 5=r-x(group), 5=r-x(others)</div>
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Set 5: CERT-In, IT Act, Current Affairs</h3>
+
+<div class="mcq-block">
+<div class="mcq-q">Q26. CERT-In _______ year establish.</div>
+<ul class="mcq-opts"><li>A) 2000</li><li>B) 2004 ✓</li><li>C) 2008</li><li>D) 2013</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) CERT-In = 2004 | IT Act = 2000</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q27. CERT-In 2022 directive according to cyber incident report time?</div>
+<ul class="mcq-opts"><li>A) 24 hours</li><li>B) 12 hours</li><li>C) 6 hours ✓</li><li>D) 48 hours</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) 6 hours mandatory reporting</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q28. Cyber Crime Helpline number?</div>
+<ul class="mcq-opts"><li>A) 100</li><li>B) 112</li><li>C) 1930 ✓</li><li>D) 1800</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) 1930 = National Cyber Crime Helpline</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q29. DPDPA 2023 maximum penalty?</div>
+<ul class="mcq-opts"><li>A) ₹50 crore</li><li>B) ₹100 crore</li><li>C) ₹250 crore ✓</li><li>D) ₹500 crore</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) ₹250 crore maximum penalty under DPDPA 2023</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q30. IT Act 2000 – Section 66C?</div>
+<ul class="mcq-opts"><li>A) Hacking</li><li>B) Identity Theft ✓</li><li>C) Data breach</li><li>D) Spam</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Section 66C = Identity Theft, 3 years imprisonment + fine</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q31. Zero Trust security model નો core principle?</div>
+<ul class="mcq-opts"><li>A) Trust all internal users</li><li>B) Never trust, always verify ✓</li><li>C) Trust verified users</li><li>D) Block all external</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Zero Trust = "Never Trust, Always Verify"</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q32. AIIMS Delhi 2022 attack type?</div>
+<ul class="mcq-opts"><li>A) Phishing</li><li>B) DDoS</li><li>C) Ransomware ✓</li><li>D) SQL Injection</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) AIIMS Delhi = Ransomware attack, Nov 2022</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q33. I4C full form?</div>
+<ul class="mcq-opts"><li>A) Indian Internet Crime Center</li><li>B) Indian Cyber Crime Coordination Centre ✓</li><li>C) Intelligence Cyber Crime Control</li><li>D) India International Cyber Centre</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) I4C = Indian Cyber Crime Coordination Centre (MHA)</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q34. Digital India programme launch year?</div>
+<ul class="mcq-opts"><li>A) 2013</li><li>B) 2014</li><li>C) 2015 ✓</li><li>D) 2016</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) Digital India = 2015 launch by PM Modi</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q35. CERT-In _______ ministry under?</div>
+<ul class="mcq-opts"><li>A) MHA</li><li>B) MeitY ✓</li><li>C) PMO</li><li>D) Finance Ministry</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) MeitY = Ministry of Electronics and Information Technology</div>
+</div>
+
+<div class="subtopic">
+<h3>📌 Set 6: Advanced Topics</h3>
+
+<div class="mcq-block">
+<div class="mcq-q">Q36. PKI માં CA full form?</div>
+<ul class="mcq-opts"><li>A) Control Authority</li><li>B) Certificate Authority ✓</li><li>C) Crypto Authority</li><li>D) Central Authority</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) CA = Certificate Authority = Issues Digital Certificates</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q37. AES NIST standard year?</div>
+<ul class="mcq-opts"><li>A) 1977</li><li>B) 1999</li><li>C) 2001 ✓</li><li>D) 2005</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) AES = 2001 NIST | DES = 1977 NIST</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q38. Mirai Botnet _______ attack type?</div>
+<ul class="mcq-opts"><li>A) Ransomware</li><li>B) Phishing</li><li>C) DDoS through IoT ✓</li><li>D) SQL Injection</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) Mirai Botnet = IoT device DDoS (2016 Dyn DNS attack)</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q39. ECC _______ problem based?</div>
+<ul class="mcq-opts"><li>A) Factorization</li><li>B) Discrete Log</li><li>C) Elliptic Curve Discrete Log ✓</li><li>D) NP-Hard</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) ECC = Elliptic Curve Discrete Logarithm Problem (ECDLP)</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q40. MD5 hash output?</div>
+<ul class="mcq-opts"><li>A) 64 bits</li><li>B) 128 bits ✓</li><li>C) 160 bits</li><li>D) 256 bits</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) MD5 = 128-bit (broken), SHA-1=160, SHA-256=256, SHA-512=512</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q41. Smishing = ?</div>
+<ul class="mcq-opts"><li>A) Email phishing</li><li>B) SMS phishing ✓</li><li>C) Voice phishing</li><li>D) Social media</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Smishing = SMS + Phishing | Vishing = Voice + Phishing</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q42. Two Factor Authentication (2FA) examples?</div>
+<ul class="mcq-opts"><li>A) Password only</li><li>B) Password + OTP ✓</li><li>C) Fingerprint only</li><li>D) Username only</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) 2FA = Something you KNOW + Something you HAVE/ARE</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q43. SSL/TLS HTTPS – _______ use?</div>
+<ul class="mcq-opts"><li>A) Only symmetric</li><li>B) Only asymmetric</li><li>C) Asymmetric for key exchange + Symmetric for data ✓</li><li>D) Hash only</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) HTTPS = Hybrid: Asymmetric key exchange + Symmetric data encryption</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q44. Steganography શું છે?</div>
+<ul class="mcq-opts"><li>A) Data encryption</li><li>B) Data hidden inside media files ✓</li><li>C) Hash function</li><li>D) Digital signature</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) Steganography = Secret message hide inside image/audio/video</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q45. ISO 27001 standard related to?</div>
+<ul class="mcq-opts"><li>A) Network Performance</li><li>B) Information Security Management System ✓</li><li>C) Software Development</li><li>D) Hardware Standards</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) ISO 27001 = ISMS = Information Security Management System</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q46. National Cyber Security Policy India _______ year?</div>
+<ul class="mcq-opts"><li>A) 2000</li><li>B) 2008</li><li>C) 2013 ✓</li><li>D) 2015</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) NCSP 2013 = India's first national cyber security policy</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q47. Rootkit _______ characteristic?</div>
+<ul class="mcq-opts"><li>A) Visible to antivirus easily</li><li>B) Network spread</li><li>C) Deep system, hard to detect, admin access ✓</li><li>D) Files encrypt</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) Rootkit = OS level, hard to detect, stealth admin access</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q48. Man-in-the-Middle (MITM) attack _______ use?</div>
+<ul class="mcq-opts"><li>A) Server overload</li><li>B) Communication intercept between two parties ✓</li><li>C) Password guess</li><li>D) Data encrypt</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) MITM = Communication between A & B intercept</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q49. Blockchain _______ attack = Majority control?</div>
+<ul class="mcq-opts"><li>A) 33% attack</li><li>B) 51% attack ✓</li><li>C) 66% attack</li><li>D) 99% attack</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: B) 51% attack = Majority hash power → Blockchain control</div>
+</div>
+
+<div class="mcq-block">
+<div class="mcq-q">Q50. Social Engineering attack _______ target?</div>
+<ul class="mcq-opts"><li>A) Computer hardware</li><li>B) Network protocols</li><li>C) Human psychology ✓</li><li>D) Database</li></ul>
+<button class="show-ans-btn" onclick="showAns(this)">Answer જુઓ</button>
+<div class="mcq-ans">✅ Correct: C) Social Engineering = Human manipulation/deception, not technical attack</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 100 ONE-LINERS -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="oneliners">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>⚡</span>
+  <span>Top 100 One-Liners – Quick Revision</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>🔐 Information Security & CIA</h3>
+<div class="one-liner"><span class="ol-num">1</span><span class="ol-text">CIA Triad = Confidentiality + Integrity + Availability</span></div>
+<div class="one-liner"><span class="ol-num">2</span><span class="ol-text">Confidentiality = ફક્ત authorized person data access</span></div>
+<div class="one-liner"><span class="ol-num">3</span><span class="ol-text">Integrity = Data unchanged/accurate/complete</span></div>
+<div class="one-liner"><span class="ol-num">4</span><span class="ol-text">Availability = Authorized users ને always access</span></div>
+<div class="one-liner"><span class="ol-num">5</span><span class="ol-text">Non-Repudiation = Sender message ભેજ્યો deny ન કરી શકે</span></div>
+<div class="one-liner"><span class="ol-num">6</span><span class="ol-text">Authentication = User identity verify</span></div>
+<div class="one-liner"><span class="ol-num">7</span><span class="ol-text">Authorization = Verified user ને access grant</span></div>
+<div class="one-liner"><span class="ol-num">8</span><span class="ol-text">Phishing = Fake email/website through credentials steal</span></div>
+<div class="one-liner"><span class="ol-num">9</span><span class="ol-text">DDoS = Distributed Denial of Service = Multiple sources attack</span></div>
+<div class="one-liner"><span class="ol-num">10</span><span class="ol-text">Zero-Day = Unknown vulnerability, no patch available</span></div>
+</div>
+
+<div class="subtopic">
+<h3>🦠 Malware & System</h3>
+<div class="one-liner"><span class="ol-num">11</span><span class="ol-text">Virus = Host file attach, self-replicate</span></div>
+<div class="one-liner"><span class="ol-num">12</span><span class="ol-text">Worm = No host, network through self-spread</span></div>
+<div class="one-liner"><span class="ol-num">13</span><span class="ol-text">Trojan = Legitimate software disguise, no self-replicate</span></div>
+<div class="one-liner"><span class="ol-num">14</span><span class="ol-text">Ransomware = Files encrypt, ransom demand</span></div>
+<div class="one-liner"><span class="ol-num">15</span><span class="ol-text">Spyware = Silently monitor, data steal</span></div>
+<div class="one-liner"><span class="ol-num">16</span><span class="ol-text">Rootkit = Deep OS access, hard to detect</span></div>
+<div class="one-liner"><span class="ol-num">17</span><span class="ol-text">Botnet = Zombie computers network for DDoS</span></div>
+<div class="one-liner"><span class="ol-num">18</span><span class="ol-text">Keylogger = Keyboard input secretly record</span></div>
+<div class="one-liner"><span class="ol-num">19</span><span class="ol-text">WannaCry = 2017 Ransomware, EternalBlue, Bitcoin</span></div>
+<div class="one-liner"><span class="ol-num">20</span><span class="ol-text">Mirai Botnet = 2016, IoT devices DDoS</span></div>
+</div>
+
+<div class="subtopic">
+<h3>🔢 Encryption Basics</h3>
+<div class="one-liner"><span class="ol-num">21</span><span class="ol-text">Caesar Cipher: C = (P + K) mod 26</span></div>
+<div class="one-liner"><span class="ol-num">22</span><span class="ol-text">XOR: A XOR A = 0 | A XOR 0 = A</span></div>
+<div class="one-liner"><span class="ol-num">23</span><span class="ol-text">MD5 = 128-bit hash (broken)</span></div>
+<div class="one-liner"><span class="ol-num">24</span><span class="ol-text">SHA-1 = 160-bit (deprecated)</span></div>
+<div class="one-liner"><span class="ol-num">25</span><span class="ol-text">SHA-256 = 256-bit (secure, Bitcoin use)</span></div>
+<div class="one-liner"><span class="ol-num">26</span><span class="ol-text">Hash = One-way function, irreversible</span></div>
+<div class="one-liner"><span class="ol-num">27</span><span class="ol-text">Avalanche Effect = Small change → Completely different hash</span></div>
+<div class="one-liner"><span class="ol-num">28</span><span class="ol-text">φ(p) = p - 1 for prime p</span></div>
+<div class="one-liner"><span class="ol-num">29</span><span class="ol-text">a mod n = remainder when a divided by n</span></div>
+<div class="one-liner"><span class="ol-num">30</span><span class="ol-text">Steganography = Message hide in image/audio/video</span></div>
+</div>
+
+<div class="subtopic">
+<h3>🔑 Symmetric Encryption</h3>
+<div class="one-liner"><span class="ol-num">31</span><span class="ol-text">Symmetric = Same key for encrypt & decrypt</span></div>
+<div class="one-liner"><span class="ol-num">32</span><span class="ol-text">DES = 1977, 56-bit key, 64-bit block, 16 rounds</span></div>
+<div class="one-liner"><span class="ol-num">33</span><span class="ol-text">AES = 2001, 128/192/256-bit keys, 128-bit block</span></div>
+<div class="one-liner"><span class="ol-num">34</span><span class="ol-text">AES-128 = 10 rounds | AES-192 = 12 | AES-256 = 14</span></div>
+<div class="one-liner"><span class="ol-num">35</span><span class="ol-text">3DES = DES × 3 = 112/168-bit, slow</span></div>
+<div class="one-liner"><span class="ol-num">36</span><span class="ol-text">Block Cipher = Fixed blocks | Stream Cipher = bit by bit</span></div>
+<div class="one-liner"><span class="ol-num">37</span><span class="ol-text">ECB = Weakest mode, same block → same cipher</span></div>
+<div class="one-liner"><span class="ol-num">38</span><span class="ol-text">CBC = TLS use, IV required, chaining</span></div>
+<div class="one-liner"><span class="ol-num">39</span><span class="ol-text">Symmetric: n users need n(n-1)/2 keys</span></div>
+<div class="one-liner"><span class="ol-num">40</span><span class="ol-text">AES = Substitution-Permutation Network (SPN)</span></div>
+</div>
+
+<div class="subtopic">
+<h3>🗝️ Asymmetric Encryption</h3>
+<div class="one-liner"><span class="ol-num">41</span><span class="ol-text">Asymmetric = Public Key + Private Key</span></div>
+<div class="one-liner"><span class="ol-num">42</span><span class="ol-text">Public Key = Encrypt | Private Key = Decrypt</span></div>
+<div class="one-liner"><span class="ol-num">43</span><span class="ol-text">RSA = Rivest-Shamir-Adleman, 1977</span></div>
+<div class="one-liner"><span class="ol-num">44</span><span class="ol-text">RSA = Integer Factorization Problem based</span></div>
+<div class="one-liner"><span class="ol-num">45</span><span class="ol-text">Diffie-Hellman = Discrete Logarithm Problem</span></div>
+<div class="one-liner"><span class="ol-num">46</span><span class="ol-text">ECC = Small key, same security as RSA</span></div>
+<div class="one-liner"><span class="ol-num">47</span><span class="ol-text">Digital Signature: Sign = Private Key | Verify = Public Key</span></div>
+<div class="one-liner"><span class="ol-num">48</span><span class="ol-text">Digital Signature = Auth + Integrity + Non-Repudiation</span></div>
+<div class="one-liner"><span class="ol-num">49</span><span class="ol-text">X.509 = Digital Certificate standard</span></div>
+<div class="one-liner"><span class="ol-num">50</span><span class="ol-text">CA = Certificate Authority = Issues digital certificates</span></div>
+</div>
+
+<div class="subtopic">
+<h3>💻 OS Security</h3>
+<div class="one-liner"><span class="ol-num">51</span><span class="ol-text">DAC = Owner decides permissions (Linux files)</span></div>
+<div class="one-liner"><span class="ol-num">52</span><span class="ol-text">MAC = System/Admin controls (Military)</span></div>
+<div class="one-liner"><span class="ol-num">53</span><span class="ol-text">RBAC = Role-Based Access Control</span></div>
+<div class="one-liner"><span class="ol-num">54</span><span class="ol-text">chmod 777 = rwxrwxrwx (all permissions)</span></div>
+<div class="one-liner"><span class="ol-num">55</span><span class="ol-text">r=4, w=2, x=1 (Linux permission values)</span></div>
+<div class="one-liner"><span class="ol-num">56</span><span class="ol-text">Principle of Least Privilege = Minimum access</span></div>
+<div class="one-liner"><span class="ol-num">57</span><span class="ol-text">Buffer Overflow = Memory boundary overwrite attack</span></div>
+<div class="one-liner"><span class="ol-num">58</span><span class="ol-text">BitLocker = Windows Full Disk Encryption (AES)</span></div>
+<div class="one-liner"><span class="ol-num">59</span><span class="ol-text">UAC = User Account Control (Windows)</span></div>
+<div class="one-liner"><span class="ol-num">60</span><span class="ol-text">Secure Boot = UEFI verified bootloader</span></div>
+</div>
+
+<div class="subtopic">
+<h3>📡 Cyber Trends & Attacks</h3>
+<div class="one-liner"><span class="ol-num">61</span><span class="ol-text">Zero Trust = Never Trust, Always Verify</span></div>
+<div class="one-liner"><span class="ol-num">62</span><span class="ol-text">IoT = Default password + no patch = vulnerable</span></div>
+<div class="one-liner"><span class="ol-num">63</span><span class="ol-text">Deepfake = AI-generated fake video/audio</span></div>
+<div class="one-liner"><span class="ol-num">64</span><span class="ol-text">Smishing = SMS phishing | Vishing = Voice phishing</span></div>
+<div class="one-liner"><span class="ol-num">65</span><span class="ol-text">MITM = Man-in-the-Middle communication intercept</span></div>
+<div class="one-liner"><span class="ol-num">66</span><span class="ol-text">SQL Injection = Database malicious query attack</span></div>
+<div class="one-liner"><span class="ol-num">67</span><span class="ol-text">Social Engineering = Human psychology exploit</span></div>
+<div class="one-liner"><span class="ol-num">68</span><span class="ol-text">Brute Force = All password combinations try</span></div>
+<div class="one-liner"><span class="ol-num">69</span><span class="ol-text">51% Attack = Blockchain majority control</span></div>
+<div class="one-liner"><span class="ol-num">70</span><span class="ol-text">Packet Sniffer = Network traffic capture & analyze</span></div>
+</div>
+
+<div class="subtopic">
+<h3>🏛️ CERT-In, IT Act, Policy</h3>
+<div class="one-liner"><span class="ol-num">71</span><span class="ol-text">CERT-In = 2004, MeitY under, New Delhi HQ</span></div>
+<div class="one-liner"><span class="ol-num">72</span><span class="ol-text">CERT-In 2022 = 6 hours mandatory incident reporting</span></div>
+<div class="one-liner"><span class="ol-num">73</span><span class="ol-text">DPDPA 2023 = India digital personal data protection law</span></div>
+<div class="one-liner"><span class="ol-num">74</span><span class="ol-text">DPDPA penalty = Up to ₹250 crore</span></div>
+<div class="one-liner"><span class="ol-num">75</span><span class="ol-text">IT Act 2000 = India's primary cyber law</span></div>
+<div class="one-liner"><span class="ol-num">76</span><span class="ol-text">Section 66C = Identity Theft | 66D = Cheating by personation</span></div>
+<div class="one-liner"><span class="ol-num">77</span><span class="ol-text">Section 43 = Unauthorized computer access</span></div>
+<div class="one-liner"><span class="ol-num">78</span><span class="ol-text">Cyber Crime Helpline = 1930</span></div>
+<div class="one-liner"><span class="ol-num">79</span><span class="ol-text">Cyber Crime Portal = cybercrime.gov.in</span></div>
+<div class="one-liner"><span class="ol-num">80</span><span class="ol-text">NCSP 2013 = India's first National Cyber Security Policy</span></div>
+</div>
+
+<div class="subtopic">
+<h3>🌐 Digital India & Standards</h3>
+<div class="one-liner"><span class="ol-num">81</span><span class="ol-text">Digital India = 2015 launch, PM Modi</span></div>
+<div class="one-liner"><span class="ol-num">82</span><span class="ol-text">I4C = Indian Cyber Crime Coordination Centre (MHA)</span></div>
+<div class="one-liner"><span class="ol-num">83</span><span class="ol-text">ISO 27001 = Information Security Management System</span></div>
+<div class="one-liner"><span class="ol-num">84</span><span class="ol-text">ISO 27017 = Cloud security controls standard</span></div>
+<div class="one-liner"><span class="ol-num">85</span><span class="ol-text">AIIMS Delhi 2022 = Ransomware attack</span></div>
+<div class="one-liner"><span class="ol-num">86</span><span class="ol-text">Colonial Pipeline 2021 = US fuel DarkSide Ransomware</span></div>
+<div class="one-liner"><span class="ol-num">87</span><span class="ol-text">NotPetya 2017 = Ukraine, $10B+ damage</span></div>
+<div class="one-liner"><span class="ol-num">88</span><span class="ol-text">VPN = Encrypted private tunnel over public internet</span></div>
+<div class="one-liner"><span class="ol-num">89</span><span class="ol-text">Firewall = Network traffic filter (Trusted vs Untrusted)</span></div>
+<div class="one-liner"><span class="ol-num">90</span><span class="ol-text">IDS = Detect Only | IPS = Detect + Prevent</span></div>
+</div>
+
+<div class="subtopic">
+<h3>🎓 Miscellaneous Important</h3>
+<div class="one-liner"><span class="ol-num">91</span><span class="ol-text">2FA = Two-Factor Authentication (Password + OTP)</span></div>
+<div class="one-liner"><span class="ol-num">92</span><span class="ol-text">HTTPS = SSL/TLS encrypted HTTP</span></div>
+<div class="one-liner"><span class="ol-num">93</span><span class="ol-text">SSL/TLS = Hybrid: Asymmetric + Symmetric</span></div>
+<div class="one-liner"><span class="ol-num">94</span><span class="ol-text">PKI = Public Key Infrastructure</span></div>
+<div class="one-liner"><span class="ol-num">95</span><span class="ol-text">CRL = Certificate Revocation List</span></div>
+<div class="one-liner"><span class="ol-num">96</span><span class="ol-text">Penetration Testing = Ethical hacking/authorized attack simulation</span></div>
+<div class="one-liner"><span class="ol-num">97</span><span class="ol-text">White Hat = Ethical Hacker | Black Hat = Malicious Hacker</span></div>
+<div class="one-liner"><span class="ol-num">98</span><span class="ol-text">CASB = Cloud Access Security Broker</span></div>
+<div class="one-liner"><span class="ol-num">99</span><span class="ol-text">DLP = Data Loss Prevention</span></div>
+<div class="one-liner"><span class="ol-num">100</span><span class="ol-text">Salting = Random data add to password before hash (rainbow table prevent)</span></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- FORMULAS & FACTS -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="formulas">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>📐</span>
+  <span>Top 25 Formulas, Facts & Tables</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+<div class="subtopic">
+<div class="formula">1. Caesar Cipher Encrypt: C = (P + K) mod 26
+2. Caesar Cipher Decrypt: P = (C - K) mod 26
+3. Symmetric Keys Needed: n(n-1)/2 for n users
+4. Euler Totient for prime: φ(p) = p - 1
+5. Euler Totient for primes p,q: φ(pq) = (p-1)(q-1)
+6. RSA Encrypt: C = Mᵉ mod n
+7. RSA Decrypt: M = Cᵈ mod n
+8. RSA: n = p × q (p,q are large primes)
+9. RSA: d × e ≡ 1 mod φ(n)
+10. Linux Permission: r=4, w=2, x=1 (total = 7 max)
+11. chmod 755 = rwxr-xr-x
+12. chmod 644 = rw-r--r--
+13. Binary to Decimal: 1011 = 1×2³+0×2²+1×2¹+1×2⁰ = 11
+14. XOR: 1 XOR 1 = 0, 1 XOR 0 = 1
+15. a mod n = r where a = qn + r
+16. DH: Shared Secret = gᵃᵇ mod p
+17. Hash Output: MD5=128, SHA1=160, SHA256=256, SHA512=512
+18. AES Rounds: 128-bit=10, 192-bit=12, 256-bit=14
+19. Asymmetric keys: 2n keys for n users (public+private per user)
+20. DES: 64-bit block, 56-bit effective key, 16 rounds
+21. 3DES: 3× DES = 48 rounds
+22. Password Strength ∝ Length × Character Set Size
+23. Brute Force attempts: 2^n for n-bit key
+24. DES cracked: 2^56 = 72 quadrillion combinations
+25. AES-256 = 2^256 = effectively unbreakable</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TOP 25 DIFFERENCES -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="diffs">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>⚖️</span>
+  <span>Top 25 Important Differences</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>1. Symmetric vs Asymmetric ★★★★★</h3>
+<div class="tbl-wrap"><table class="diff-table"><tr><th>Feature</th><th class="col-a">Symmetric</th><th class="col-b">Asymmetric</th></tr><tr><td>Keys</td><td class="col-a">1 (Same)</td><td class="col-b">2 (Public+Private)</td></tr><tr><td>Speed</td><td class="col-a">Fast</td><td class="col-b">Slow</td></tr><tr><td>Key Exchange</td><td class="col-a">Problem</td><td class="col-b">No problem</td></tr><tr><td>Examples</td><td class="col-a">AES, DES</td><td class="col-b">RSA, ECC</td></tr></table></div>
+</div>
+
+<div class="subtopic">
+<h3>2. DES vs AES ★★★★★</h3>
+<div class="tbl-wrap"><table class="diff-table"><tr><th>Feature</th><th class="col-a">DES</th><th class="col-b">AES</th></tr><tr><td>Year</td><td class="col-a">1977</td><td class="col-b">2001</td></tr><tr><td>Key Size</td><td class="col-a">56-bit</td><td class="col-b">128/192/256-bit</td></tr><tr><td>Block Size</td><td class="col-a">64-bit</td><td class="col-b">128-bit</td></tr><tr><td>Rounds</td><td class="col-a">16</td><td class="col-b">10/12/14</td></tr><tr><td>Status</td><td class="col-a">Broken</td><td class="col-b">Secure</td></tr></table></div>
+</div>
+
+<div class="subtopic">
+<h3>3. IDS vs IPS ★★★★</h3>
+<div class="tbl-wrap"><table class="diff-table"><tr><th>Feature</th><th class="col-a">IDS</th><th class="col-b">IPS</th></tr><tr><td>Role</td><td class="col-a">Detect + Alert</td><td class="col-b">Detect + Block</td></tr><tr><td>Type</td><td class="col-a">Passive</td><td class="col-b">Active (inline)</td></tr><tr><td>Traffic Impact</td><td class="col-a">None</td><td class="col-b">Can block</td></tr></table></div>
+</div>
+
+<div class="subtopic">
+<h3>4. Virus vs Worm ★★★★★</h3>
+<div class="tbl-wrap"><table class="diff-table"><tr><th>Feature</th><th class="col-a">Virus</th><th class="col-b">Worm</th></tr><tr><td>Host</td><td class="col-a">Needs host file</td><td class="col-b">No host needed</td></tr><tr><td>Spread</td><td class="col-a">User action needed</td><td class="col-b">Auto network spread</td></tr><tr><td>Replication</td><td class="col-a">With host</td><td class="col-b">Independent</td></tr></table></div>
+</div>
+
+<div class="subtopic">
+<h3>5. Block Cipher vs Stream Cipher ★★★★</h3>
+<div class="tbl-wrap"><table class="diff-table"><tr><th>Feature</th><th class="col-a">Block Cipher</th><th class="col-b">Stream Cipher</th></tr><tr><td>Unit</td><td class="col-a">Fixed blocks</td><td class="col-b">Bit/byte</td></tr><tr><td>Speed</td><td class="col-a">Slower</td><td class="col-b">Faster</td></tr><tr><td>Examples</td><td class="col-a">AES, DES</td><td class="col-b">RC4, ChaCha20</td></tr></table></div>
+</div>
+
+<div class="subtopic">
+<h3>6. RSA vs ECC ★★★</h3>
+<div class="tbl-wrap"><table class="diff-table"><tr><th>Feature</th><th class="col-a">RSA</th><th class="col-b">ECC</th></tr><tr><td>Key Size</td><td class="col-a">2048-bit (standard)</td><td class="col-b">256-bit (equivalent)</td></tr><tr><td>Speed</td><td class="col-a">Slower</td><td class="col-b">Faster</td></tr><tr><td>Based On</td><td class="col-a">Factorization</td><td class="col-b">Elliptic Curve DLP</td></tr><tr><td>Use</td><td class="col-a">General</td><td class="col-b">Mobile/IoT</td></tr></table></div>
+</div>
+
+<div class="subtopic">
+<h3>7. Information Security vs Cyber Security ★★★</h3>
+<div class="tbl-wrap"><table class="diff-table"><tr><th>Feature</th><th class="col-a">Info Security</th><th class="col-b">Cyber Security</th></tr><tr><td>Scope</td><td class="col-a">Physical + Digital</td><td class="col-b">Digital only</td></tr><tr><td>Coverage</td><td class="col-a">Broader</td><td class="col-b">Narrower</td></tr></table></div>
+</div>
+
+<div class="subtopic">
+<h3>8. DAC vs MAC vs RBAC ★★★★</h3>
+<div class="tbl-wrap"><table><tr><th>Model</th><th>Control By</th><th>ઉદાહરણ</th></tr><tr><td>DAC</td><td>Owner/User</td><td>Linux files</td></tr><tr><td>MAC</td><td>System/Admin (labels)</td><td>Military</td></tr><tr><td>RBAC</td><td>Role/Job function</td><td>Corporate</td></tr></table></div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- QUICK REVISION -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="quickrev">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🚀</span>
+  <span>Quick Revision Notes – Chapter Summary</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<h3>🔐 Topic 1: Information Security</h3>
+<div class="box box-orange">
+CIA = Confidentiality + Integrity + Availability | Non-Repudiation, Authentication, Authorization | Phishing=fake email | DDoS=Distributed attack | Zero-Day=unknown vulnerability | Firewall=traffic filter | VPN=encrypted tunnel | IDS=detect | IPS=detect+block
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🦠 Topic 2: System Security</h3>
+<div class="box box-red">
+Virus=host needed | Worm=no host | Trojan=disguise | Ransomware=encrypt+ransom | Rootkit=deep, hard detect | WannaCry=2017 Ransomware | 2FA=password+OTP | Firewall types: Packet/Stateful/Application/NGFW
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔢 Topic 3: Arithmetic in Encryption</h3>
+<div class="box box-blue">
+Caesar: C=(P+K)mod26 | XOR: A⊕A=0, A⊕0=A | MD5=128bit | SHA-256=256bit | Hash=one-way | Avalanche Effect | φ(p)=p-1 | Modular arithmetic=clock arithmetic
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🔑 Topic 4: Symmetric Encryption</h3>
+<div class="box box-green">
+Same key | DES=1977, 56bit, broken | AES=2001, 128/192/256bit, secure | AES block=128bit | ECB=weak | CBC=TLS use | Block=fixed blocks | Stream=bit-by-bit | n users=n(n-1)/2 keys
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🗝️ Topic 5: Asymmetric Encryption</h3>
+<div class="box box-purple">
+Two keys: Public+Private | Public=encrypt | Private=decrypt | RSA=factorization | DH=discrete log | ECC=small key | Digital Sign=Private sign, Public verify | CA=certificate issue | X.509=cert standard
+</div>
+</div>
+
+<div class="subtopic">
+<h3>💻 Topic 6: OS Security</h3>
+<div class="box box-cyan">
+DAC=owner | MAC=system | RBAC=role | Least Privilege | chmod: r=4,w=2,x=1 | Buffer overflow=memory | BitLocker=disk encrypt | UAC=Windows | Secure Boot=UEFI
+</div>
+</div>
+
+<div class="subtopic">
+<h3>📡 Topic 7: Cyber Trends</h3>
+<div class="box box-yellow">
+Zero Trust=never trust always verify | AI threats | Cloud=shared responsibility | IoT=default password risk | 5G security | WannaCry=2017 | AIIMS=2022 | Deepfake | Smishing/Vishing | 51% attack=blockchain
+</div>
+</div>
+
+<div class="subtopic">
+<h3>🏛️ Topic 8: Current Affairs</h3>
+<div class="box box-orange">
+CERT-In=2004, MeitY, 6hr report | DPDPA 2023=₹250cr penalty | IT Act 2000 | S.66C=identity theft | S.43=unauthorized access | Helpline=1930 | Portal=cybercrime.gov.in | Digital India=2015 | I4C=MHA | NCSP=2013
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- LAST MINUTE SHEET -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="topic-section" id="lastmin">
+<div class="topic-title open" onclick="toggleTopic(this)">
+  <span>🔥</span>
+  <span>🔥 LAST MINUTE REVISION SHEET – Exam Day!</span>
+  <span class="stars">★★★★★</span>
+  <span class="collapse-icon">▼</span>
+</div>
+<div class="topic-body">
+
+<div class="subtopic">
+<div class="box box-red">
+<strong>🎯 TOP 30 EXAM-CRITICAL FACTS – MUST REMEMBER</strong>
+
+<ol style="padding-left:20px;margin-top:10px">
+<li><strong>CIA Triad</strong> = Confidentiality + Integrity + Availability</li>
+<li><strong>AES</strong> = 2001, 128-bit block, 128/192/256-bit keys (10/12/14 rounds)</li>
+<li><strong>DES</strong> = 1977, 56-bit key, 64-bit block, 16 rounds – BROKEN</li>
+<li><strong>RSA</strong> = Rivest-Shamir-Adleman, Integer Factorization</li>
+<li><strong>Public Key</strong> = Encrypt | <strong>Private Key</strong> = Decrypt / Sign</li>
+<li><strong>Caesar Cipher</strong>: C = (P + K) mod 26</li>
+<li><strong>SHA-256</strong> = 256-bit hash (Bitcoin use)</li>
+<li><strong>MD5</strong> = 128-bit (BROKEN)</li>
+<li><strong>XOR</strong>: A XOR A = 0 | A XOR 0 = A</li>
+<li><strong>Worm</strong> = No host, self-spread | <strong>Virus</strong> = Host needed</li>
+<li><strong>Ransomware WannaCry</strong> = 2017, EternalBlue, Bitcoin</li>
+<li><strong>CERT-In</strong> = 2004, MeitY, 6-hour reporting</li>
+<li><strong>DPDPA 2023</strong> = ₹250 crore penalty</li>
+<li><strong>IT Act 2000</strong> = India cyber law | S.66C = Identity Theft</li>
+<li><strong>Cyber Crime Helpline</strong> = 1930</li>
+<li><strong>Digital India</strong> = 2015</li>
+<li><strong>I4C</strong> = Indian Cyber Crime Coordination Centre (MHA)</li>
+<li><strong>Zero Trust</strong> = Never Trust, Always Verify</li>
+<li><strong>IDS</strong> = Detect only | <strong>IPS</strong> = Detect + Block</li>
+<li><strong>Non-Repudiation</strong> = Sender cannot deny sending</li>
+<li><strong>DAC</strong> = Owner | <strong>MAC</strong> = System | <strong>RBAC</strong> = Role</li>
+<li><strong>AIIMS Delhi 2022</strong> = Ransomware attack</li>
+<li><strong>Mirai Botnet 2016</strong> = IoT DDoS</li>
+<li><strong>Diffie-Hellman</strong> = Key Exchange, Discrete Log Problem</li>
+<li><strong>Digital Signature</strong> = Auth + Integrity + Non-Repudiation</li>
+<li><strong>ECB</strong> = Weakest mode | <strong>CBC</strong> = TLS standard</li>
+<li><strong>Phishing</strong> = Fake email/website</li>
+<li><strong>φ(p) = p-1</strong> for prime p</li>
+<li><strong>ISO 27001</strong> = ISMS standard</li>
+<li><strong>NCSP 2013</strong> = India's first national cyber security policy</li>
+</ol>
+</div>
+</div>
+
+<div class="subtopic">
+<div class="box box-purple">
+<strong>⚡ QUICK COMPARISON TABLE</strong>
+<div class="tbl-wrap" style="margin-top:10px">
+<table>
+<tr><th>Algorithm</th><th>Key</th><th>Block</th><th>Year</th><th>Status</th></tr>
+<tr><td>DES</td><td>56-bit</td><td>64-bit</td><td>1977</td><td>❌ Broken</td></tr>
+<tr><td>3DES</td><td>112/168-bit</td><td>64-bit</td><td>1999</td><td>⚠️ Legacy</td></tr>
+<tr><td>AES-128</td><td>128-bit</td><td>128-bit</td><td>2001</td><td>✅ Secure</td></tr>
+<tr><td>AES-256</td><td>256-bit</td><td>128-bit</td><td>2001</td><td>✅ Strongest</td></tr>
+<tr><td>RSA-2048</td><td>2048-bit</td><td>Asymmetric</td><td>1977</td><td>✅ Standard</td></tr>
+<tr><td>MD5</td><td>-</td><td>128-bit hash</td><td>1992</td><td>❌ Broken</td></tr>
+<tr><td>SHA-256</td><td>-</td><td>256-bit hash</td><td>2001</td><td>✅ Secure</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:40px 20px;color:var(--text3);font-size:13px;border-top:1px solid var(--border);margin-top:40px">
+  <div style="font-size:20px;margin-bottom:10px">🛡️</div>
+  <strong style="color:var(--accent)">Gujarat Police Wireless PSI – Network Security Master Notes</strong><br>
+  Gujarati Medium | Exam-Oriented | MCQ Focus | Complete Coverage<br>
+  <span style="color:var(--text3)">Best of Luck! | All The Best! | શ્રેષ્ઠ શુભેચ્છાઓ!</span>
+</div>
+
+</main>
+
+<!-- BACK TO TOP -->
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ═══ THEME TOGGLE ═══
+function toggleTheme(){
+  const b=document.body;
+  const isDark=b.getAttribute('data-theme')==='dark';
+  b.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('theme-btn').textContent=isDark?'🌙':'☀️';
+}
+
+// ═══ LANG TOGGLE ═══
+function toggleLang(){
+  const b=document.body;
+  const isGu=b.getAttribute('data-lang')==='gu';
+  b.setAttribute('data-lang',isGu?'en':'gu');
+  document.getElementById('lang-btn').textContent=isGu?'ગુ':'EN';
+}
+
+// ═══ FONT SIZE ═══
+let fontSize=15;
+function setFontSize(dir){
+  if(dir===-1)fontSize=Math.max(12,fontSize-1);
+  else if(dir===1)fontSize=Math.min(20,fontSize+1);
+  else fontSize=15;
+  document.documentElement.style.setProperty('--font-size',fontSize+'px');
+}
+
+// ═══ SIDEBAR ═══
+function toggleSidebar(){
+  const s=document.getElementById('sidebar');
+  const m=document.getElementById('main');
+  const o=document.getElementById('overlay');
+  const isClosed=s.classList.contains('closed');
+  s.classList.toggle('closed',!isClosed);
+  if(window.innerWidth>900){m.classList.toggle('full',!isClosed);}
+  o.classList.toggle('active',isClosed);
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.add('closed');
+  document.getElementById('main').classList.add('full');
+  document.getElementById('overlay').classList.remove('active');
+}
+// Mobile: sidebar closed by default
+if(window.innerWidth<=900){
+  document.getElementById('sidebar').classList.add('closed');
+  document.getElementById('main').classList.add('full');
+}
+
+// ═══ SCROLL TO ═══
+function goToSection(id){
+  const el=document.getElementById(id);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}
+  if(window.innerWidth<=900)closeSidebar();
+}
+
+// ═══ PROGRESS BAR ═══
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement;
+  const pct=(s.scrollTop/(s.scrollHeight-s.clientHeight))*100;
+  document.getElementById('progress-bar').style.width=pct+'%';
+  document.getElementById('btt').classList.toggle('show',s.scrollTop>300);
+  // Active sidebar
+  const sections=['s1','s2','s3','s4','s5','s6','s7','s8','mcq-section','oneliners','formulas','diffs','quickrev','lastmin'];
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){
+      const rect=el.getBoundingClientRect();
+      const links=document.querySelectorAll('.sidebar-link');
+      links.forEach(l=>{if(l.getAttribute('onclick')?.includes(id))l.classList.toggle('active',rect.top<=100&&rect.bottom>0);});
+    }
+  });
+});
+
+// ═══ TOPIC TOGGLE ═══
+function toggleTopic(titleEl){
+  titleEl.classList.toggle('open');
+  const body=titleEl.nextElementSibling;
+  body.classList.toggle('collapsed');
+}
+
+// ═══ MCQ ANSWER SHOW ═══
+function showAns(btn){
+  btn.parentElement.classList.add('revealed');
+  btn.style.display='none';
+}
+
+// ═══ SEARCH ═══
+let searchTimeout;
+function doSearch(val){
+  clearTimeout(searchTimeout);
+  searchTimeout=setTimeout(()=>{
+    // Clear old
+    document.querySelectorAll('.search-highlight').forEach(el=>{
+      el.outerHTML=el.textContent;
+    });
+    if(!val||val.length<2)return;
+    const main=document.getElementById('main');
+    const walker=document.createTreeWalker(main,NodeFilter.SHOW_TEXT);
+    const nodes=[];
+    while(walker.nextNode())nodes.push(walker.currentNode);
+    const re=new RegExp('('+val.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+    nodes.forEach(node=>{
+      if(node.parentElement.classList.contains('search-highlight'))return;
+      if(node.parentElement.tagName==='SCRIPT')return;
+      if(re.test(node.textContent)){
+        const span=document.createElement('span');
+        span.innerHTML=node.textContent.replace(re,'<span class="search-highlight">$1</span>');
+        node.parentNode.replaceChild(span,node);
+      }
+    });
+    // Scroll to first
+    const first=document.querySelector('.search-highlight');
+    if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+  },300);
+}
+
+// ═══ MCQ OPT CLICK ═══
+document.querySelectorAll('.mcq-opts li').forEach(li=>{
+  li.addEventListener('click',function(){
+    const opts=this.parentElement.querySelectorAll('li');
+    opts.forEach(o=>o.style.fontWeight='');
+    this.style.fontWeight='700';
+    this.style.color='var(--accent)';
+  });
+});
+</script>
+</body>
+</html>
